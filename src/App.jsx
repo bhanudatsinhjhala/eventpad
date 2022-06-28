@@ -1,16 +1,19 @@
 // import logo from "./logo.svg";
 import React from "react";
 import "./App.css";
-import Header from "./Header.jsx";
+import RegistrationId from "./RegistrationId.jsx";
+import QrScanner from "./QrScanner.jsx";
+import Home from "./Home.jsx";
+import { Routes, Route } from "react-router-dom";
 // import QrScan from "./qrScan";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <h3>hello</h3>
-      {/* <QrScan /> */}
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/registrationid" element={<RegistrationId />} />
+      <Route path="/qrscan" element={<QrScanner />} />
+    </Routes>
   );
 }
 
