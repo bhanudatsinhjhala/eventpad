@@ -1,51 +1,40 @@
 import React, { useState } from "react";
 import Header from "./Header";
+import UserDetailsCard from "./userDetailsCard";
 import { QrReader } from "react-qr-reader";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import "./App.css";
 // import { useNavigate} from "react-router-dom";
 function QrScanner() {
   const [data, setData] = useState("No result");
-  const [res, setRes] = useState("No result");
   // const navigate = useNavigate();
-  // var visible = true;
-  function handleClick() {
-    setRes(data);
-    console.log(res);
-    // console.log(visible);
-    // navigate("/scannerDetails")
-  }
-  function deleteRes() {
-    setRes("");
+  const [visiblity, setVisibility] = useState(true);
+  function qrData(data) {
+    if(data !== null){
+      setData(data);
+      setVisibility(false);
+    }
   }
   return (
     <div>
       <Header />
-      <QrReader
+     { visiblity ? <QrReader
         constraints={{ facingMode: "environment" }}
         scanDelay={500}
         onResult={(result, error) => {
           if (result) {
             console.log(result.text);
-            setData(result.text);
+            qrData(result.text);
           } else if (error) {
             console.info(error);
             setData("error");
           }
         }}
+        videoStyle={{ height: "inherit", margin: "auto", width: "88%", position: "none"}}
+        videoContainerStyle={{ paddingTop: "0px", height: "inherit"}}
         className="qrContainer"
-        style={{ width: "100%", height: "50vh", marginTop: "90px" }}
-      />
-      <Button style={{ marginTop: "200px" }} onClick={handleClick}>
-        QRScanner
-      </Button>
-      <Button style={{ marginTop: "200px" }} onClick={deleteRes}>
-        Delete result
-      </Button>
-      {/* {res.map((value, index) => {
-        return <p key={index}> {value} </p>;
-      })} */}
-      <p> {res}</p>
+        style={{ width: "100%", height: "50vh"}}
+      /> : <UserDetailsCard regId={data} /> }
     </div>
   );
 }
