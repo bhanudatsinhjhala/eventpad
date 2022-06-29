@@ -2,9 +2,50 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import App from "./components/App";
+import axios from "axios";
 import reportWebVitals from "./reportWebVitals";
+require("dotenv").config();
 
+const api_url = process.env.REACT_APP_API_URL;
+export async function getUserDetails(id) {
+  const response = await axios.get(
+    `${api_url}/api/getuserdetails`,
+    {
+      params: {
+        regId: id,
+      },
+    },
+    (req, res) => {
+      try {
+        console.log(res.data);
+        return res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  );
+  return response;
+}
+export async function markPresence(value) {
+  const response = await axios.get(
+    `${api_url}/api/markPresent`,
+    {
+      params: {
+        presnt: value,
+      },
+    },
+    (req, res) => {
+      try {
+        console.log(res.data);
+        return res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  );
+  return response;
+}
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./Header";
 import Box from "@mui/material/Box";
@@ -8,8 +8,33 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import DoneIcon from "@mui/icons-material/Done";
-
+import { getUserDetails, markPresence } from "../index.js";
 function RegistrationId() {
+  const [regid, setRegid] = useState();
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    email: "",
+    regId: "",
+    seatNo: "",
+    _id: "",
+    __v: "",
+  });
+  function handleChange(e) {
+    console.log(e.target.value);
+    setRegid(e.target.value);
+  }
+  function formSubmit(e) {
+    e.preventDefault();
+    console.log(regid);
+    getUserDetails(regid).then((res) => {
+      console.log(res.data[0]);
+      setUserDetails(res.data[0]);
+    });
+  }
+  function handlePresent() {
+    console.log(true);
+    markPresence(true);
+  }
   return (
     <div>
       <Container>
@@ -18,9 +43,14 @@ function RegistrationId() {
           <Box component="form" className="regForm">
             <h1>Registration Id</h1>
             <Stack direction="row" spacing={3}>
-              <TextField />
-              <Button className="submitBtn" variant="contained">
-                Mark Presence
+              <TextField name="regid" value={regid} onChange={handleChange} />
+              <Button
+                className="submitBtn"
+                onClick={formSubmit}
+                type="submit"
+                variant="contained"
+              >
+                Submit
               </Button>
             </Stack>
           </Box>
@@ -45,7 +75,7 @@ function RegistrationId() {
                   Name:
                 </Typography>
                 <Typography variant="h5" style={{ display: "inline" }}>
-                  Bhanudatsinh Jhala
+                  {userDetails.name}
                 </Typography>
               </div>
               <div style={{ margin: "1rem" }}>
@@ -53,7 +83,7 @@ function RegistrationId() {
                   RegistrationId:
                 </Typography>
                 <Typography variant="h5" style={{ display: "inline" }}>
-                  1234
+                  {userDetails.regId}
                 </Typography>
               </div>
               <div style={{ margin: "1rem" }}>
@@ -61,7 +91,7 @@ function RegistrationId() {
                   Seat No:
                 </Typography>
                 <Typography variant="h5" style={{ display: "inline" }}>
-                  20
+                  {userDetails.seatNo}
                 </Typography>
               </div>
               <div style={{ margin: "1rem" }}>
@@ -69,6 +99,7 @@ function RegistrationId() {
                   variant="outlined"
                   style={{ marginLeft: "1rem" }}
                   color="success"
+                  onClick={handlePresent}
                 >
                   <DoneIcon style={{ marginRight: "10px" }} />
                   Mark Presence
