@@ -27,18 +27,21 @@ export async function getUserDetails(id) {
   );
   return response;
 }
-export async function markPresence(value) {
-  const response = await axios.get(
-    `${api_url}/api/markPresent`,
+export async function markPresence(id) {
+  // console.log("present", user.present);
+  console.log("present", id);
+  // const present = user.present;
+  // const regId = user.regId;
+  const response = await axios.put(
+    `${api_url}/api/markpresence`,
     {
-      params: {
-        presnt: value,
-      },
+      present: true,
+      regId: id,
     },
     (req, res) => {
       try {
-        console.log(res.data);
-        return res.data;
+        console.log(res);
+        return res;
       } catch (err) {
         console.log(err);
       }

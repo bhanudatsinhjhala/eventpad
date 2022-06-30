@@ -16,6 +16,7 @@ function RegistrationId() {
     email: "",
     regId: "",
     seatNo: "",
+    present: "",
     _id: "",
     __v: "",
   });
@@ -30,10 +31,25 @@ function RegistrationId() {
       console.log(res.data[0]);
       setUserDetails(res.data[0]);
     });
+    setRegid("");
   }
   function handlePresent() {
     console.log(true);
-    markPresence(true);
+    console.log(userDetails);
+    markPresence(userDetails.regId).then((res) => {
+      // console.log(res.data.acknowledged);
+      if (res.data.acknowledged === true) {
+        setUserDetails({
+          name: "",
+          email: "",
+          regId: "",
+          seatNo: "",
+          present: "",
+          _id: "",
+          __v: "",
+        });
+      }
+    });
   }
   return (
     <div>
@@ -71,26 +87,38 @@ function RegistrationId() {
               }}
             >
               <div style={{ margin: "1rem" }}>
-                <Typography m={2} variant="h5" style={{ display: "inline" }}>
+                <Typography
+                  m={2}
+                  variant="p"
+                  style={{ display: "inline-block" }}
+                >
                   Name:
                 </Typography>
-                <Typography variant="h5" style={{ display: "inline" }}>
+                <Typography variant="p" style={{ display: "inline-block" }}>
                   {userDetails.name}
                 </Typography>
               </div>
               <div style={{ margin: "1rem" }}>
-                <Typography m={2} variant="h5" style={{ display: "inline" }}>
-                  RegistrationId:
+                <Typography
+                  m={2}
+                  variant="p"
+                  style={{ display: "inline-block" }}
+                >
+                  Reg-Id:
                 </Typography>
-                <Typography variant="h5" style={{ display: "inline" }}>
+                <Typography variant="p" style={{ display: "inline-block" }}>
                   {userDetails.regId}
                 </Typography>
               </div>
               <div style={{ margin: "1rem" }}>
-                <Typography m={2} variant="h5" style={{ display: "inline" }}>
+                <Typography
+                  m={2}
+                  variant="p"
+                  style={{ display: "inline-block" }}
+                >
                   Seat No:
                 </Typography>
-                <Typography variant="h5" style={{ display: "inline" }}>
+                <Typography variant="p" style={{ display: "inline-block" }}>
                   {userDetails.seatNo}
                 </Typography>
               </div>
