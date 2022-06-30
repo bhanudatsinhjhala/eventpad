@@ -13,6 +13,12 @@
   margin-top: 12rem;
 }
 
+.regSnack{
+  top: 0px;
+  justify-content:center!important;
+  right:  8px !important;
+}
+
 .submitBtn{
   font-family: 'Roboto' !important;
   font-size:  1rem !important;

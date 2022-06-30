@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 // import Container from "@mui/material/Container";
 // import TextField from "@mui/material/TextField";
@@ -6,32 +6,22 @@ import Button from "@mui/material/Button";
 // import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import DoneIcon from "@mui/icons-material/Done";
-import { getUserDetails, markPresence } from "../index.js";
+import { markPresence } from "../index.js";
 function userDetailsCard(props) {
-  const [userDetails, setUserDetails] = useState({
-    name: "",
-    email: "",
-    regId: "",
-    seatNo: "",
-    _id: "",
-    __v: "",
-  });
-  function getUserOne(regid) {
-    getUserDetails(regid).then((res) => {
-      console.log(res.data[0]);
-      setUserDetails(res.data[0]);
-      props.changeVis(false);
-    });
-  }
-  useEffect(() => {
-    getUserOne(props.regId);
-  }, []);
+  // const [userDetails, setUserDetails] = useState({
+  //   name: "",
+  //   email: "",
+  //   regId: "",
+  //   seatNo: "",
+  //   _id: "",
+  //   __v: "",
+  // });
   function handlePresent() {
     console.log(true);
     markPresence(props.regId).then((res) => {
       // console.log(res.data.acknowledged);
       if (res.data.acknowledged === true) {
-        setUserDetails({
+        props.changeUserDetails({
           name: "",
           email: "",
           regId: "",
@@ -58,7 +48,7 @@ function userDetailsCard(props) {
             Name:
           </Typography>
           <Typography variant="p" style={{ display: "inline-block" }}>
-            {userDetails.name}
+            {props.userDetails.name}
           </Typography>
         </div>
         <div style={{ margin: "1rem" }}>
@@ -66,7 +56,7 @@ function userDetailsCard(props) {
             Reg-Id:
           </Typography>
           <Typography variant="p" style={{ display: "inline-block" }}>
-            {userDetails.regId}
+            {props.userDetails.regId}
           </Typography>
         </div>
         <div style={{ margin: "1rem" }}>
@@ -74,7 +64,7 @@ function userDetailsCard(props) {
             Seat No:
           </Typography>
           <Typography variant="p" style={{ display: "inline-block" }}>
-            {userDetails.seatNo}
+            {props.userDetails.seatNo}
           </Typography>
         </div>
         <div style={{ margin: "1rem" }}>
