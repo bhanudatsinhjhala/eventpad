@@ -6,17 +6,17 @@ import { QrReader } from "react-qr-reader";
 import "./App.css";
 // import { useNavigate} from "react-router-dom";
 function QrScanner() {
-  const [data, setData] = useState(20220104005);
+  const [data, setData] = useState();
   // const navigate = useNavigate();
-  const [visiblity, setVisibility] = useState(false);
-  const vis = "";
-  if (vis === true) {
-    setVisibility(vis);
-  }
+  const [visiblity, setVisibility] = useState(true);
+
+  const changeVis = (value) => {
+    setVisibility(value);
+  };
   function qrData(data) {
     if (data !== null) {
       setData(data);
-      setVisibility(vis);
+      changeVis(false);
     }
   }
   return (
@@ -46,7 +46,7 @@ function QrScanner() {
           style={{ width: "100%", height: "50vh" }}
         />
       ) : (
-        <UserDetailsCard regId={data} getVisibility={vis} />
+        <UserDetailsCard regId={data} changeVis={changeVis} />
       )}
     </div>
   );

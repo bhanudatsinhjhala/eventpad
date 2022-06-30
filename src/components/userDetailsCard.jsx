@@ -20,7 +20,7 @@ function userDetailsCard(props) {
     getUserDetails(regid).then((res) => {
       console.log(res.data[0]);
       setUserDetails(res.data[0]);
-      props.getVisibility = false;
+      props.changeVis(false);
     });
   }
   useEffect(() => {
@@ -41,7 +41,7 @@ function userDetailsCard(props) {
           __v: "",
         });
       }
-      props.getVisibility = true;
+      props.changeVis(true);
     });
   }
   return (
