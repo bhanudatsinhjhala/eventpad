@@ -6,10 +6,13 @@ import { QrReader } from "react-qr-reader";
 import "./App.css";
 // import { useNavigate} from "react-router-dom";
 function QrScanner() {
-  const [data, setData] = useState(20220104003);
+  const [data, setData] = useState(20220104005);
   // const navigate = useNavigate();
-  const [visiblity, setVisibility] = useState(true);
+  const [visiblity, setVisibility] = useState(false);
   const vis = "";
+  if (vis === true) {
+    setVisibility(vis);
+  }
   function qrData(data) {
     if (data !== null) {
       setData(data);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 // import Container from "@mui/material/Container";
 // import TextField from "@mui/material/TextField";
@@ -16,11 +16,16 @@ function userDetailsCard(props) {
     _id: "",
     __v: "",
   });
-  getUserDetails(props.regId).then((res) => {
-    console.log(res.data[0]);
-    setUserDetails(res.data[0]);
-    props.getVisibility = false;
-  });
+  function getUserOne(regid) {
+    getUserDetails(regid).then((res) => {
+      console.log(res.data[0]);
+      setUserDetails(res.data[0]);
+      props.getVisibility = false;
+    });
+  }
+  useEffect(() => {
+    getUserOne(props.regId);
+  }, []);
   function handlePresent() {
     console.log(true);
     markPresence(props.regId).then((res) => {
@@ -36,6 +41,7 @@ function userDetailsCard(props) {
           __v: "",
         });
       }
+      props.getVisibility = true;
     });
   }
   return (
