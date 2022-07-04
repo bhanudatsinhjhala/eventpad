@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
@@ -6,6 +7,7 @@ import { getUserDetails } from "../index";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
@@ -13,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
 function RegistrationId() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [regid, setRegid] = useState();
   // const [data, setData] = useState();
@@ -46,16 +49,25 @@ function RegistrationId() {
     // console.log(regid);
     setRegid("");
     getUserDetails(regid).then((res) => {
-      console.log(res.data);
+      console.log(res);
       if (res.data.length === 0) {
-        changeSnackText("Please check your Registration Id.");
+        changeSnackText(
+          "Please check your Registration Id. Your Registration was not found in database."
+        );
         changeVis(true);
+      } else if (res.data.message !== null) {
+        changeSnackText(res.data.message);
       } else {
         setUserDetails(res.data[0]);
         changeVis(false);
         console.log(visiblity);
       }
     });
+  }
+  function handleClick(value) {
+    if (value === "home") {
+      navigate("/");
+    }
   }
   function handleClose() {
     if (open === true) {
@@ -64,13 +76,13 @@ function RegistrationId() {
   }
   const action = (
     <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleClose}>
+      {/* <Button color="secondary" size="small" onClick={handleClose}>
         UNDO
-      </Button>
+      </Button> */}
       <IconButton
         size="small"
         aria-label="close"
-        color="inherit"
+        color="primary"
         onClick={handleClose}
       >
         <CloseIcon fontSize="small" />
@@ -84,7 +96,9 @@ function RegistrationId() {
         <Container mt={2}>
           {visiblity ? (
             <Box component="form" className="regForm">
-              <h1>Registration Id</h1>
+              <Typography variant="h3" sx={{ marginBottom: "20px" }}>
+                Registration Id
+              </Typography>
               <Stack direction="row" spacing={3}>
                 <TextField name="regid" value={regid} onChange={handleChange} />
                 <Button
@@ -104,6 +118,15 @@ function RegistrationId() {
               changeVis={changeVis}
             />
           )}
+          <Box sx={{ width: "fit-content", margin: "30px auto" }}>
+            <Button
+              sx={{ margin: "auto" }}
+              variant="outlined"
+              onClick={() => handleClick("home")}
+            >
+              Back to Home
+            </Button>
+          </Box>
           <Snackbar
             className="regSnack"
             open={open}

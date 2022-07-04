@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
@@ -49,6 +50,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -74,6 +76,10 @@ export default function PersistentDrawerLeft() {
   const handleNavBtn = (e) => {
     console.log(e.target.outerText);
   };
+  function logOut() {
+    sessionStorage.removeItem("token");
+    navigate("/login");
+  }
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -91,6 +97,18 @@ export default function PersistentDrawerLeft() {
           <Typography variant="h6" noWrap component="div">
             QR Scanner
           </Typography>
+          <Button
+            sx={{
+              position: "fixed",
+              right: "50px",
+              color: "#fff",
+              borderColor: "#fff",
+            }}
+            variant="outlined"
+            onClick={logOut}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer

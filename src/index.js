@@ -8,6 +8,50 @@ import reportWebVitals from "./reportWebVitals";
 require("dotenv").config();
 
 const api_url = process.env.REACT_APP_API_URL;
+
+export async function verifyjwt(token) {
+  const response = await axios.get(
+    `${api_url}/api/verifyjwt`,
+    {
+      params: {
+        token: token,
+      },
+    },
+    (req, res) => {
+      try {
+        // console.log(res);
+        return res;
+      } catch (err) {
+        // console.log(err, "25");
+        return err;
+      }
+    }
+  );
+  return response;
+}
+export async function loginUser(user) {
+  const membershipId = parseInt(user.membershipId);
+  // console.log(user);
+  const response = await axios.get(
+    `${api_url}/api/login`,
+    {
+      params: {
+        membershipId: membershipId,
+        password: user.password,
+      },
+    },
+    (req, res) => {
+      try {
+        // console.log(res);
+        return res;
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    }
+  );
+  return response;
+}
 export async function getUserDetails(id) {
   const response = await axios.get(
     `${api_url}/api/getuserdetails`,
@@ -18,7 +62,7 @@ export async function getUserDetails(id) {
     },
     (req, res) => {
       try {
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
       } catch (err) {
         console.log(err);
@@ -29,7 +73,7 @@ export async function getUserDetails(id) {
 }
 export async function markPresence(id) {
   // console.log("present", user.present);
-  console.log("present", id);
+  // console.log("present", id);
   // const present = user.present;
   // const regId = user.regId;
   const response = await axios.put(
@@ -40,7 +84,7 @@ export async function markPresence(id) {
     },
     (req, res) => {
       try {
-        console.log(res);
+        // console.log(res);
         return res;
       } catch (err) {
         console.log(err);
