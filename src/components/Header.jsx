@@ -72,6 +72,11 @@ export default function PersistentDrawerLeft() {
       text: "Registration Id",
       to: "registrationid",
     },
+    {
+      key: 3,
+      text: "Upload Data",
+      to: "uploadfile",
+    },
   ];
   const handleNavBtn = (e) => {
     console.log(e.target.outerText);

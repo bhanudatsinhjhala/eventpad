@@ -9,6 +9,29 @@ require("dotenv").config();
 
 const api_url = process.env.REACT_APP_API_URL;
 
+export async function uploadFile(file) {
+  console.log(file);
+  const formData = new FormData();
+  formData.append("hl", "file");
+  formData.append("file", file);
+  console.log(formData);
+  const response = await axios.post(
+    `${api_url}/api/uploadsheet`,
+    formData,
+    (req, res) => {
+      console.log(file);
+      try {
+        console.log(res);
+        return res;
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    }
+  );
+  return response;
+}
+
 export async function verifyjwt(token) {
   const response = await axios.get(
     `${api_url}/api/verifyjwt`,

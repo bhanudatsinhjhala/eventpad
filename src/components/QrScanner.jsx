@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
@@ -14,6 +14,15 @@ import "./App.css";
 // import { useNavigate} from "react-router-dom";
 function QrScanner() {
   const navigate = useNavigate();
+  function isAuthenticated() {
+    const token = sessionStorage.getItem("token");
+    if (token === null) {
+      navigate("/login");
+    }
+  }
+  useEffect(() => {
+    isAuthenticated();
+  }, []);
   const [open, setOpen] = useState(false);
   // const [data, setData] = useState();
   const [snackText, setSnackText] = useState("hello");

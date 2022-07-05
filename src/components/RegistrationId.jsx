@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
@@ -16,6 +16,15 @@ import CloseIcon from "@mui/icons-material/Close";
 
 function RegistrationId() {
   const navigate = useNavigate();
+  function isAuthenticated() {
+    const token = sessionStorage.getItem("token");
+    if (token === null) {
+      navigate("/login");
+    }
+  }
+  useEffect(() => {
+    isAuthenticated();
+  }, []);
   const [open, setOpen] = useState(false);
   const [regid, setRegid] = useState();
   // const [data, setData] = useState();
