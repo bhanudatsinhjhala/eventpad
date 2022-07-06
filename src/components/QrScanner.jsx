@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails } from "../index";
+import { getUserDetails, verifyjwt } from "../index";
 import { QrReader } from "react-qr-reader";
 import Snackbar from "@mui/material/Snackbar";
 import Box from "@mui/material/Box";
@@ -14,10 +14,17 @@ import "./App.css";
 // import { useNavigate} from "react-router-dom";
 function QrScanner() {
   const navigate = useNavigate();
-  function isAuthenticated() {
+  async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
+    } else {
+      await verifyjwt(token).then((res) => {
+        // console.log(res.request);
+        if (res.request.status !== 200) {
+          navigate("/login");
+        }
+      });
     }
   }
   useEffect(() => {
@@ -54,19 +61,16 @@ function QrScanner() {
   function qrData(data) {
     if (data !== null) {
       getUserDetails(data).then((res) => {
-        console.log(res);
-        if (res.data.length === 0) {
-          changeSnackText(
-            "Please check your Registration Id. Your Registration was not found in database."
-          );
+        // console.log(res);
+        if (res.request.status === 500) {
+          changeSnackText(res.response.data);
           changeVis(true);
-        } else if (res.data.message !== null) {
-          changeSnackText(res.data.message);
-          changeVis(true);
+        } else if (res.request.status === 300) {
+          navigate("/login");
         } else {
           setUserDetails(res.data[0]);
           changeVis(false);
-          console.log(visiblity);
+          // console.log(visiblity);
         }
       });
     }
@@ -101,10 +105,10 @@ function QrScanner() {
           scanDelay={500}
           onResult={(result, error) => {
             if (result) {
-              console.log(result.text);
+              // console.log(result.text);
               qrData(parseInt(result.text));
             } else if (error) {
-              console.info(error);
+              // console.info(error);
               // qrData("");
             }
           }}

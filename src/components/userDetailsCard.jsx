@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 // import Container from "@mui/material/Container";
 // import TextField from "@mui/material/TextField";
@@ -6,21 +6,33 @@ import Button from "@mui/material/Button";
 // import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import DoneIcon from "@mui/icons-material/Done";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
 import { markPresence } from "../index.js";
 function userDetailsCard(props) {
-  // const [userDetails, setUserDetails] = useState({
-  //   name: "",
-  //   email: "",
-  //   regId: "",
-  //   seatNo: "",
-  //   _id: "",
-  //   __v: "",
-  // });
+  const [open, setOpen] = useState(false);
+  const [snackText, setSnackText] = useState("hello");
+  // const snackText = "hello";
+
+  const changeSnackText = (value) => {
+    setSnackText(value);
+    setOpen(true);
+  };
   function handlePresent() {
-    console.log(true);
-    markPresence(props.regId).then((res) => {
-      // console.log(res.data.acknowledged);
-      if (res.data.acknowledged === true) {
+    // console.log(props);
+    markPresence(props.userDetails.regId).then((res) => {
+      // console.log(res);
+      if (res.request.status === 300) {
+        changeSnackText(
+          "Please check your Registration Id. Your Registration was not found in database."
+        );
+        props.changeVis(false);
+      } else if (res.request.status === 500) {
+        changeSnackText(res.response.data);
+      } else {
+        props.changeVis(true);
+        // console.log(res.data.acknowledged);
         props.changeUserDetails({
           name: "",
           email: "",
@@ -31,9 +43,28 @@ function userDetailsCard(props) {
           __v: "",
         });
       }
-      props.changeVis(true);
     });
   }
+  function handleClose() {
+    if (open === true) {
+      setOpen(false);
+    }
+  }
+  const action = (
+    <React.Fragment>
+      {/* <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button> */}
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="primary"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
   return (
     <Box
       component="card"
@@ -79,6 +110,13 @@ function userDetailsCard(props) {
           </Button>
         </div>
       </div>
+      <Snackbar
+        className="regSnack"
+        open={open}
+        onClose={handleClose}
+        message={snackText}
+        action={action}
+      />
     </Box>
   );
 }

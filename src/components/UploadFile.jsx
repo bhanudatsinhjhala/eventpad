@@ -9,17 +9,24 @@ import Stack from "@mui/material/Stack";
 import { Input, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import { uploadFile } from "..";
+import { uploadFile, verifyjwt } from "..";
 // import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 function UploadData() {
   const navigate = useNavigate();
-  function isAuthenticated() {
+  async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
+    } else {
+      await verifyjwt(token).then((res) => {
+        // console.log(res.request);
+        if (res.request.status !== 200) {
+          navigate("/login");
+        }
+      });
     }
   }
   useEffect(() => {
@@ -35,18 +42,20 @@ function UploadData() {
   };
   function handleChange(e) {
     e.preventDefault();
-    console.log(e.target.files[0].name);
+    // console.log(e.target.files[0].name);
     const file = e.target.files[0];
     setUser(file);
-    console.log(user);
+    // console.log(user);
   }
   function formSubmit(e) {
     e.preventDefault();
-    console.log(user, "user");
+    // console.log(user, "user");
     uploadFile(user).then((res) => {
-      if (res.data.message) {
-        console.log(res);
-        changeSnackText(res.data.message);
+      if (res.request.status === 500) {
+        // console.log(res);
+        changeSnackText(res.response.data);
+      } else if (res.request.status === 300) {
+        navigate("/login");
       } else {
         changeSnackText("hello");
       }

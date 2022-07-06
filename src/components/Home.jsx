@@ -7,19 +7,28 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import FullScreen from "@mui/icons-material/Fullscreen";
+import { verifyjwt } from "..";
 import Edit from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 function Home() {
   const navigate = useNavigate();
-  function isAuthenticated() {
+  async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
+    } else {
+      await verifyjwt(token).then((res) => {
+        // console.log(res.request);
+        if (res.request.status !== 200) {
+          navigate("/login");
+        }
+      });
     }
   }
   useEffect(() => {
     isAuthenticated();
+    //eslint-disable-next-line
   }, []);
   function handleClick(value) {
     if (value === "reg") {
@@ -27,7 +36,7 @@ function Home() {
     } else {
       navigate("/qrscan");
     }
-    console.log("clicked", value);
+    // console.log("clicked", value);
   }
   return (
     <div>

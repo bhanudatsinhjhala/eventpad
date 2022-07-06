@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails } from "../index";
+import { getUserDetails, verifyjwt } from "../index";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
@@ -16,10 +16,17 @@ import CloseIcon from "@mui/icons-material/Close";
 
 function RegistrationId() {
   const navigate = useNavigate();
-  function isAuthenticated() {
+  async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
+    } else {
+      await verifyjwt(token).then((res) => {
+        // console.log(res.request);
+        if (res.request.status !== 200) {
+          navigate("/login");
+        }
+      });
     }
   }
   useEffect(() => {
@@ -50,7 +57,7 @@ function RegistrationId() {
     setOpen(true);
   };
   function handleChange(e) {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setRegid(e.target.value);
   }
   function formSubmit(e) {
@@ -58,18 +65,19 @@ function RegistrationId() {
     // console.log(regid);
     setRegid("");
     getUserDetails(regid).then((res) => {
-      console.log(res);
-      if (res.data.length === 0) {
+      // console.log(res);
+      if (res.request.status === 300) {
         changeSnackText(
           "Please check your Registration Id. Your Registration was not found in database."
         );
         changeVis(true);
-      } else if (res.data.message !== null) {
-        changeSnackText(res.data.message);
+      } else if (res.request.status === 500) {
+        changeSnackText(res.response.data);
       } else {
+        // console.log(res.data);
         setUserDetails(res.data[0]);
         changeVis(false);
-        console.log(visiblity);
+        // console.log(visiblity);
       }
     });
   }
