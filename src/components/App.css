@@ -12,18 +12,17 @@
 
 .regForm{
   margin: auto;
-  width: fit-content;
   margin-top: 12rem;
 }
-.textInput > div > input{
+/* .textInput > div > input{
   padding: 10px !important;
   width: 200px !important;
-}
+} */
 
 .regSnack{
-  top: 0px;
-  justify-content:center!important;
-  right:  8px !important;
+ margin-top: 15px;
+ justify-content: center !important;
+ position: inherit !important;
 }
 
 .submitBtn{

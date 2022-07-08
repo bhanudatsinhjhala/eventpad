@@ -77,6 +77,11 @@ export default function PersistentDrawerLeft() {
       text: "Upload Data",
       to: "uploadfile",
     },
+    {
+      key: 4,
+      text: "Log Out",
+      to: "login",
+    },
   ];
   const handleNavBtn = (e) => {
     console.log(e.target.outerText);
@@ -108,6 +113,10 @@ export default function PersistentDrawerLeft() {
               right: "50px",
               color: "#fff",
               borderColor: "#fff",
+              display: {
+                xs: "none",
+                sm: "block",
+              },
             }}
             variant="outlined"
             onClick={logOut}
@@ -125,7 +134,7 @@ export default function PersistentDrawerLeft() {
             boxSizing: "border-box",
           },
         }}
-        variant="persistent"
+        // variant="persistent"
         anchor="left"
         open={open}
       >
@@ -141,16 +150,28 @@ export default function PersistentDrawerLeft() {
         <Divider />
         <List>
           {navItems.map((Obj) => (
-            <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding>
-              <Link to={`/${Obj.to}`} style={{ textDecoration: "none" }}>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {Obj.key % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={Obj.text} />
-                </ListItemButton>
-              </Link>
-            </ListItem>
+            <div>
+              if(Obj.key !==4)(
+              <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding>
+                <Link to={`/${Obj.to}`} style={{ textDecoration: "none" }}>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {Obj.key % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary={Obj.text} />
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+              )else(
+              <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding>
+                <Link to={`/${Obj.to}`} style={{ textDecoration: "none" }}>
+                  <Button variant="outlined" onClick={logOut}>
+                    Logout
+                  </Button>
+                </Link>
+              </ListItem>
+              )
+            </div>
           ))}
         </List>
         <Divider />

@@ -43,7 +43,7 @@ function Home() {
       <Header />
       <Container sx={{ margin: "auto", marginTop: "100px" }}>
         <Stack
-          direction="row"
+          direction={{ xs: "column", sm: "column", md: "row" }}
           justifyContent="center"
           alignItems="center"
           spacing={5}
@@ -56,9 +56,9 @@ function Home() {
             }}
           >
             <CardContent>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body1" color="text.secondary">
                 <IconButton>
-                  <Edit sx={{ fontSize: "1.25rem" }}></Edit>
+                  <Edit></Edit>
                 </IconButton>
                 Registration ID
               </Typography>
@@ -71,9 +71,9 @@ function Home() {
             }}
           >
             <CardContent>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body1" color="text.secondary">
                 <IconButton>
-                  <FullScreen sx={{ fontSize: "1.25rem" }}></FullScreen>
+                  <FullScreen></FullScreen>
                 </IconButton>
                 QR Scanner
               </Typography>

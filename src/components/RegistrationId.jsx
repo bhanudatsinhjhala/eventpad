@@ -2,15 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
+import RegistrationForm from "./RegistrationForm";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails, verifyjwt } from "../index";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Snackbar from "@mui/material/Snackbar";
+import { verifyjwt } from "../index";
+import { Box, Container, Button, Snackbar } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -33,7 +28,7 @@ function RegistrationId() {
     isAuthenticated();
   }, []);
   const [open, setOpen] = useState(false);
-  const [regid, setRegid] = useState();
+  // const [regid, setRegid] = useState();
   // const [data, setData] = useState();
   const [userDetails, setUserDetails] = useState({
     name: "",
@@ -56,31 +51,7 @@ function RegistrationId() {
     setSnackText(value);
     setOpen(true);
   };
-  function handleChange(e) {
-    // console.log(e.target.value);
-    setRegid(e.target.value);
-  }
-  function formSubmit(e) {
-    e.preventDefault();
-    // console.log(regid);
-    setRegid("");
-    getUserDetails(regid).then((res) => {
-      // console.log(res);
-      if (res.request.status === 300) {
-        changeSnackText(
-          "Please check your Registration Id. Your Registration was not found in database."
-        );
-        changeVis(true);
-      } else if (res.request.status === 500) {
-        changeSnackText(res.response.data);
-      } else {
-        // console.log(res.data);
-        setUserDetails(res.data[0]);
-        changeVis(false);
-        // console.log(visiblity);
-      }
-    });
-  }
+
   function handleClick(value) {
     if (value === "home") {
       navigate("/");
@@ -110,24 +81,13 @@ function RegistrationId() {
     <div>
       <Container>
         <Header />
-        <Container mt={2}>
+        <Container sx={{ margin: "10px auto" }}>
           {visiblity ? (
-            <Box component="form" className="regForm">
-              <Typography variant="h3" sx={{ marginBottom: "20px" }}>
-                Registration Id
-              </Typography>
-              <Stack direction="row" spacing={3}>
-                <TextField name="regid" value={regid} onChange={handleChange} />
-                <Button
-                  className="submitBtn"
-                  onClick={formSubmit}
-                  type="submit"
-                  variant="contained"
-                >
-                  Submit
-                </Button>
-              </Stack>
-            </Box>
+            <RegistrationForm
+              changeSnackText={changeSnackText}
+              changeVis={changeVis}
+              changeUserDetails={changeUserDetails}
+            />
           ) : (
             <UserDetailsCard
               changeUserDetails={changeUserDetails}

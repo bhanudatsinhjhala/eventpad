@@ -34,7 +34,9 @@ function UploadData() {
   }, []);
   //   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [snackText, setSnackText] = useState("hello");
+  const [snackText, setSnackText] = useState(
+    "Please Upload Excel or Spread Sheet."
+  );
   const [user, setUser] = useState("");
   const changeSnackText = (value) => {
     setSnackText(value);
@@ -57,7 +59,7 @@ function UploadData() {
       } else if (res.request.status === 300) {
         navigate("/login");
       } else {
-        changeSnackText("hello");
+        changeSnackText("Please Upload a Excel File or Spreadsheet");
       }
     });
   }
@@ -85,41 +87,48 @@ function UploadData() {
     <div>
       <Header />
       <Container>
-        <Card className="regForm" sx={{ borderRadius: "3%" }}>
-          <CardContent sx={{ margin: 6 }}>
+        <Card className="regForm" sx={{ borderRadius: "3%", maxWidth: 300 }}>
+          <CardContent sx={{ margin: 1 }}>
             <Typography variant="h5">
               Welcome, to IEEE Event Attendance System
             </Typography>
             <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>
-              <Stack spacing={3}>
-                <label htmlFor="contained-button-file">
+              <label htmlFor="contained-button-file">
+                <Stack spacing={3}>
                   <Input
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     id="contained-button-file"
                     single
                     type="file"
                     name="file"
+                    color="primary"
+                    variant="outlined"
                     onChange={handleChange}
                   />
                   <Button
                     variant="contained"
                     onClick={formSubmit}
+                    fullWidth="false"
+                    sx={{
+                      width: "fit-content",
+                      padding: "6px 30px",
+                    }}
                     component="span"
                   >
-                    Upload
+                    Submit
                   </Button>
-                </label>
-              </Stack>
+                </Stack>
+              </label>
             </Box>
-            <Snackbar
-              className="regSnack"
-              open={open}
-              onClose={handleClose}
-              message={snackText}
-              action={action}
-            />
           </CardContent>
         </Card>
+        <Snackbar
+          className="regSnack"
+          open={open}
+          onClose={handleClose}
+          message={snackText}
+          action={action}
+        />
       </Container>
     </div>
   );
