@@ -69,7 +69,7 @@ function QrScanner() {
         if (res.request.status === 500) {
           changeSnackText(res.response.data);
           changeVis(true);
-        } else if (res.request.status === 300) {
+        } else if (res.request.status === 301) {
           navigate("/login");
         } else {
           setUserDetails(res.data[0]);
