@@ -2,6 +2,7 @@ import React from "react";
 import Header from "./Header";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
+import Grow from "@mui/material/Grow";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -19,7 +20,7 @@ function Home() {
       navigate("/login");
     } else {
       await verifyjwt(token).then((res) => {
-        // console.log(res.request);
+        // console.log(JSON.parse(res.request.response));
         if (res.request.status !== 200) {
           navigate("/login");
         }
@@ -42,44 +43,46 @@ function Home() {
     <div>
       <Header />
       <Container sx={{ margin: "auto", marginTop: "100px" }}>
-        <Stack
-          direction={{ xs: "column", sm: "column", md: "row" }}
-          justifyContent="center"
-          alignItems="center"
-          spacing={5}
-          sx={{ margin: "auto", height: "70vh" }}
-        >
-          <Card
-            sx={{ maxWidth: 345, cursor: "pointer" }}
-            onClick={() => {
-              handleClick("reg");
-            }}
+        <Grow in="true" {...(true ? { timeout: 1300 } : {})}>
+          <Stack
+            direction={{ xs: "column", sm: "column", md: "row" }}
+            justifyContent="center"
+            alignItems="center"
+            spacing={5}
+            sx={{ margin: "auto", height: "70vh" }}
           >
-            <CardContent>
-              <Typography variant="body1" color="text.secondary">
-                <IconButton>
-                  <Edit></Edit>
-                </IconButton>
-                Registration ID
-              </Typography>
-            </CardContent>
-          </Card>
-          <Card
-            sx={{ maxWidth: 345, cursor: "pointer" }}
-            onClick={() => {
-              handleClick("qr");
-            }}
-          >
-            <CardContent>
-              <Typography variant="body1" color="text.secondary">
-                <IconButton>
-                  <FullScreen></FullScreen>
-                </IconButton>
-                QR Scanner
-              </Typography>
-            </CardContent>
-          </Card>
-        </Stack>
+            <Card
+              sx={{ maxWidth: 345, cursor: "pointer" }}
+              onClick={() => {
+                handleClick("reg");
+              }}
+            >
+              <CardContent>
+                <Typography variant="body1" color="text.secondary">
+                  <IconButton>
+                    <Edit></Edit>
+                  </IconButton>
+                  Registration ID
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card
+              sx={{ maxWidth: 345, cursor: "pointer" }}
+              onClick={() => {
+                handleClick("qr");
+              }}
+            >
+              <CardContent>
+                <Typography variant="body1" color="text.secondary">
+                  <IconButton>
+                    <FullScreen></FullScreen>
+                  </IconButton>
+                  QR Scanner
+                </Typography>
+              </CardContent>
+            </Card>
+          </Stack>
+        </Grow>
       </Container>
     </div>
   );

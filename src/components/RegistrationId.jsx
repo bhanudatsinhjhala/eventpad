@@ -5,7 +5,7 @@ import Header from "./Header";
 import RegistrationForm from "./RegistrationForm";
 import UserDetailsCard from "./userDetailsCard";
 import { verifyjwt } from "../index";
-import { Box, Container, Button, Snackbar } from "@mui/material";
+import { Container, Snackbar } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -52,11 +52,6 @@ function RegistrationId() {
     setOpen(true);
   };
 
-  function handleClick(value) {
-    if (value === "home") {
-      navigate("/");
-    }
-  }
   function handleClose() {
     if (open === true) {
       setOpen(false);
@@ -95,15 +90,6 @@ function RegistrationId() {
               changeVis={changeVis}
             />
           )}
-          <Box sx={{ width: "fit-content", margin: "30px auto" }}>
-            <Button
-              sx={{ margin: "auto" }}
-              variant="outlined"
-              onClick={() => handleClick("home")}
-            >
-              Back to Home
-            </Button>
-          </Box>
           <Snackbar
             className="regSnack"
             open={open}

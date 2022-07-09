@@ -1,41 +1,56 @@
-import React from "react";
-import { Button, TextField, Stack } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Button,
+  TextField,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import Login from "@mui/icons-material/Login";
-import { loginUser, verifyjwt } from "..";
-import { useNavigate } from "react-router-dom";
+import { createUsers } from "..";
+// import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 function MyForm(props) {
+  const [isAccountCreated, setAccountCreated] = useState(false);
   const {
     register,
+    reset,
     formState: { errors },
     handleSubmit,
   } = useForm();
-
-  const navigate = useNavigate();
-  const form = useForm({ defaultValues: { membershipId: "", password: "" } });
+  useEffect(() => {
+    if (isAccountCreated) {
+      reset({
+        membershipId: "",
+        role: "",
+        password: "",
+        email: "",
+      });
+      setAccountCreated(false);
+    }
+  }, [reset, isAccountCreated]);
+  // const navigate = useNavigate();
+  const form = useForm({
+    defaultValues: { membershipId: "", password: "", email: "", role: "" },
+  });
   const onSubmit = (data) => {
-    // console.log(data);
-    loginUser(data).then((res, err) => {
-      // console.log(res);
+    console.log(data);
+    createUsers(data).then((res, err) => {
+      console.log(res);
       // console.log(err.response);
       if (res.status === 200) {
         // console.log(res.data);
         if (res.data.message) {
           // console.log(res.data);
           props.changeSnackText(res.data.message);
-        } else {
-          sessionStorage.setItem("token", res.data);
-          verifyjwt(res.data).then((res) => {
-            // console.log(res);
-            if (res.data.message) {
-              // console.log(res.data);
-              props.changeSnackText(res.data.message);
-            } else {
-              navigate("/");
-            }
-          });
+          setAccountCreated(true);
         }
+      } else if (res.response.status === 500) {
+        props.changeSnackText(res.response.data.message);
       }
     });
   };
@@ -79,6 +94,29 @@ function MyForm(props) {
               : null
           }
         />
+        <TextField
+          type="text"
+          className="textInput"
+          name="email"
+          label="Email-Id"
+          placeholder="Enter your Email Id"
+          size="small"
+          {...register("email", {
+            required: true,
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: "Entered value does not match email format",
+            },
+          })}
+          error={Boolean(errors.email)}
+          helperText={
+            errors.email
+              ? errors.email.type === "required"
+                ? "Email Id is required"
+                : errors.email.message
+              : null
+          }
+        />
 
         <TextField
           type="password"
@@ -98,6 +136,22 @@ function MyForm(props) {
               : null
           }
         />
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Role</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Role"
+            name="Role"
+            {...register("role", {
+              required: true,
+            })}
+          >
+            <MenuItem value="Admin">Admin</MenuItem>
+            <MenuItem value="Volunteer">Volunteer</MenuItem>
+            <MenuItem value="Execom">Execom</MenuItem>
+          </Select>
+        </FormControl>
         <Button
           startIcon={<Login />}
           variant="outlined"

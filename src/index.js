@@ -4,6 +4,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import App from "./components/App";
 import axios from "axios";
+import qs from "qs";
 import reportWebVitals from "./reportWebVitals";
 require("dotenv").config();
 
@@ -134,6 +135,44 @@ export async function markPresence(id) {
         .then((res, err) => {
           if (res) {
             // console.log(res);
+            return res;
+          } else {
+            console.log(err);
+            return err;
+          }
+        });
+      return response;
+    } else {
+      // console.log(verifyres);
+      return verifyres;
+    }
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
+export async function createUsers(user) {
+  try {
+    var verifyres = await verifyjwt(sessionStorage.getItem("token"));
+    if (verifyres.status === 200) {
+      // const formData = new FormData();
+      // formData.append("membershipId", parseInt(user.membershipId));
+      // formData.append("email", user.email);
+      // formData.append("password", user.password);
+      // formData.append("role", user.role);
+      const response = await axios
+        .post(
+          `${api_url}/api/signup`,
+          qs.stringify({
+            membershipId: parseInt(user.membershipId),
+            role: user.role,
+            email: user.email,
+            password: user.password,
+          })
+        )
+        .then((res, err) => {
+          if (res) {
+            console.log(res);
             return res;
           } else {
             console.log(err);

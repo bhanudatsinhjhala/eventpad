@@ -22,9 +22,12 @@ function UploadData() {
       navigate("/login");
     } else {
       await verifyjwt(token).then((res) => {
-        // console.log(res.request);
+        console.log(res.request);
         if (res.request.status !== 200) {
           navigate("/login");
+        } else if (JSON.parse(res.request.response).role !== "Admin") {
+          navigate("/");
+          alert("Sorry you can not access this page because you are not admin");
         }
       });
     }
@@ -90,7 +93,7 @@ function UploadData() {
         <Card className="regForm" sx={{ borderRadius: "3%", maxWidth: 300 }}>
           <CardContent sx={{ margin: 1 }}>
             <Typography variant="h5">
-              Welcome, to IEEE Event Attendance System
+              Upload Your Registartion Data Excel Sheet here.
             </Typography>
             <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>
               <label htmlFor="contained-button-file">

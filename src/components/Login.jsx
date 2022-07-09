@@ -7,6 +7,7 @@ import {
   CardContent,
   Box,
   Snackbar,
+  Grow,
 } from "@mui/material";
 import LoginForm from "./LoginForm.jsx";
 import IconButton from "@mui/material/IconButton";
@@ -40,21 +41,23 @@ function Loginqr() {
   );
   return (
     <Container>
-      <Card
-        className="regForm"
-        sx={{ borderRadius: "3%", maxWidth: 300 }}
-        elevation={10}
-      >
-        <CardContent sx={{ maxWidth: 280, margin: "20px auto" }}>
-          <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-            Welcome, to IEEE Event Attendance System
-          </Typography>
+      <Grow in={true} {...(true ? { timeout: 1300 } : {})}>
+        <Card
+          className="regForm"
+          sx={{ borderRadius: "3%", maxWidth: 300 }}
+          elevation={10}
+        >
+          <CardContent sx={{ maxWidth: 280, margin: "20px auto" }}>
+            <Typography variant="h5" sx={{ marginBottom: "20px" }}>
+              Welcome, to IEEE Event Attendance System
+            </Typography>
 
-          <Box>
-            <LoginForm changeSnackText={changeSnackText} />
-          </Box>
-        </CardContent>
-      </Card>
+            <Box>
+              <LoginForm changeSnackText={changeSnackText} />
+            </Box>
+          </CardContent>
+        </Card>
+      </Grow>
       <Snackbar
         className="regSnack"
         open={open}

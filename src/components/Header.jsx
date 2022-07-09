@@ -20,6 +20,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
 
@@ -79,6 +80,11 @@ export default function PersistentDrawerLeft() {
     },
     {
       key: 4,
+      text: "Volunteers Account",
+      to: "createusers",
+    },
+    {
+      key: 5,
       text: "Log Out",
       to: "login",
     },
@@ -105,7 +111,7 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            QR Scanner
+            {open === true ? null : "QR Scanner"}
           </Typography>
           <Button
             sx={{
@@ -134,12 +140,20 @@ export default function PersistentDrawerLeft() {
             boxSizing: "border-box",
           },
         }}
-        // variant="persistent"
+        variant="persistent"
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+        <DrawerHeader sx={{ justifyContent: "space-between" }}>
+          <Typography
+            variant="h6"
+            color="primary"
+            sx={{ margin: 2, color: "#1976d2" }}
+          >
+            QR Scanner
+          </Typography>
+
+          <IconButton onClick={handleDrawerClose} sx={{ color: "inherit" }}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
@@ -149,30 +163,47 @@ export default function PersistentDrawerLeft() {
         </DrawerHeader>
         <Divider />
         <List>
-          {navItems.map((Obj) => (
-            <div>
-              if(Obj.key !==4)(
-              <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding>
-                <Link to={`/${Obj.to}`} style={{ textDecoration: "none" }}>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      {Obj.key % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={Obj.text} />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
-              )else(
-              <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding>
-                <Link to={`/${Obj.to}`} style={{ textDecoration: "none" }}>
-                  <Button variant="outlined" onClick={logOut}>
-                    Logout
-                  </Button>
-                </Link>
-              </ListItem>
-              )
-            </div>
-          ))}
+          {navItems.map((Obj) => {
+            if (Obj.key !== 5) {
+              return (
+                <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding>
+                  <Link
+                    to={`/${Obj.to}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <ListItemButton>
+                      <ListItemIcon>
+                        {Obj.key % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                      </ListItemIcon>
+                      <ListItemText primary={Obj.text} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              );
+            } else {
+              return (
+                <ListItem
+                  key={Obj.key}
+                  onClick={handleNavBtn}
+                  variant="outlined"
+                  disablePadding
+                >
+                  <Link
+                    to={`/${Obj.to}`}
+                    variant="outlined"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <ListItemButton onClick={logOut}>
+                      <ListItemIcon>
+                        <LogoutIcon />
+                      </ListItemIcon>
+                      Logout
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              );
+            }
+          })}
         </List>
         <Divider />
       </Drawer>

@@ -11,7 +11,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 // import Button from "@mui/material/Button";
 import "./App.css";
-// import { useNavigate} from "react-router-dom";
 function QrScanner() {
   const navigate = useNavigate();
   async function isAuthenticated() {
@@ -58,6 +57,11 @@ function QrScanner() {
       setOpen(false);
     }
   }
+  function handleClick(value) {
+    if (value === "home") {
+      navigate("/");
+    }
+  }
   function qrData(data) {
     if (data !== null) {
       getUserDetails(data).then((res) => {
@@ -73,11 +77,6 @@ function QrScanner() {
           // console.log(visiblity);
         }
       });
-    }
-  }
-  function handleClick(value) {
-    if (value === "home") {
-      navigate("/");
     }
   }
   const action = (
@@ -100,28 +99,39 @@ function QrScanner() {
     <div>
       <Header />
       {visiblity ? (
-        <QrReader
-          constraints={{ facingMode: "environment" }}
-          scanDelay={500}
-          onResult={(result, error) => {
-            if (result) {
-              // console.log(result.text);
-              qrData(parseInt(result.text));
-            } else if (error) {
-              // console.info(error);
-              // qrData("");
-            }
-          }}
-          videoStyle={{
-            height: "inherit",
-            margin: "auto",
-            width: "88%",
-            position: "none",
-          }}
-          videoContainerStyle={{ paddingTop: "0px", height: "inherit" }}
-          className="qrContainer"
-          style={{ width: "100%", height: "50vh" }}
-        />
+        <div>
+          <QrReader
+            constraints={{ facingMode: "environment" }}
+            scanDelay={500}
+            onResult={(result, error) => {
+              if (result) {
+                // console.log(result.text);
+                qrData(parseInt(result.text));
+              } else if (error) {
+                // console.info(error);
+                // qrData("");
+              }
+            }}
+            videoStyle={{
+              height: "inherit",
+              margin: "auto",
+              width: "88%",
+              position: "none",
+            }}
+            videoContainerStyle={{ paddingTop: "0px", height: "inherit" }}
+            className="qrContainer"
+            style={{ width: "100%", height: "50vh" }}
+          />
+          <Box sx={{ width: "fit-content", margin: "30px auto" }}>
+            <Button
+              sx={{ margin: "auto" }}
+              variant="outlined"
+              onClick={() => handleClick("home")}
+            >
+              Back to Home
+            </Button>
+          </Box>
+        </div>
       ) : (
         <UserDetailsCard
           changeUserDetails={changeUserDetails}
@@ -129,15 +139,6 @@ function QrScanner() {
           changeVis={changeVis}
         />
       )}
-      <Box sx={{ width: "fit-content", margin: "30px auto" }}>
-        <Button
-          sx={{ margin: "auto" }}
-          variant="outlined"
-          onClick={() => handleClick("home")}
-        >
-          Back to Home
-        </Button>
-      </Box>
       <Snackbar
         className="regSnack"
         open={open}
