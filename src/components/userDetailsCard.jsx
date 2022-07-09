@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 // import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grow from "@mui/material/Grow";
-import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import DoneIcon from "@mui/icons-material/Done";
 import IconButton from "@mui/material/IconButton";
@@ -13,7 +12,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { markPresence } from "../index.js";
 
 function userDetailsCard(props) {
-  const navigate = useNavigate();
   const checked = true;
   const [open, setOpen] = useState(false);
   const [snackText, setSnackText] = useState("hello");
@@ -54,11 +52,7 @@ function userDetailsCard(props) {
       setOpen(false);
     }
   }
-  function handleClick(value) {
-    if (value === "home") {
-      navigate("/");
-    }
-  }
+
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -128,15 +122,6 @@ function userDetailsCard(props) {
             message={snackText}
             action={action}
           />
-        </Box>
-        <Box sx={{ width: "fit-content", margin: "30px auto" }}>
-          <Button
-            sx={{ margin: "auto" }}
-            variant="outlined"
-            onClick={() => handleClick("home")}
-          >
-            Back to Home
-          </Button>
         </Box>
       </div>
     </Grow>

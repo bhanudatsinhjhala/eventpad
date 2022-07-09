@@ -122,15 +122,6 @@ function QrScanner() {
             className="qrContainer"
             style={{ width: "100%", height: "50vh" }}
           />
-          <Box sx={{ width: "fit-content", margin: "30px auto" }}>
-            <Button
-              sx={{ margin: "auto" }}
-              variant="outlined"
-              onClick={() => handleClick("home")}
-            >
-              Back to Home
-            </Button>
-          </Box>
         </div>
       ) : (
         <UserDetailsCard
@@ -139,6 +130,15 @@ function QrScanner() {
           changeVis={changeVis}
         />
       )}
+      <Box sx={{ width: "fit-content", margin: "30px auto" }}>
+        <Button
+          sx={{ margin: "auto" }}
+          variant="outlined"
+          onClick={() => handleClick("home")}
+        >
+          Back to Home
+        </Button>
+      </Box>
       <Snackbar
         className="regSnack"
         open={open}

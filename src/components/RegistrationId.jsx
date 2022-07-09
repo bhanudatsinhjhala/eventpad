@@ -5,7 +5,7 @@ import Header from "./Header";
 import RegistrationForm from "./RegistrationForm";
 import UserDetailsCard from "./userDetailsCard";
 import { verifyjwt } from "../index";
-import { Container, Snackbar } from "@mui/material";
+import { Container, Snackbar, Box, Button } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -57,6 +57,11 @@ function RegistrationId() {
       setOpen(false);
     }
   }
+  function handleClick(value) {
+    if (value === "home") {
+      navigate("/");
+    }
+  }
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -90,6 +95,15 @@ function RegistrationId() {
               changeVis={changeVis}
             />
           )}
+          <Box sx={{ width: "fit-content", margin: "30px auto" }}>
+            <Button
+              sx={{ margin: "auto" }}
+              variant="outlined"
+              onClick={() => handleClick("home")}
+            >
+              Back to Home
+            </Button>
+          </Box>
           <Snackbar
             className="regSnack"
             open={open}

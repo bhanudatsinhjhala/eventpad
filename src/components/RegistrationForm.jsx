@@ -2,20 +2,13 @@ import React from "react";
 import { Box, Typography, Stack, TextField, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { getUserDetails } from "../index";
-import { useNavigate } from "react-router-dom";
 
 export default function RegistrationForm(props) {
-  const navigate = useNavigate();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  function handleClick(value) {
-    if (value === "home") {
-      navigate("/");
-    }
-  }
   const onSubmit = (data) => {
     console.log(data);
     getUserDetails(data.regid).then((res) => {
@@ -82,15 +75,6 @@ export default function RegistrationForm(props) {
             Submit
           </Button>
         </Stack>
-      </Box>
-      <Box sx={{ width: "fit-content", margin: "30px auto" }}>
-        <Button
-          sx={{ margin: "auto" }}
-          variant="outlined"
-          onClick={() => handleClick("home")}
-        >
-          Back to Home
-        </Button>
       </Box>
     </div>
   );
