@@ -48,6 +48,7 @@ export default function RegistrationForm(props) {
         </Typography>
         <Stack direction="row" spacing={3}>
           <TextField
+            autoComplete="off"
             name="regid"
             label="Registration-Id"
             type="text"

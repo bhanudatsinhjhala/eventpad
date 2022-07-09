@@ -66,6 +66,7 @@ function MyForm(props) {
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       <Stack spacing={3}>
         <TextField
+          autoComplete="off"
           type="text"
           className="textInput"
           name="membershipId"
@@ -95,6 +96,7 @@ function MyForm(props) {
           }
         />
         <TextField
+          autoComplete="off"
           type="text"
           className="textInput"
           name="email"
@@ -119,6 +121,7 @@ function MyForm(props) {
         />
 
         <TextField
+          autoComplete="off"
           type="password"
           label="Password"
           className="textInput"
