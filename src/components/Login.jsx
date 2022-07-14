@@ -43,8 +43,15 @@ function Loginqr() {
     <Container>
       <Grow in={true} {...(true ? { timeout: 1300 } : {})}>
         <Card
-          className="regForm"
-          sx={{ borderRadius: "3%", maxWidth: 300 }}
+          sx={{
+            margin: "auto",
+            marginTop: {
+              xs: 13,
+              md: "12rem",
+            },
+            borderRadius: "3%",
+            maxWidth: 300,
+          }}
           elevation={10}
         >
           <CardContent sx={{ maxWidth: 280, margin: "20px auto" }}>

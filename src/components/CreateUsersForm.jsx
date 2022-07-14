@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { LoadingButton } from "@mui/lab";
 import {
-  Button,
   TextField,
   Stack,
   FormControl,
@@ -8,13 +8,14 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import Login from "@mui/icons-material/Login";
+// import Login from "@mui/icons-material/Login";
 import { createUsers } from "..";
 // import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
 function MyForm(props) {
+  const [loading, setLoading] = useState(false);
   const [isAccountCreated, setAccountCreated] = useState(false);
   const {
     register,
@@ -39,6 +40,7 @@ function MyForm(props) {
   });
   const onSubmit = (data) => {
     console.log(data);
+    setLoading(true);
     createUsers(data).then((res, err) => {
       console.log(res);
       // console.log(err.response);
@@ -47,10 +49,12 @@ function MyForm(props) {
         if (res.data.message) {
           // console.log(res.data);
           props.changeSnackText(res.data.message);
+          setLoading(false);
           setAccountCreated(true);
         }
       } else if (res.response.status === 500) {
         props.changeSnackText(res.response.data.message);
+        setLoading(true);
       }
     });
   };
@@ -150,19 +154,18 @@ function MyForm(props) {
               required: true,
             })}
           >
-            <MenuItem value="Admin">Admin</MenuItem>
             <MenuItem value="Volunteer">Volunteer</MenuItem>
             <MenuItem value="Execom">Execom</MenuItem>
           </Select>
         </FormControl>
-        <Button
-          startIcon={<Login />}
-          variant="outlined"
+        <LoadingButton
           type="submit"
           size="medium"
+          loading={loading}
+          variant="outlined"
         >
-          Login
-        </Button>
+          Create Account
+        </LoadingButton>
       </Stack>
     </form>
   );

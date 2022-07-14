@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails, verifyjwt } from "../index";
+import { getUserDetails, verifyjwt, totalAbsent } from "../index";
 import { QrReader } from "react-qr-reader";
 import Snackbar from "@mui/material/Snackbar";
 import Box from "@mui/material/Box";
@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 // import Button from "@mui/material/Button";
 import "./App.css";
+import { Typography } from "@mui/material";
 function QrScanner() {
   const navigate = useNavigate();
   async function isAuthenticated() {
@@ -32,7 +33,7 @@ function QrScanner() {
   const [open, setOpen] = useState(false);
   // const [data, setData] = useState();
   const [snackText, setSnackText] = useState("hello");
-  // const navigate = useNavigate();
+  var [absentCount, setAbsentCount] = useState();
   const [visiblity, setVisibility] = useState(true);
   const [userDetails, setUserDetails] = useState({
     name: "",
@@ -62,6 +63,15 @@ function QrScanner() {
       navigate("/");
     }
   }
+  function checkAbsentCount() {
+    totalAbsent().then((res) => {
+      console.log(res);
+      setAbsentCount(res.data.count);
+    });
+  }
+  useEffect(() => {
+    checkAbsentCount();
+  });
   function qrData(data) {
     if (data !== null) {
       getUserDetails(data).then((res) => {
@@ -100,6 +110,18 @@ function QrScanner() {
       <Header />
       {visiblity ? (
         <div>
+          <Typography
+            sx={{
+              margin: "auto",
+              marginTop: "5rem",
+              width: "fit-content",
+              padding: "5px",
+              border: "1px solid #00629b",
+            }}
+            variant="body2"
+          >
+            Absent: {absentCount}
+          </Typography>
           <QrReader
             constraints={{ facingMode: "environment" }}
             scanDelay={500}

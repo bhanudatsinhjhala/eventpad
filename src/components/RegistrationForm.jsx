@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Stack, TextField, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { getUserDetails } from "../index";
+import { getUserDetails, totalAbsent } from "../index";
 
 export default function RegistrationForm(props) {
   const {
@@ -9,6 +9,17 @@ export default function RegistrationForm(props) {
     formState: { errors },
     handleSubmit,
   } = useForm();
+  var [absentCount, setAbsentCount] = useState();
+
+  function checkAbsentCount() {
+    totalAbsent().then((res) => {
+      console.log(res);
+      setAbsentCount(res.data.count);
+    });
+  }
+  useEffect(() => {
+    checkAbsentCount();
+  });
   const onSubmit = (data) => {
     console.log(data);
     getUserDetails(data.regid).then((res) => {
@@ -38,6 +49,18 @@ export default function RegistrationForm(props) {
       >
         <Typography variant="h4" sx={{ marginBottom: "20px" }}>
           Registration Id
+          <Typography
+            sx={{
+              margin: "auto",
+              marginLeft: 3,
+              display: "inline",
+              border: "1px solid #00629b",
+              padding: "2px",
+            }}
+            variant="body2"
+          >
+            Absent: {absentCount}
+          </Typography>
         </Typography>
         <Stack direction="row" spacing={3}>
           <TextField

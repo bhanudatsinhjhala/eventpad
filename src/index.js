@@ -90,6 +90,29 @@ export async function loginUser(user) {
     return err;
   }
 }
+export async function totalAbsent() {
+  try {
+    var verifyres = await verifyjwt(sessionStorage.getItem("token"));
+    if (verifyres.status === 200) {
+      const response = await axios
+        .get(`${api_url}/api/totalabsent`)
+        .then((res, err) => {
+          if (res) {
+            return res;
+          } else {
+            console.log(err);
+          }
+        });
+      return response;
+    } else {
+      // console.log(verifyres);
+      return verifyres;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export async function getUserDetails(id) {
   try {
     var verifyres = await verifyjwt(sessionStorage.getItem("token"));

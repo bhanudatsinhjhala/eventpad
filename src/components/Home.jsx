@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
@@ -14,13 +14,15 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 function Home() {
   const navigate = useNavigate();
+  var [tokenValue, setTokenValue] = useState({});
   async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
     } else {
       await verifyjwt(token).then((res) => {
-        // console.log(JSON.parse(res.request.response));
+        console.log(JSON.parse(res.request.response));
+        setTokenValue(JSON.parse(res.request.response));
         if (res.request.status !== 200) {
           navigate("/login");
         }
@@ -41,7 +43,7 @@ function Home() {
   }
   return (
     <div>
-      <Header />
+      <Header tokenValue={tokenValue} />
       <Container sx={{ margin: "auto", marginTop: "100px" }}>
         <Grow in="true" {...(true ? { timeout: 1300 } : {})}>
           <Stack

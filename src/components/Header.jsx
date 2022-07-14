@@ -50,8 +50,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft(props) {
   const navigate = useNavigate();
+  // console.log(props.tokenValue, "tokenValue");
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -62,7 +63,7 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const navItems = [
+  var navItems = [
     {
       key: 1,
       text: "QrScanner",
@@ -74,21 +75,39 @@ export default function PersistentDrawerLeft() {
       to: "registrationid",
     },
     {
-      key: 3,
-      text: "Upload Data",
-      to: "uploadfile",
-    },
-    {
-      key: 4,
-      text: "Volunteers Account",
-      to: "createusers",
-    },
-    {
       key: 5,
       text: "Log Out",
       to: "login",
     },
   ];
+  if (props.tokenValue) {
+    if (props.tokenValue.role === "Admin") {
+      navItems = [
+        ...navItems.slice(0, 2),
+        {
+          key: 3,
+          text: "Upload Data",
+          to: "uploadfile",
+        },
+        {
+          key: 4,
+          text: "Volunteers Account",
+          to: "createusers",
+        },
+        ...navItems.slice(2),
+      ];
+    } else if (props.tokenValue.role === "Execom") {
+      navItems = [
+        ...navItems.slice(0, 2),
+        {
+          key: 4,
+          text: "Volunteers Account",
+          to: "createusers",
+        },
+        ...navItems.slice(2),
+      ];
+    }
+  }
   const handleNavBtn = (e) => {
     console.log(e.target.outerText);
   };
@@ -150,7 +169,9 @@ export default function PersistentDrawerLeft() {
             color="primary"
             sx={{ margin: 2, color: "#1976d2" }}
           >
-            QR Scanner
+            <Link to={`/`} style={{ textDecoration: "none", color: "inherit" }}>
+              QR Scanner
+            </Link>
           </Typography>
 
           <IconButton onClick={handleDrawerClose} sx={{ color: "inherit" }}>

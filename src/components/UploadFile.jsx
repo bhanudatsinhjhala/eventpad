@@ -56,11 +56,13 @@ function UploadData() {
     e.preventDefault();
     // console.log(user, "user");
     uploadFile(user).then((res) => {
+      console.log(res);
       if (res.request.status === 500) {
-        // console.log(res);
         changeSnackText(res.response.data);
       } else if (res.request.status === 300) {
         navigate("/login");
+      } else if (res.request.status === 200) {
+        changeSnackText(res.data);
       } else {
         changeSnackText("Please Upload a Excel File or Spreadsheet");
       }
@@ -90,10 +92,20 @@ function UploadData() {
     <div>
       <Header />
       <Container>
-        <Card className="regForm" sx={{ borderRadius: "3%", maxWidth: 300 }}>
+        <Card
+          sx={{
+            margin: "auto",
+            marginTop: {
+              xs: 13,
+              md: "12rem",
+            },
+            borderRadius: "3%",
+            maxWidth: 300,
+          }}
+        >
           <CardContent sx={{ margin: 1 }}>
             <Typography variant="h5">
-              Upload Your Registartion Data Excel Sheet here.
+              Upload Your Participants Data's Excel Sheet here.
             </Typography>
             <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>
               <label htmlFor="contained-button-file">

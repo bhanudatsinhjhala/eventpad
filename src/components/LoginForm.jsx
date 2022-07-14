@@ -1,5 +1,7 @@
-import React from "react";
-import { Button, TextField, Stack } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, Stack, InputAdornment, IconButton } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Login from "@mui/icons-material/Login";
 import { loginUser, verifyjwt } from "..";
 import { useNavigate } from "react-router-dom";
@@ -13,29 +15,39 @@ function MyForm(props) {
   } = useForm();
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const form = useForm({ defaultValues: { membershipId: "", password: "" } });
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
   const onSubmit = (data) => {
-    // console.log(data);
+    console.log(data);
+    setLoading(true);
     loginUser(data).then((res, err) => {
-      // console.log(res);
-      // console.log(err.response);
+      console.log(res);
       if (res.status === 200) {
         // console.log(res.data);
         if (res.data.message) {
-          // console.log(res.data);
+          console.log(res.data);
           props.changeSnackText(res.data.message);
+          setLoading(false);
         } else {
           sessionStorage.setItem("token", res.data);
           verifyjwt(res.data).then((res) => {
-            // console.log(res);
+            console.log(res);
             if (res.data.message) {
               // console.log(res.data);
               props.changeSnackText(res.data.message);
+              setLoading(false);
             } else {
               navigate("/");
             }
           });
         }
+      } else {
+        props.changeSnackText(res.data);
+        setLoading(false);
       }
     });
   };
@@ -83,7 +95,7 @@ function MyForm(props) {
 
         <TextField
           autoComplete="off"
-          type="password"
+          type={showPassword ? "text" : "password"}
           label="Password"
           className="textInput"
           placeholder="Enter your Password"
@@ -99,15 +111,30 @@ function MyForm(props) {
                 : null
               : null
           }
+          InputProps={{
+            // <-- This is where the toggle button is added.
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
-        <Button
-          startIcon={<Login />}
-          variant="outlined"
+        <LoadingButton
           type="submit"
           size="medium"
+          startIcon={<Login />}
+          loading={loading}
+          variant="outlined"
         >
           Login
-        </Button>
+        </LoadingButton>
       </Stack>
     </form>
   );
