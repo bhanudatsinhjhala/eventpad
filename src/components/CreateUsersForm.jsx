@@ -39,10 +39,10 @@ function MyForm(props) {
     defaultValues: { membershipId: "", password: "", email: "", role: "" },
   });
   const onSubmit = (data) => {
-    console.log(data);
-    setLoading(true);
+    // console.log(data);
+    // setLoading(true);
     createUsers(data).then((res, err) => {
-      console.log(res);
+      // console.log(res);
       // console.log(err.response);
       if (res.status === 200) {
         // console.log(res.data);

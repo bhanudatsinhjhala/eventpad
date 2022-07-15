@@ -22,20 +22,20 @@ function MyForm(props) {
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
     setLoading(true);
     loginUser(data).then((res, err) => {
-      console.log(res);
+      // console.log(res);
       if (res.status === 200) {
         // console.log(res.data);
         if (res.data.message) {
-          console.log(res.data);
+          // console.log(res.data);
           props.changeSnackText(res.data.message);
           setLoading(false);
         } else {
           sessionStorage.setItem("token", res.data);
           verifyjwt(res.data).then((res) => {
-            console.log(res);
+            // console.log(res);
             if (res.data.message) {
               // console.log(res.data);
               props.changeSnackText(res.data.message);

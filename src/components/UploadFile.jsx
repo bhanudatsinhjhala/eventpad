@@ -22,7 +22,7 @@ function UploadData() {
       navigate("/login");
     } else {
       await verifyjwt(token).then((res) => {
-        console.log(res.request);
+        // console.log(res.request);
         if (res.request.status !== 200) {
           navigate("/login");
         } else if (JSON.parse(res.request.response).role !== "Admin") {
@@ -56,7 +56,7 @@ function UploadData() {
     e.preventDefault();
     // console.log(user, "user");
     uploadFile(user).then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.request.status === 500) {
         changeSnackText(res.response.data);
       } else if (res.request.status === 300) {

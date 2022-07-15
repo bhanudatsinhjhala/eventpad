@@ -1,32 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
 import RegistrationForm from "./RegistrationForm";
 import UserDetailsCard from "./userDetailsCard";
-import { verifyjwt } from "../index";
 import { Container, Snackbar, Box, Button } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
 function RegistrationId() {
   const navigate = useNavigate();
-  async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
-    if (token === null) {
-      navigate("/login");
-    } else {
-      await verifyjwt(token).then((res) => {
-        // console.log(res.request);
-        if (res.request.status !== 200) {
-          navigate("/login");
-        }
-      });
-    }
-  }
-  useEffect(() => {
-    isAuthenticated();
-  }, []);
   const [open, setOpen] = useState(false);
   // const [regid, setRegid] = useState();
   // const [data, setData] = useState();

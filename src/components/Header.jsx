@@ -18,9 +18,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LogoutIcon from "@mui/icons-material/Logout";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { verifyjwt } from "..";
 
 const drawerWidth = 240;
 
@@ -51,6 +54,25 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
+  var [tokenValue, setTokenValue] = React.useState({});
+
+  async function isAuthenticated() {
+    const token = sessionStorage.getItem("token");
+    if (token === null) {
+      navigate("/login");
+    } else {
+      await verifyjwt(token).then((res) => {
+        // console.log(JSON.parse(res.request.response));
+        setTokenValue(JSON.parse(res.request.response));
+        if (res.request.status !== 200) {
+          navigate("/login");
+        }
+      });
+    }
+  }
+  React.useEffect(() => {
+    isAuthenticated();
+  }, []);
   const navigate = useNavigate();
   // console.log(props.tokenValue, "tokenValue");
   const theme = useTheme();
@@ -68,11 +90,13 @@ export default function PersistentDrawerLeft(props) {
       key: 1,
       text: "QrScanner",
       to: "qrscan",
+      icon: <QrCodeScannerIcon />,
     },
     {
       key: 2,
       text: "Registration Id",
       to: "registrationid",
+      icon: <AppRegistrationIcon />,
     },
     {
       key: 5,
@@ -80,23 +104,25 @@ export default function PersistentDrawerLeft(props) {
       to: "login",
     },
   ];
-  if (props.tokenValue) {
-    if (props.tokenValue.role === "Admin") {
+  if (tokenValue) {
+    if (tokenValue.role === "Admin") {
       navItems = [
         ...navItems.slice(0, 2),
         {
           key: 3,
           text: "Upload Data",
           to: "uploadfile",
+          icon: <FileUploadIcon />,
         },
         {
           key: 4,
           text: "Volunteers Account",
           to: "createusers",
+          icon: <PersonAddIcon />,
         },
         ...navItems.slice(2),
       ];
-    } else if (props.tokenValue.role === "Execom") {
+    } else if (tokenValue.role === "Execom") {
       navItems = [
         ...navItems.slice(0, 2),
         {
@@ -193,9 +219,7 @@ export default function PersistentDrawerLeft(props) {
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <ListItemButton>
-                      <ListItemIcon>
-                        {Obj.key % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                      </ListItemIcon>
+                      <ListItemIcon>{Obj.icon}</ListItemIcon>
                       <ListItemText primary={Obj.text} />
                     </ListItemButton>
                   </Link>

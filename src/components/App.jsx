@@ -5,6 +5,7 @@ import RegistrationId from "./RegistrationId.jsx";
 import QrScanner from "./QrScanner.jsx";
 import Home from "./Home.jsx";
 import Login from "./Login.jsx";
+import PresenceData from "./PresenceData.jsx";
 import Form from "./Form.jsx";
 import UploadFile from "./UploadFile.jsx";
 import { Routes, Route } from "react-router-dom";
@@ -15,6 +16,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/presentdata" element={<PresenceData />} />
       <Route path="/login" element={<Login />} />
       <Route path="/createusers" element={<CreateUsers />} />
       <Route path="/Form" element={<Form />} />

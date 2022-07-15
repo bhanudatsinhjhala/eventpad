@@ -13,7 +13,7 @@ export default function RegistrationForm(props) {
 
   function checkAbsentCount() {
     totalAbsent().then((res) => {
-      console.log(res);
+      // console.log(res);
       setAbsentCount(res.data.count);
     });
   }
@@ -21,7 +21,7 @@ export default function RegistrationForm(props) {
     checkAbsentCount();
   });
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
     getUserDetails(data.regid).then((res) => {
       // console.log(res);
       if (res.request.status === 300) {

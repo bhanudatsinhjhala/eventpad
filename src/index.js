@@ -95,6 +95,27 @@ export async function totalAbsent() {
     var verifyres = await verifyjwt(sessionStorage.getItem("token"));
     if (verifyres.status === 200) {
       const response = await axios
+        .get(`${api_url}/api/getpresencedata`)
+        .then((res, err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(res);
+            return res;
+          }
+          return response;
+        });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function presenceData() {
+  try {
+    var verifyres = await verifyjwt(sessionStorage.getItem("token"));
+    if (verifyres.status === 200) {
+      const response = await axios
         .get(`${api_url}/api/totalabsent`)
         .then((res, err) => {
           if (res) {

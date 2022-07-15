@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails, verifyjwt, totalAbsent } from "../index";
+import { getUserDetails, totalAbsent } from "../index";
 import { QrReader } from "react-qr-reader";
 import Snackbar from "@mui/material/Snackbar";
 import Box from "@mui/material/Box";
@@ -13,23 +13,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./App.css";
 import { Typography } from "@mui/material";
 function QrScanner() {
-  const navigate = useNavigate();
-  async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
-    if (token === null) {
-      navigate("/login");
-    } else {
-      await verifyjwt(token).then((res) => {
-        // console.log(res.request);
-        if (res.request.status !== 200) {
-          navigate("/login");
-        }
-      });
-    }
+  function checkAbsentCount() {
+    totalAbsent().then((res) => {
+      // console.log(res);
+      setAbsentCount(res.data.count);
+    });
   }
   useEffect(() => {
-    isAuthenticated();
-  }, []);
+    checkAbsentCount();
+  });
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   // const [data, setData] = useState();
   const [snackText, setSnackText] = useState("hello");
@@ -63,15 +56,6 @@ function QrScanner() {
       navigate("/");
     }
   }
-  function checkAbsentCount() {
-    totalAbsent().then((res) => {
-      console.log(res);
-      setAbsentCount(res.data.count);
-    });
-  }
-  useEffect(() => {
-    checkAbsentCount();
-  });
   function qrData(data) {
     if (data !== null) {
       getUserDetails(data).then((res) => {
