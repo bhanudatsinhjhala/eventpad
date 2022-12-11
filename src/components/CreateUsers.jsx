@@ -9,7 +9,6 @@ import {
   Snackbar,
   Grow,
 } from "@mui/material";
-import { verifyjwt } from "..";
 import CreateUsersForm from "./CreateUsersForm.jsx";
 import Header from "./Header.jsx";
 import { useNavigate } from "react-router-dom";
@@ -23,16 +22,6 @@ function CreateUsers() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
-    } else {
-      await verifyjwt(token).then((res) => {
-        // console.log(res.request);
-        if (res.request.status !== 200) {
-          navigate("/login");
-        } else if (JSON.parse(res.request.response).role === "Volunteer") {
-          navigate("/");
-          alert("Sorry you can not access this page because you are not admin");
-        }
-      });
     }
   }
   useEffect(() => {
@@ -65,7 +54,7 @@ function CreateUsers() {
   return (
     <div>
       <Header />
-      <Container>
+      <Container class="createFormUser">
         <Grow in={true} {...(true ? { timeout: 1300 } : {})}>
           <Card
             sx={{
@@ -79,7 +68,7 @@ function CreateUsers() {
             }}
             elevation={10}
           >
-            <CardContent sx={{ maxWidth: 280, margin: "20px auto" }}>
+            <CardContent sx={{ maxWidth: 280, margin: "20px auto", paddingBottom: '0px' }}>
               <Typography variant="h5" sx={{ marginBottom: "20px" }}>
                 Create Volunteers Accounts
               </Typography>

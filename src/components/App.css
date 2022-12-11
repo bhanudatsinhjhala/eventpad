@@ -53,6 +53,11 @@
     width: 95%;
   }
 }
+@media screen and (min-width: 968px){
+  .createFormUser{
+    margin-top: -6rem;
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

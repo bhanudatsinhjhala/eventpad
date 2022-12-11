@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { LoadingButton } from "@mui/lab";
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import {
   TextField,
   Stack,
@@ -16,6 +17,8 @@ import { useEffect } from "react";
 
 function MyForm(props) {
   const [loading, setLoading] = useState(false);
+  const [btnText, setBtnText] = useState('Create Account');
+  const [btnColor, setBtnColor] = useState('primary');
   const [isAccountCreated, setAccountCreated] = useState(false);
   const {
     register,
@@ -30,31 +33,47 @@ function MyForm(props) {
         role: "",
         password: "",
         email: "",
+        name: "",
       });
       setAccountCreated(false);
     }
   }, [reset, isAccountCreated]);
   // const navigate = useNavigate();
+
   const form = useForm({
     defaultValues: { membershipId: "", password: "", email: "", role: "" },
   });
   const onSubmit = (data) => {
     // console.log(data);
-    // setLoading(true);
-    createUsers(data).then((res, err) => {
-      // console.log(res);
+    setLoading(true);
+    createUsers(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
+      console.log(res);
       // console.log(err.response);
       if (res.status === 200) {
         // console.log(res.data);
         if (res.data.message) {
           // console.log(res.data);
+          setBtnColor('success');
           props.changeSnackText(res.data.message);
+          setTimeout(() => {
+            setBtnText('Create Account');
+            setBtnColor('primary')
+          }, 2000)
           setLoading(false);
           setAccountCreated(true);
         }
-      } else if (res.response.status === 500) {
-        props.changeSnackText(res.response.data.message);
-        setLoading(true);
+      } else {
+        if (res.response.status === 409) {
+          setBtnText(res.response.data.message)
+          setBtnColor('error');
+          setTimeout(() => {
+            setBtnText('Create Account');
+            setBtnColor('primary')
+          }, 2000)
+        } else {
+          props.changeSnackText(res.response.data.message);
+        }
+        setLoading(false);
       }
     });
   };
@@ -92,10 +111,40 @@ function MyForm(props) {
               ? errors.membershipId.type === "required"
                 ? "Membership Id is required"
                 : errors.membershipId.type === "minLength"
-                ? "Please Enter 8 Digit Membership Id"
-                : errors.membershipId.type === "maxLength"
-                ? "Please enter Membership Id of 8 Digit Only"
-                : errors.membershipId.message
+                  ? "Please Enter 8 Digit Membership Id"
+                  : errors.membershipId.type === "maxLength"
+                    ? "Please enter Membership Id of 8 Digit Only"
+                    : errors.membershipId.message
+              : null
+          }
+        />
+        <TextField
+          autoComplete="off"
+          type="text"
+          className="textInput"
+          name="name"
+          label="User Name"
+          placeholder="Enter your user name"
+          size="small"
+          {...register("name", {
+            required: true,
+            minLength: 5,
+            maxLength: 20,
+            pattern: {
+              value: /^\S+$/,
+              message: "Please do not leave blank space",
+            },
+          })}
+          error={Boolean(errors.name)}
+          helperText={
+            errors.name
+              ? errors.name.type === "required"
+                ? "User Name is required"
+                : errors.name.type === "minLength"
+                  ? "Please Enter User name of min length of 5 charachters"
+                  : errors.name.type === "maxLength"
+                    ? "Please Enter User name of max length of 20 charachters Only"
+                    : errors.name.message
               : null
           }
         />
@@ -154,17 +203,20 @@ function MyForm(props) {
               required: true,
             })}
           >
-            <MenuItem value="Volunteer">Volunteer</MenuItem>
-            <MenuItem value="Execom">Execom</MenuItem>
+            <MenuItem value="volunteer">Volunteer</MenuItem>
+            <MenuItem value="execom">Execom</MenuItem>
           </Select>
         </FormControl>
         <LoadingButton
           type="submit"
           size="medium"
+          color={btnColor}
           loading={loading}
           variant="outlined"
         >
-          Create Account
+          {
+            btnColor === 'success' ? <CheckCircleOutlineRoundedIcon /> : btnText
+          }
         </LoadingButton>
       </Stack>
     </form>
