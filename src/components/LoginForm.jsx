@@ -3,7 +3,7 @@ import { TextField, Stack, InputAdornment, IconButton } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Login from "@mui/icons-material/Login";
-import { loginUser, verifyjwt } from "..";
+import { loginUser} from "..";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -25,29 +25,22 @@ function MyForm(props) {
     // console.log(data);
     setLoading(true);
     loginUser(data).then((res, err) => {
-      // console.log(res);
-      if (res.status === 200) {
-        // console.log(res.data);
-        if (res.data.message) {
+      console.log(res);
+      if (res.status !== 200) {
+        let errorRes= res.response
+        if (errorRes.data.message) {
           // console.log(res.data);
-          props.changeSnackText(res.data.message);
+          props.changeSnackText(errorRes.data.message);
           setLoading(false);
         } else {
-          sessionStorage.setItem("token", res.data);
-          verifyjwt(res.data).then((res) => {
-            // console.log(res);
-            if (res.data.message) {
-              // console.log(res.data);
-              props.changeSnackText(res.data.message);
-              setLoading(false);
-            } else {
-              navigate("/");
-            }
-          });
-        }
+          props.changeSnackText(res.data);
+          setLoading(false);
+        };
       } else {
-        props.changeSnackText(res.data);
-        setLoading(false);
+        sessionStorage.setItem("token", JSON.stringify(res.data.accessToken));
+        sessionStorage.setItem("refreshToken", JSON.stringify(res.data.refreshToken));
+        sessionStorage.setItem("role", JSON.stringify(res.data.role));
+        navigate("/");
       }
     });
   };
