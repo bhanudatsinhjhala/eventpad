@@ -9,7 +9,7 @@ import Stack from "@mui/material/Stack";
 import { Input, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import { uploadFile, verifyjwt } from "..";
+import { uploadFile} from "..";
 // import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
@@ -20,18 +20,8 @@ function UploadData() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
-    } else {
-      await verifyjwt(token).then((res) => {
-        // console.log(res.request);
-        if (res.request.status !== 200) {
-          navigate("/login");
-        } else if (JSON.parse(res.request.response).role !== "Admin") {
-          navigate("/");
-          alert("Sorry you can not access this page because you are not admin");
-        }
-      });
     }
-  }
+    }
   useEffect(() => {
     isAuthenticated();
   }, []);
@@ -55,7 +45,7 @@ function UploadData() {
   function formSubmit(e) {
     e.preventDefault();
     // console.log(user, "user");
-    uploadFile(user).then((res) => {
+    uploadFile(user, JSON.parse(sessionStorage.getItem("token"))).then((res) => {
       // console.log(res);
       if (res.request.status === 500) {
         changeSnackText(res.response.data);
