@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails, totalAbsent } from "../index";
+import { getUserDetails } from "../index";
 import { QrReader } from "react-qr-reader";
 import Snackbar from "@mui/material/Snackbar";
 import Box from "@mui/material/Box";
@@ -13,20 +13,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./App.css";
 import { Typography } from "@mui/material";
 function QrScanner() {
-  function checkAbsentCount() {
-    totalAbsent().then((res) => {
-      // console.log(res);
-      setAbsentCount(res.data.count);
-    });
-  }
-  useEffect(() => {
-    checkAbsentCount();
-  });
+  // function checkAbsentCount() {
+  //   totalAbsent().then((res) => {
+  //     // console.log(res);
+  //     setAbsentCount(res.data.count);
+  //   });
+  // }
+  // useEffect(() => {
+  //   checkAbsentCount();
+  // });
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   // const [data, setData] = useState();
   const [snackText, setSnackText] = useState("hello");
-  var [absentCount, setAbsentCount] = useState();
+  // var [absentCount, setAbsentCount] = useState();
   const [visiblity, setVisibility] = useState(true);
   const [userDetails, setUserDetails] = useState({
     name: "",
@@ -58,17 +58,17 @@ function QrScanner() {
   }
   function qrData(data) {
     if (data !== null) {
-      getUserDetails(data).then((res) => {
-        // console.log(res);
-        if (res.request.status === 500) {
-          changeSnackText(res.response.data);
-          changeVis(true);
-        } else if (res.request.status === 301) {
+      console.info("qr data====>", data);
+      getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then((res) => {
+        console.log(res);
+        if (res.request.status === 200) {
+          setUserDetails(res.data);
+          changeVis(false);
+        } else if (res.request.status === 401) {
           navigate("/login");
         } else {
-          setUserDetails(res.data[0]);
-          changeVis(false);
-          // console.log(visiblity);
+          changeSnackText(res.response.data);
+          changeVis(true);
         }
       });
     }
@@ -104,7 +104,7 @@ function QrScanner() {
             }}
             variant="body2"
           >
-            Absent: {absentCount}
+            Absent:
           </Typography>
           <QrReader
             constraints={{ facingMode: "environment" }}

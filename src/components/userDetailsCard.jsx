@@ -23,17 +23,10 @@ function userDetailsCard(props) {
   };
   function handlePresent() {
     // console.log(props);
-    markPresence(props.userDetails.regId).then((res) => {
+    markPresence(props.userDetails.regId, JSON.parse(sessionStorage.getItem("token"))).then(async (res) => {
       // console.log(res);
-      if (res.request.status === 300) {
-        changeSnackText(
-          "Please check your Registration Id. Your Registration was not found in database."
-        );
-        props.changeVis(false);
-      } else if (res.request.status === 500) {
-        changeSnackText(res.response.data);
-      } else {
-        props.changeVis(true);
+      if (res.request.status === 200) {
+        changeSnackText(res.data.message);
         // console.log(res.data.acknowledged);
         props.changeUserDetails({
           name: "",
@@ -44,6 +37,9 @@ function userDetailsCard(props) {
           _id: "",
           __v: "",
         });
+        props.changeVis(true);
+      } else{
+        changeSnackText(res.response.data.message);
       }
     });
   }

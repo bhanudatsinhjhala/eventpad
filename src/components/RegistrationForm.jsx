@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Typography, Stack, TextField, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { getUserDetails, totalAbsent } from "../index";
+import { getUserDetails } from "../index";
 
 export default function RegistrationForm(props) {
   const {
@@ -9,34 +9,32 @@ export default function RegistrationForm(props) {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  var [absentCount, setAbsentCount] = useState();
+  // var [absentCount, setAbsentCount] = useState();
 
-  function checkAbsentCount() {
-    totalAbsent().then((res) => {
-      // console.log(res);
-      setAbsentCount(res.data.count);
-    });
-  }
-  useEffect(() => {
-    checkAbsentCount();
-  });
+  // function checkAbsentCount() {
+  //   totalAbsent().then((res) => {
+  //     console.log(res);
+  //     setAbsentCount(res.data.count);
+  //   });
+  // }
+  // useEffect(() => {
+  //   checkAbsentCount();
+  // });
   const onSubmit = (data) => {
     // console.log(data);
-    getUserDetails(data.regid).then((res) => {
-      // console.log(res);
-      if (res.request.status === 300) {
-        props.changeSnackText(
-          "Please check your Registration Id. Your Registration was not found in database."
-        );
-        props.changeVis(true);
-      } else if (res.request.status === 500) {
-        props.changeSnackText(res.response.data);
-      } else {
+    getUserDetails(data.regid, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+      console.log(res);
+      if(res.status===200) {
         // console.log(res.data);
-        props.changeUserDetails(res.data[0]);
+        props.changeUserDetails(res.data);
         props.changeVis(false);
         // console.log(visiblity);
-      }
+      }else{
+        props.changeSnackText(
+          res.response.data.message
+        );
+        props.changeVis(true);
+      } 
     });
   };
   return (
@@ -59,7 +57,7 @@ export default function RegistrationForm(props) {
             }}
             variant="body2"
           >
-            Absent: {absentCount}
+            Absent:
           </Typography>
         </Typography>
         <Stack direction="row" spacing={3}>

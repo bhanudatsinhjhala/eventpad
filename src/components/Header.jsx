@@ -23,7 +23,6 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LogoutIcon from "@mui/icons-material/Logout";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { verifyjwt } from "..";
 
 const drawerWidth = 240;
 
@@ -54,26 +53,19 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
-  var [tokenValue, setTokenValue] = React.useState({});
-
+  var [role, setRole] = React.useState();
+  const navigate = useNavigate();
   async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
-    if (token === null) {
+    console.info("isAuthenticated is working");
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    if (token === null || token=== undefined) {
       navigate("/login");
-    } else {
-      await verifyjwt(token).then((res) => {
-        // console.log(JSON.parse(res.request.response));
-        setTokenValue(JSON.parse(res.request.response));
-        if (res.request.status !== 200) {
-          navigate("/login");
-        }
-      });
     }
+    setRole(JSON.parse(sessionStorage.getItem('role')));
   }
   React.useEffect(() => {
     isAuthenticated();
   }, []);
-  const navigate = useNavigate();
   // console.log(props.tokenValue, "tokenValue");
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -104,8 +96,8 @@ export default function PersistentDrawerLeft(props) {
       to: "login",
     },
   ];
-  if (tokenValue) {
-    if (tokenValue.role === "Admin") {
+  if (role) {
+    if (role === "Admin") {
       navItems = [
         ...navItems.slice(0, 2),
         {
@@ -122,7 +114,7 @@ export default function PersistentDrawerLeft(props) {
         },
         ...navItems.slice(2),
       ];
-    } else if (tokenValue.role === "Execom") {
+    } else if (role === "Execom") {
       navItems = [
         ...navItems.slice(0, 2),
         {
