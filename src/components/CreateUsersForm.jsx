@@ -30,7 +30,6 @@ function MyForm(props) {
     if (isAccountCreated) {
       reset({
         membershipId: "",
-        role: "",
         password: "",
         email: "",
         name: "",
