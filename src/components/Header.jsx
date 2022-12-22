@@ -97,7 +97,7 @@ export default function PersistentDrawerLeft(props) {
     },
   ];
   if (role) {
-    if (role === "Admin") {
+    if (role === "admin") {
       navItems = [
         ...navItems.slice(0, 2),
         {
@@ -114,7 +114,7 @@ export default function PersistentDrawerLeft(props) {
         },
         ...navItems.slice(2),
       ];
-    } else if (role === "Execom") {
+    } else if (role === "execom") {
       navItems = [
         ...navItems.slice(0, 2),
         {
