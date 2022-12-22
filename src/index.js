@@ -11,16 +11,19 @@ import qs from "qs";
 require("dotenv").config();
 
 const api_url = process.env.REACT_APP_API_URL;
-export async function uploadFile(file, token) {
+export async function uploadFile(file, token, eventId) {
   try {
     // console.log(file);
     const formData = new FormData();
-    formData.append("hl", "file");
-    formData.append("file", file);
+    // formData.append("hl", "file");
+    formData.append("sheet", file);
     // console.log(formData);
     const response = await axios({
         method: 'POST',
         url: `${api_url}/uploadsheet`,
+        params: {
+          eventId: eventId
+        },
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -29,7 +32,7 @@ export async function uploadFile(file, token) {
       .then((res, err) => {
         if (res) {
           // console.log(file);
-          // console.log(res);
+          console.log(res);
           return res;
         } else {
           console.log(err);
@@ -238,6 +241,31 @@ export async function createUsers(user, token) {
     return response;
   } catch (err) {
     console.log(err);
+    return err;
+  }
+}
+
+export async function createEvent(event, token) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: `${api_url}/createevent`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      data: event
+    }).then((res, err) => {
+      if (res) {
+        console.info(res);
+        return res;
+      } else {
+        console.info(err);
+        return err;
+      }
+    })
+    return response;
+  } catch (err) {
+    console.error(err);
     return err;
   }
 }

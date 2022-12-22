@@ -4,29 +4,30 @@ import Header from "./Header";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { Input, Typography } from "@mui/material";
 import { Container } from "@mui/system";
+import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
-import { uploadFile} from "..";
-// import { useNavigate } from "react-router-dom";
+import { uploadFile } from "..";
+import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-function UploadData() {
+function UploadData(props) {
   const navigate = useNavigate();
   async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
     }
-    }
+  }
   useEffect(() => {
     isAuthenticated();
   }, []);
   //   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [snackText, setSnackText] = useState(
     "Please Upload Excel or Spread Sheet."
   );
@@ -43,19 +44,20 @@ function UploadData() {
     // console.log(user);
   }
   function formSubmit(e) {
+    setLoading(true);
     e.preventDefault();
     // console.log(user, "user");
-    uploadFile(user, JSON.parse(sessionStorage.getItem("token"))).then((res) => {
+    uploadFile(user, JSON.parse(sessionStorage.getItem("token")), props.eventId).then((res, err) => {
       // console.log(res);
-      if (res.request.status === 500) {
-        changeSnackText(res.response.data);
-      } else if (res.request.status === 300) {
-        navigate("/login");
-      } else if (res.request.status === 200) {
-        changeSnackText(res.data);
+      if (res.request.status === 200) {
+        changeSnackText(res.data.message);
+        navigate("/");
+      } else if (res) {
+        changeSnackText(res.response.data.message);
       } else {
-        changeSnackText("Please Upload a Excel File or Spreadsheet");
+        console.info(err);
       }
+      setLoading(false);
     });
   }
   function handleClose() {
@@ -110,18 +112,15 @@ function UploadData() {
                     variant="outlined"
                     onChange={handleChange}
                   />
-                  <Button
-                    variant="contained"
+                  <LoadingButton
+                    type="submit"
+                    size="medium"
+                    loading={loading}
+                    variant="outlined"
                     onClick={formSubmit}
-                    fullWidth="false"
-                    sx={{
-                      width: "fit-content",
-                      padding: "6px 30px",
-                    }}
-                    component="span"
                   >
                     Submit
-                  </Button>
+                  </LoadingButton>
                 </Stack>
               </label>
             </Box>

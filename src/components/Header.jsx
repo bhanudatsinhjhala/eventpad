@@ -58,7 +58,7 @@ export default function PersistentDrawerLeft(props) {
   async function isAuthenticated() {
     console.info("isAuthenticated is working");
     const token = JSON.parse(sessionStorage.getItem("token"));
-    if (token === null || token=== undefined) {
+    if (token === null || token === undefined) {
       navigate("/login");
     }
     setRole(JSON.parse(sessionStorage.getItem('role')));
@@ -102,8 +102,8 @@ export default function PersistentDrawerLeft(props) {
         ...navItems.slice(0, 2),
         {
           key: 3,
-          text: "Upload Data",
-          to: "uploadfile",
+          text: "Event",
+          to: "event",
           icon: <FileUploadIcon />,
         },
         {
