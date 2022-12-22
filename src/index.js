@@ -17,7 +17,7 @@ export async function uploadFile(file, token, eventId) {
     const formData = new FormData();
     // formData.append("hl", "file");
     formData.append("sheet", file);
-    // console.log(formData);
+    console.log("eventId ====>", eventId);
     const response = await axios({
         method: 'POST',
         url: `${api_url}/uploadsheet`,

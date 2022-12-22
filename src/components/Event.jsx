@@ -23,9 +23,9 @@ function Event() {
         formState: { errors },
         handleSubmit,
     } = useForm();
-    let eventId;
     const [eventDatePicker, setEventDatePicker] = React.useState(dayjs('2022-12-22T21:11:54'));
     const [open, setOpen] = useState(false);
+    const [eventId, setEventId] = useState();
     const [snackText, setSnackText] = useState("hello");
     const [loading, setLoading] = useState(false);
     const [visiblity, setVisibility] = useState(true);
@@ -46,7 +46,7 @@ function Event() {
             if (res.status === 200) {
                 changeSnackText(res.data.message)
                 console.info("res datassss", res.data.data)
-                eventId = res.data.data._id;
+                setEventId(res.data.data._id);
                 setVisibility(false);
             } else if (res) {
                 changeSnackText(res.response.data.message)
