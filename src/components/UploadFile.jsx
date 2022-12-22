@@ -10,7 +10,6 @@ import { Container } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
 import { uploadFile } from "..";
-import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
