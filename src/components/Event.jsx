@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header.jsx";
 import {
     TextField, Stack, Card, CardContent, Typography, Box, FormControl,
@@ -14,22 +14,35 @@ import { createEvent } from "../index.js";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadFile from "./UploadFile.jsx";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
 
 function Event() {
+
+    const navigate = useNavigate();
+    async function isAuthenticated() {
+        const token = sessionStorage.getItem("token");
+        if (token === null) {
+            navigate("/login");
+        }
+    }
+
+    useEffect(() => {
+        isAuthenticated();
+    }, []);
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = useForm();
-    const [eventDatePicker, setEventDatePicker] = React.useState(dayjs('2022-12-22T21:11:54'));
+    const [eventDatePicker, setEventDatePicker] = React.useState(dayjs(new Date()));
     const [open, setOpen] = useState(false);
     const [eventId, setEventId] = useState();
     const [snackText, setSnackText] = useState("hello");
     const [loading, setLoading] = useState(false);
     const [visiblity, setVisibility] = useState(true);
-
+    useEffect(() => {
+    }, [])
     const handleChange = (newValue) => {
         setEventDatePicker(newValue);
     };

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./Header";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { Input, Typography } from "@mui/material";
+import {
+  Input, Typography,
+} from "@mui/material";
 import { Container } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
@@ -13,18 +15,9 @@ import { uploadFile } from "..";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+
 function UploadData(props) {
   const navigate = useNavigate();
-  async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
-    if (token === null) {
-      navigate("/login");
-    }
-  }
-  useEffect(() => {
-    isAuthenticated();
-  }, []);
-  //   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [snackText, setSnackText] = useState(
@@ -37,7 +30,7 @@ function UploadData(props) {
   };
   function handleChange(e) {
     e.preventDefault();
-    // console.log(e.target.files[0].name);
+    console.log(e.target.files[0].name);
     const file = e.target.files[0];
     setUser(file);
     // console.log(user);
@@ -114,9 +107,9 @@ function UploadData(props) {
                   <LoadingButton
                     type="submit"
                     size="medium"
+                    onClick={formSubmit}
                     loading={loading}
                     variant="outlined"
-                    onClick={formSubmit}
                   >
                     Submit
                   </LoadingButton>
@@ -133,7 +126,7 @@ function UploadData(props) {
           action={action}
         />
       </Container>
-    </div>
+    </div >
   );
 }
 

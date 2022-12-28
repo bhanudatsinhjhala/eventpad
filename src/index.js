@@ -45,6 +45,22 @@ export async function uploadFile(file, token, eventId) {
     return err;
   }
 }
+
+export async function getEventDetails(token) {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `${api_url}/getevent`,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    })
+    console.info("get event ===>", response);
+    return response;
+  } catch (error) {
+    console.info(error);
+  }
+}
 // export async function verifyjwt(token) {
 //   try {
 //     const response = await axios
