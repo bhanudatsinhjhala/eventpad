@@ -1,24 +1,39 @@
-import React, { useState, useEffect } from "react";
-import Header from "./Header.jsx";
+import React, { useEffect, useState } from 'react';
 import {
-    TextField, Stack, Card, CardContent, Typography, Box, FormControl,
-    InputLabel, Select, MenuItem, Snackbar,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { useForm } from "react-hook-form";
-import "./App.css";
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { createEvent } from "../index.js";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+    Container, Button, Dialog,
+    Table, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody,
+} from '@mui/material';
+import Header from "./Header.jsx";
+import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
+import { getEventDetails } from "../index.js";
 import { useNavigate } from "react-router-dom";
-import Container from "@mui/material/Container";
 
-function Event() {
-
+export default function Event() {
+    const [rows, setRows] = useState([{
+        _id: "0",
+        eventName: 'Loading...',
+        evenDate: "-",
+        eventType: "-"
+    }])
+    function getEvents() {
+        getEventDetails(JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+            console.log(res);
+            res.data.forEach((event) => {
+                let date = new Date(event.eventDate * 1000);
+                let dateString = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+                console.log(dateString);
+                event.dateString = dateString;
+            })
+            setRows(res.data);
+        });
+    }
+    useEffect(() => {
+        isAuthenticated();
+        if (rows[0]._id === "0") {
+            getEvents();
+        }
+    }, [])
     const navigate = useNavigate();
     async function isAuthenticated() {
         const token = sessionStorage.getItem("token");
@@ -30,178 +45,74 @@ function Event() {
     useEffect(() => {
         isAuthenticated();
     }, []);
-    const {
-        register,
-        formState: { errors },
-        handleSubmit,
-    } = useForm();
-    const [eventDatePicker, setEventDatePicker] = React.useState(dayjs(new Date()));
-    const [open, setOpen] = useState(false);
-    const [eventId, setEventId] = useState();
-    const [snackText, setSnackText] = useState("hello");
-    const [loading, setLoading] = useState(false);
-    const [visiblity, setVisibility] = useState(true);
-    useEffect(() => {
-    }, [])
-    const handleChange = (newValue) => {
-        setEventDatePicker(newValue);
+    const [openDialog, setOpenDialog] = React.useState(false);
+
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
     };
-    // const navigate = useNavigate();
-    const form = useForm({ defaultValues: { eventName: "", eventDate: "" } });
-    const onSubmit = (data) => {
-        // console.log(data);
-        setLoading(true);
-        console.info(data);
-        console.log(new Date(eventDatePicker));
-        data.eventDate = Math.round(new Date(eventDatePicker).getTime() / 1000);
-        createEvent(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
-            console.info(res);
-            if (res.status === 200) {
-                changeSnackText(res.data.message)
-                console.info("res datassss", res.data.data)
-                setEventId(res.data.data._id);
-                setVisibility(false);
-            } else if (res) {
-                changeSnackText(res.response.data.message)
-            }
-            else {
-                console.info(err);
-            }
-            setLoading(false);
-        })
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
     };
-    const onError = (error) => {
-        console.log(error);
-    };
-    function handleClose() {
-        if (open === true) {
-            setOpen(false);
-        }
+    function deleteEvent(id) {
+        console.log("Delete Event", id);
     }
-    const changeSnackText = (value) => {
-        setSnackText(value);
-        setOpen(true);
-    };
-    const action = (
-        <React.Fragment>
-            {/* <Button color="secondary" size="small" onClick={handleClose}>
-            UNDO
-          </Button> */}
-            <IconButton
-                size="small"
-                aria-label="close"
-                color="primary"
-                onClick={handleClose}
-            >
-                <CloseIcon fontSize="small" />
-            </IconButton>
-        </React.Fragment>
-    );
+    function downloadReport(id) {
+        console.log("Download Report", id);
+    }
     return (
         <div>
             <Header />
             <Container sx={{ margin: "auto", marginTop: "100px" }}>
-                {visiblity ? (
-                    <Card
-                        sx={{
-                            margin: "auto",
-                            marginTop: {
-                                xs: 13,
-                                md: "12rem",
-                            },
-                            borderRadius: "3%",
-                            maxWidth: 300,
-                        }}
-                        elevation={10}
-                    >
-                        <CardContent sx={{ maxWidth: 280, margin: "20px auto", paddingBottom: '0px' }}>
-                            <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-                                Create Event
-                            </Typography>
-                            <Box>
-                                <form onSubmit={handleSubmit(onSubmit, onError)}>
-                                    <Stack spacing={4}>
-                                        <TextField
-                                            autoComplete="off"
-                                            type="text"
-                                            className="textInput"
-                                            name="eventName"
-                                            label="Event Name"
-                                            placeholder="Enter Event Name"
-                                            size="small"
-                                            {...register("eventName", {
-                                                required: true,
-                                                minLength: 5,
-                                            })}
-                                            error={Boolean(errors.eventName)}
-                                            helperText={
-                                                errors.eventName
-                                                    ? errors.eventName.type === "required"
-                                                        ? "Event Name  is required"
-                                                        : errors.eventName.type === "minLength"
-                                                            ? "Please enter event name with more than 5 charchters"
-                                                            : errors.eventName.message
-                                                    : null
-                                            }
-                                        />
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DateTimePicker
-                                                name="eventDate"
-                                                label="Date&Time picker"
-                                                value={eventDatePicker}
-                                                onChange={handleChange}
-                                                renderInput={(params) => <TextField {...params} />}
-                                                error={Boolean(errors.eventDate)}
-                                                helperText={
-                                                    errors.eventDate
-                                                        ? errors.eventDate.type === "required"
-                                                            ? "Event Date is required"
-                                                            : null
-                                                        : null
-                                                }
-                                            />
-                                        </LocalizationProvider>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Event Type</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                label="Event Type"
-                                                name="eventType"
-                                                {...register("eventType", {
-                                                    required: true,
-                                                })}
-                                            >
-                                                <MenuItem value="technical">Technical</MenuItem>
-                                                <MenuItem value="non-technical">Non-Technical</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        <LoadingButton
-                                            type="submit"
-                                            size="medium"
-                                            loading={loading}
-                                            variant="outlined"
-                                        >
-                                            Create Event
-                                        </LoadingButton>
-                                    </Stack>
-                                </form>
-                            </Box>
-                        </CardContent>
-                    </Card>
-                ) : (
-                    <UploadFile eventId={eventId} />
-                )}
-                <Snackbar
-                    className="regSnack"
-                    open={open}
-                    onClose={handleClose}
-                    message={snackText}
-                    action={action}
-                />
+                <CreateEvent sx={{ marginBottom: "15px" }} getEvents={getEvents} />
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Event Name</TableCell>
+                                <TableCell align="left">Event Type</TableCell>
+                                <TableCell align="left">Event Date</TableCell>
+                                <TableCell align="left">Upload Data</TableCell>
+                                <TableCell align="left">Download Report</TableCell>
+                                <TableCell align="left">Deleted Event</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row) => (
+                                <TableRow
+                                    key={row._id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell component="th" scope="row">
+                                        {row.eventName}
+                                    </TableCell>
+                                    <TableCell align="left">{row.eventType}</TableCell>
+                                    <TableCell align="left">{row.dateString}</TableCell>
+                                    <TableCell align="left">
+                                        <Button variant="outlined" size="small" onClick={handleClickOpenDialog}>
+                                            Upload Data
+                                        </Button>
+                                        <Dialog open={openDialog} onClose={handleCloseDialog}>
+                                            <UploadFile eventId={row._id} handleCloseDialog={handleCloseDialog} />
+                                        </Dialog>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <Button variant="outlined" type="submit" size="small" onClick={()=> downloadReport(row._id)}>
+                                            Download Report
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <Button type="submit" variant="outlined" size="small" onClick={() => deleteEvent(row._id)}>
+                                            Delete Event
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Container>
         </div>
-    )
+    );
 }
 
-export default Event;

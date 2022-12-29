@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import "./App.css";
-import Header from "./Header";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import {
-  Input, Typography,
+  Input,
 } from "@mui/material";
-import { Container } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
 import { uploadFile } from "..";
-import Snackbar from "@mui/material/Snackbar";
+import {
+  Snackbar, Button,
+  DialogTitle, DialogContentText, DialogContent, DialogActions,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -43,7 +42,7 @@ function UploadData(props) {
       // console.log(res);
       if (res.request.status === 200) {
         changeSnackText(res.data.message);
-        navigate("/");
+        props.handleCloseDialog();
       } else if (res) {
         changeSnackText(res.response.data.message);
       } else {
@@ -74,50 +73,27 @@ function UploadData(props) {
   );
   return (
     <div>
-      <Header />
-      <Container>
-        <Card
-          sx={{
-            margin: "auto",
-            marginTop: {
-              xs: 13,
-              md: "12rem",
-            },
-            borderRadius: "3%",
-            maxWidth: 300,
-          }}
-        >
-          <CardContent sx={{ margin: 1 }}>
-            <Typography variant="h5">
-              Upload Your Participants Data's Excel Sheet here.
-            </Typography>
-            <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>
-              <label htmlFor="contained-button-file">
-                <Stack spacing={3}>
-                  <Input
-                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    id="contained-button-file"
-                    single
-                    type="file"
-                    name="file"
-                    color="primary"
-                    variant="outlined"
-                    onChange={handleChange}
-                  />
-                  <LoadingButton
-                    type="submit"
-                    size="medium"
-                    onClick={formSubmit}
-                    loading={loading}
-                    variant="outlined"
-                  >
-                    Submit
-                  </LoadingButton>
-                </Stack>
-              </label>
-            </Box>
-          </CardContent>
-        </Card>
+      <DialogTitle>Subscribe</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Upload Your Participants Data's Excel Sheet here.
+        </DialogContentText>
+        <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>
+          <label htmlFor="contained-button-file">
+            <Stack spacing={3}>
+              <Input
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                id="contained-button-file"
+                single
+                type="file"
+                name="file"
+                color="primary"
+                variant="outlined"
+                onChange={handleChange}
+              />
+            </Stack>
+          </label>
+        </Box>
         <Snackbar
           className="regSnack"
           open={open}
@@ -125,8 +101,20 @@ function UploadData(props) {
           message={snackText}
           action={action}
         />
-      </Container>
-    </div >
+      </DialogContent>
+      <DialogActions sx={{ justifyContent: "space-around" }}>
+        <Button onClick={props.handleCloseDialog} variant="outlined">Cancel</Button>
+        <LoadingButton
+          type="submit"
+          size="medium"
+          onClick={formSubmit}
+          loading={loading}
+          variant="contained"
+        >
+          Submit
+        </LoadingButton>
+      </DialogActions>
+    </div>
   );
 }
 

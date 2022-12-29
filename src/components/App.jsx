@@ -8,6 +8,7 @@ import Login from "./Login.jsx";
 // import PresenceData from "./PresenceData.jsx";
 import QrGenerate from "./qrGenerate.jsx";
 import Form from "./Form.jsx";
+// import Event from "./CreateEvent.jsx";
 import Event from "./Event.jsx";
 import UploadFile from "./UploadFile.jsx";
 import { Routes, Route } from "react-router-dom";
