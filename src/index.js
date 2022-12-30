@@ -45,7 +45,27 @@ export async function uploadFile(file, token, eventId) {
     return err;
   }
 }
-
+export async function getEventReport(eventId, token) {
+  try {
+    console.log("eventId in index.js", eventId);
+    // console.log("eventId in index.js", typeOf eventId);
+    const response = await axios({
+      method: "GET",
+      url: `${api_url}/geteventreport`,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      params: {
+        eventId: eventId
+      },
+      responseType: 'blob'
+    });
+    console.info("get event report ==>", response);
+    return response;
+  } catch (error) {
+    console.log("event report==>", error);
+  }
+}
 export async function getEventDetails(token) {
   try {
     const response = await axios({

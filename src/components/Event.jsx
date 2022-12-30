@@ -6,8 +6,10 @@ import {
 import Header from "./Header.jsx";
 import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
-import { getEventDetails } from "../index.js";
+import { getEventDetails, getEventReport } from "../index.js";
 import { useNavigate } from "react-router-dom";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Event() {
     const [rows, setRows] = useState([{
@@ -57,7 +59,24 @@ export default function Event() {
     function deleteEvent(id) {
         console.log("Delete Event", id);
     }
-    function downloadReport(id) {
+    function downloadReport(id, eventName) {
+        let filename = `${eventName}-report.xlsx`;
+        getEventReport(id, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+            console.log("Download response", res.data);
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            if (typeof window.navigator.msSaveBlob === 'function') {
+                window.navigator.msSaveBlob(
+                    res.data,
+                    filename
+                );
+            } else {
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+            }
+        })
         console.log("Download Report", id);
     }
     return (
@@ -97,13 +116,13 @@ export default function Event() {
                                         </Dialog>
                                     </TableCell>
                                     <TableCell align="left">
-                                        <Button variant="outlined" type="submit" size="small" onClick={()=> downloadReport(row._id)}>
-                                            Download Report
+                                        <Button variant="outlined" startIcon={<FileDownloadIcon />} type="submit" size="small" onClick={() => downloadReport(row._id, row.eventName)}>
+                                            Download
                                         </Button>
                                     </TableCell>
                                     <TableCell align="left">
-                                        <Button type="submit" variant="outlined" size="small" onClick={() => deleteEvent(row._id)}>
-                                            Delete Event
+                                        <Button type="submit" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteEvent(row._id)}>
+                                            Delete
                                         </Button>
                                     </TableCell>
                                 </TableRow>
