@@ -6,7 +6,7 @@ import {
 import Header from "./Header.jsx";
 import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
-import { getEventDetails, getEventReport } from "../index.js";
+import { getEventDetails, getEventReport, deleteEventDetails } from "../index.js";
 import { useNavigate } from "react-router-dom";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -57,6 +57,13 @@ export default function Event() {
         setOpenDialog(false);
     };
     function deleteEvent(id) {
+        deleteEventDetails(id, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+                console.log(res.data.message);
+                getEvents();
+            }
+        })
         console.log("Delete Event", id);
     }
     function downloadReport(id, eventName) {

@@ -66,6 +66,26 @@ export async function getEventReport(eventId, token) {
     console.log("event report==>", error);
   }
 }
+
+export async function deleteEventDetails(eventId, token) {
+  try {
+    const response = await axios({
+      method: "DELETE",
+      url: `${api_url}/deleteevent`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      data: {
+        eventId: eventId,
+      }
+    });
+
+    console.log("Api resp==>", response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
 export async function getEventDetails(token) {
   try {
     const response = await axios({
