@@ -121,6 +121,7 @@ export default function PersistentDrawerLeft(props) {
           key: 4,
           text: "Volunteers Account",
           to: "createusers",
+          icon: <PersonAddIcon />,
         },
         ...navItems.slice(2),
       ];
