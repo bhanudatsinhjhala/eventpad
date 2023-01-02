@@ -45,6 +45,24 @@ export async function uploadFile(file, token, eventId) {
     return err;
   }
 }
+
+export async function deleteMember(membershipId, token) {
+  try {
+    const response = await axios({
+      "method": "DELETE",
+      "url": `${api_url}/deletemember`,
+      "headers": {
+        "Authorization": `Bearer ${token}`
+      },
+      data: {
+        membershipId: membershipId
+      }
+    })
+    return response;
+  } catch (error) {
+    console.log("delete member error", error);
+  }
+}
 export async function getEventReport(eventId, token) {
   try {
     console.log("eventId in index.js", eventId);
@@ -96,6 +114,21 @@ export async function getEventDetails(token) {
       },
     })
     console.info("get event ===>", response);
+    return response;
+  } catch (error) {
+    console.info(error);
+  }
+}
+export async function getAllMemberDetails(token) {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `${api_url}/getallmemberdetails`,
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    })
+    console.info("get member ===>", response);
     return response;
   } catch (error) {
     console.info(error);

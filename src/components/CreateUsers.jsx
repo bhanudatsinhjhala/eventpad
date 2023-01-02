@@ -1,20 +1,39 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import {
-  Typography,
   Container,
-  Card,
-  CardContent,
-  Box,
+  Button,
   Snackbar,
-  Grow,
+  Table, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody,
 } from "@mui/material";
 import CreateUsersForm from "./CreateUsersForm.jsx";
 import Header from "./Header.jsx";
+import { getAllMemberDetails, deleteMember } from "../index.js";
 import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
 function CreateUsers() {
+  const [rows, setRows] = useState([{
+    membershipId: "0",
+    name: 'Loading...',
+    role: "-",
+    email: "-"
+  }])
+  function getMembers() {
+    getAllMemberDetails(JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+      console.log(res);
+      setRows(res.data.data);
+    });
+  }
+  useEffect(() => {
+    isAuthenticated();
+    if (rows[0].membershipId === "0") {
+      getMembers();
+    }
+  }, [])
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [snackText, setSnackText] = useState("hello");
@@ -24,9 +43,17 @@ function CreateUsers() {
       navigate("/login");
     }
   }
+
   useEffect(() => {
     isAuthenticated();
   }, []);
+  const deleteAccount = (membershipId) => {
+    deleteMember(membershipId, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+      console.log(res);
+      getMembers();
+    })
+    console.log("membership id", membershipId)
+  }
   function handleClose() {
     if (open === true) {
       setOpen(false);
@@ -54,31 +81,44 @@ function CreateUsers() {
   return (
     <div>
       <Header />
-      <Container class="createFormUser">
-        <Grow in={true} {...(true ? { timeout: 1300 } : {})}>
-          <Card
-            sx={{
-              margin: "auto",
-              marginTop: {
-                xs: 13,
-                md: "12rem",
-              },
-              borderRadius: "3%",
-              maxWidth: 300,
-            }}
-            elevation={10}
-          >
-            <CardContent sx={{ maxWidth: 280, margin: "20px auto", paddingBottom: '0px' }}>
-              <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-                Create Volunteers Accounts
-              </Typography>
-
-              <Box>
-                <CreateUsersForm changeSnackText={changeSnackText} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grow>
+      <Container sx={{ margin: "auto", marginTop: "100px" }}>
+        <CreateUsersForm changeSnackText={changeSnackText} getMembers={getMembers} />
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Volunteer Name</TableCell>
+                <TableCell align="left">MembershipId</TableCell>
+                <TableCell align="left">Email</TableCell>
+                <TableCell align="left">Roles</TableCell>
+                <TableCell align="left">Deleted Event</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.membershipId}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="left">{row.membershipId}</TableCell>
+                  <TableCell align="left">{row.email}</TableCell>
+                  <TableCell align="left">{row.role}</TableCell>
+                  {
+                    (row.role !== JSON.parse(sessionStorage.getItem("role"))) ?
+                      (<TableCell align="left">
+                        <Button type="submit" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteAccount(row.membershipId)}>
+                          Delete
+                        </Button>
+                      </TableCell>) : null
+                  }
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         <Snackbar
           className="regSnack"
           open={open}
