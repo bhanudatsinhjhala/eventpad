@@ -73,7 +73,7 @@ function UploadData(props) {
   );
   return (
     <div>
-      <DialogTitle>Subscribe</DialogTitle>
+      <DialogTitle>Event Setup</DialogTitle>
       <DialogContent>
         <DialogContentText>
           Upload Your Participants Data's Excel Sheet here.
