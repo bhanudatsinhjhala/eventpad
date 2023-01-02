@@ -182,7 +182,7 @@ function CreateEvent(props) {
                                     </Stack>
                                 </DialogContent>
                                 <DialogActions sx={{ justifyContent: "space-around" }}>
-                                    <Button onClick={handleClose} variant="outlined">Cancel</Button>
+                                    <Button onClick={handleCloseDialog} variant="outlined">Cancel</Button>
                                     <LoadingButton
                                         type="submit"
                                         size="medium"
@@ -198,14 +198,14 @@ function CreateEvent(props) {
                         <UploadFile eventId={eventId} handleCloseDialog={handleCloseDialog} />
                     )
                     }
-                    <Snackbar
-                        className="regSnack"
-                        open={open}
-                        onClose={handleClose}
-                        message={snackText}
-                        action={action}
-                    />
                 </Dialog>
+                <Snackbar
+                    className="regSnack"
+                    open={open}
+                    onClose={handleClose}
+                    message={snackText}
+                    action={action}
+                />
             </Container>
         </div >
     )
