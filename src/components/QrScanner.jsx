@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
 import { getUserDetails } from "../index";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { QrReader } from "react-qr-reader";
 import Snackbar from "@mui/material/Snackbar";
 import Box from "@mui/material/Box";
@@ -73,6 +74,14 @@ function QrScanner() {
       });
     }
   }
+  const yellowColorTheme = createTheme({
+    palette: {
+      yellowBtn: {
+        main: '#ffa306',
+        contrastText: '#fff',
+      },
+    },
+  });
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -92,66 +101,69 @@ function QrScanner() {
   return (
     <div>
       <Header />
-      {visiblity ? (
-        <div>
-          <Typography
-            sx={{
-              margin: "auto",
-              marginTop: "5rem",
-              width: "fit-content",
-              padding: "5px",
-              border: "1px solid #00629b",
-            }}
-            variant="body2"
-          >
-            Absent:
-          </Typography>
-          <QrReader
-            constraints={{ facingMode: "environment" }}
-            scanDelay={500}
-            onResult={(result, error) => {
-              if (result) {
-                // console.log(result.text);
-                qrData(parseInt(result.text));
-              } else if (error) {
-                // console.info(error);
-                // qrData("");
-              }
-            }}
-            videoStyle={{
-              height: "inherit",
-              margin: "auto",
-              width: "88%",
-              position: "none",
-            }}
-            videoContainerStyle={{ paddingTop: "0px", height: "inherit" }}
-            className="qrContainer"
-            style={{ width: "100%", height: "50vh" }}
+      <ThemeProvider theme={yellowColorTheme}>
+        {visiblity ? (
+          <div>
+            <Typography
+              sx={{
+                margin: "auto",
+                marginTop: "5rem",
+                width: "fit-content",
+                padding: "5px",
+                border: "1px solid #ffa306",
+              }}
+              variant="body2"
+            >
+              Absent:
+            </Typography>
+            <QrReader
+              constraints={{ facingMode: "environment" }}
+              scanDelay={500}
+              onResult={(result, error) => {
+                if (result) {
+                  // console.log(result.text);
+                  qrData(parseInt(result.text));
+                } else if (error) {
+                  // console.info(error);
+                  // qrData("");
+                }
+              }}
+              videoStyle={{
+                height: "inherit",
+                margin: "auto",
+                width: "88%",
+                position: "none",
+              }}
+              videoContainerStyle={{ paddingTop: "0px", height: "inherit" }}
+              className="qrContainer"
+              style={{ width: "100%", height: "50vh" }}
+            />
+          </div>
+        ) : (
+          <UserDetailsCard
+            changeUserDetails={changeUserDetails}
+            userDetails={userDetails}
+            changeVis={changeVis}
           />
-        </div>
-      ) : (
-        <UserDetailsCard
-          changeUserDetails={changeUserDetails}
-          userDetails={userDetails}
-          changeVis={changeVis}
+        )}
+        <Box sx={{ width: "fit-content", margin: "30px auto" }}>
+          <Button
+            sx={{ margin: "auto" }}
+            variant="outlined"
+            color="yellowBtn"
+            onClick={() => handleClick("home")}
+          >
+            Back to Home
+          </Button>
+        </Box>
+        <Snackbar
+          className="regSnack"
+          open={open}
+          onClose={handleClose}
+          message={snackText}
+          action={action}
         />
-      )}
-      <Box sx={{ width: "fit-content", margin: "30px auto" }}>
-        <Button
-          sx={{ margin: "auto" }}
-          variant="outlined"
-          onClick={() => handleClick("home")}
-        >
-          Back to Home
-        </Button>
-      </Box>
-      <Snackbar
-        className="regSnack"
-        open={open}
-        onClose={handleClose}
-        message={snackText}
-        action={action}
-      />
+      </ThemeProvider>
     </div>
   );
 }

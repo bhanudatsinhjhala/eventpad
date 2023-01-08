@@ -10,6 +10,7 @@ import CreateUsersForm from "./CreateUsersForm.jsx";
 import Header from "./Header.jsx";
 import { getAllMemberDetails, deleteMember } from "../index.js";
 import { useNavigate } from "react-router-dom";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -63,6 +64,14 @@ function CreateUsers() {
     setSnackText(value);
     setOpen(true);
   };
+  const yellowColorTheme = createTheme({
+    palette: {
+      yellowBtn: {
+        main: '#ffa306',
+        contrastText: '#fff',
+      },
+    },
+  });
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -81,6 +90,7 @@ function CreateUsers() {
   return (
     <div>
       <Header />
+      <ThemeProvider theme={yellowColorTheme}>
       <Container sx={{ margin: "auto", marginTop: "100px" }}>
         <CreateUsersForm changeSnackText={changeSnackText} getMembers={getMembers} />
         <TableContainer component={Paper}>
@@ -91,7 +101,7 @@ function CreateUsers() {
                 <TableCell align="left">MembershipId</TableCell>
                 <TableCell align="left">Email</TableCell>
                 <TableCell align="left">Roles</TableCell>
-                <TableCell align="left">Deleted Event</TableCell>
+                <TableCell align="left">Deleted Account</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -109,7 +119,7 @@ function CreateUsers() {
                   {
                     (row.role !== JSON.parse(sessionStorage.getItem("role"))) ?
                       (<TableCell align="left">
-                        <Button type="submit" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteAccount(row.membershipId)}>
+                        <Button type="submit" color="yellowBtn" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteAccount(row.membershipId)}>
                           Delete
                         </Button>
                       </TableCell>) : null
@@ -127,6 +137,7 @@ function CreateUsers() {
           action={action}
         />
       </Container>
+      </ThemeProvider>
     </div>
   );
 }

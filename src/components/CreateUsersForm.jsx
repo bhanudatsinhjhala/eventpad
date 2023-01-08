@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LoadingButton } from "@mui/lab";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import {
   TextField,
@@ -19,8 +20,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 function MyForm(props) {
   const [loading, setLoading] = useState(false);
-  const [btnText, setBtnText] = useState('Create Account');
-  const [btnColor, setBtnColor] = useState('primary');
+  const [btnText, setBtnText] = useState('Create');
+  const [btnColor, setBtnColor] = useState('yellowBtn');
   const [isAccountCreated, setAccountCreated] = useState(false);
   const {
     register,
@@ -40,6 +41,14 @@ function MyForm(props) {
     }
   }, [reset, isAccountCreated]);
   // const navigate = useNavigate();
+  const yellowColorTheme = createTheme({
+    palette: {
+      yellowBtn: {
+        main: '#ffa306',
+        contrastText: '#fff',
+      },
+    },
+  });
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const handleClickOpenDialog = () => {
@@ -66,7 +75,7 @@ function MyForm(props) {
           props.getMembers();
           props.changeSnackText(res.data.message);
           setTimeout(() => {
-            setBtnText('Create Account');
+            setBtnText('Create');
             setBtnColor('primary')
           }, 2000)
           setLoading(false);
@@ -78,7 +87,7 @@ function MyForm(props) {
           setBtnText(res.response.data.message)
           setBtnColor('error');
           setTimeout(() => {
-            setBtnText('Create Account');
+            setBtnText('Create');
             setBtnColor('primary')
           }, 2000)
         } else {
@@ -98,159 +107,166 @@ function MyForm(props) {
   // console.log(open, snackText);
   return (
     <div>
-      <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}>
-        <Button variant="outlined" onClick={handleClickOpenDialog} startIcon={<PersonAddIcon />}>
-          Create Account
-        </Button>
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle>Account Setup</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              <Typography variant="h5" sx={{ marginBottom: "20px", color: "#00629b" }}>
-                Create Volunteer's Account
-              </Typography>
-            </DialogContentText>
-          </DialogContent>
-          <form onSubmit={handleSubmit(onSubmit, onError)} class="createUserForm">
-            <Stack spacing={4}>
-              <TextField
-                autoComplete="off"
-                type="text"
-                className="textInput"
-                name="membershipId"
-                label="Membership-Id"
-                placeholder="Enter your Membership Id"
-                size="small"
-                {...register("membershipId", {
-                  required: true,
-                  minLength: 8,
-                  maxLength: 8,
-                  pattern: {
-                    value: /\d/,
-                    message: "Please enter only number values",
-                  },
-                })}
-                error={Boolean(errors.membershipId)}
-                helperText={
-                  errors.membershipId
-                    ? errors.membershipId.type === "required"
-                      ? "Membership Id is required"
-                      : errors.membershipId.type === "minLength"
-                        ? "Please Enter 8 Digit Membership Id"
-                        : errors.membershipId.type === "maxLength"
-                          ? "Please enter Membership Id of 8 Digit Only"
-                          : errors.membershipId.message
-                    : null
-                }
-              />
-              <TextField
-                autoComplete="off"
-                type="text"
-                className="textInput"
-                name="name"
-                label="User Name"
-                placeholder="Enter your user name"
-                size="small"
-                {...register("name", {
-                  required: true,
-                  minLength: 5,
-                  maxLength: 20,
-                  pattern: {
-                    value: /^\S+$/,
-                    message: "Please do not leave blank space",
-                  },
-                })}
-                error={Boolean(errors.name)}
-                helperText={
-                  errors.name
-                    ? errors.name.type === "required"
-                      ? "User Name is required"
-                      : errors.name.type === "minLength"
-                        ? "Please Enter User name of min length of 5 charachters"
-                        : errors.name.type === "maxLength"
-                          ? "Please Enter User name of max length of 20 charachters Only"
-                          : errors.name.message
-                    : null
-                }
-              />
-              <TextField
-                autoComplete="off"
-                type="text"
-                className="textInput"
-                name="email"
-                label="Email-Id"
-                placeholder="Enter your Email Id"
-                size="small"
-                {...register("email", {
-                  required: true,
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "Entered value does not match email format",
-                  },
-                })}
-                error={Boolean(errors.email)}
-                helperText={
-                  errors.email
-                    ? errors.email.type === "required"
-                      ? "Email Id is required"
-                      : errors.email.message
-                    : null
-                }
-              />
+      <ThemeProvider theme={yellowColorTheme}>
+        <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}>
+          <Button variant="outlined" color="yellowBtn" onClick={handleClickOpenDialog} startIcon={<PersonAddIcon />}>
+            Create Account
+          </Button>
+          <Dialog open={openDialog} onClose={handleCloseDialog}>
+            <DialogTitle>Account Setup</DialogTitle>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+              <DialogContent sx={{ padding: "20px 20px" }}>
+                <DialogContentText>
+                  <Typography variant="h5" sx={{ paddingBottom: "20px", color: "#ffa306" }}>
+                    Create Volunteer's Account
+                  </Typography>
+                </DialogContentText>
+                <Stack spacing={4}>
+                  <TextField
+                    color="yellowBtn"
+                    autoComplete="off"
+                    type="text"
+                    className="textInput"
+                    name="membershipId"
+                    label="Membership-Id"
+                    placeholder="Enter your Membership Id"
+                    size="small"
+                    {...register("membershipId", {
+                      required: true,
+                      minLength: 8,
+                      maxLength: 8,
+                      pattern: {
+                        value: /\d/,
+                        message: "Please enter only number values",
+                      },
+                    })}
+                    error={Boolean(errors.membershipId)}
+                    helperText={
+                      errors.membershipId
+                        ? errors.membershipId.type === "required"
+                          ? "Membership Id is required"
+                          : errors.membershipId.type === "minLength"
+                            ? "Please Enter 8 Digit Membership Id"
+                            : errors.membershipId.type === "maxLength"
+                              ? "Please enter Membership Id of 8 Digit Only"
+                              : errors.membershipId.message
+                        : null
+                    }
+                  />
+                  <TextField
+                    color="yellowBtn"
+                    autoComplete="off"
+                    type="text"
+                    className="textInput"
+                    name="name"
+                    label="User Name"
+                    placeholder="Enter your user name"
+                    size="small"
+                    {...register("name", {
+                      required: true,
+                      minLength: 5,
+                      maxLength: 20,
+                      pattern: {
+                        value: /^\S+$/,
+                        message: "Please do not leave blank space",
+                      },
+                    })}
+                    error={Boolean(errors.name)}
+                    helperText={
+                      errors.name
+                        ? errors.name.type === "required"
+                          ? "User Name is required"
+                          : errors.name.type === "minLength"
+                            ? "Please Enter User name of min length of 5 charachters"
+                            : errors.name.type === "maxLength"
+                              ? "Please Enter User name of max length of 20 charachters Only"
+                              : errors.name.message
+                        : null
+                    }
+                  />
+                  <TextField
+                    color="yellowBtn"
+                    autoComplete="off"
+                    type="text"
+                    className="textInput"
+                    name="email"
+                    label="Email-Id"
+                    placeholder="Enter your Email Id"
+                    size="small"
+                    {...register("email", {
+                      required: true,
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Entered value does not match email format",
+                      },
+                    })}
+                    error={Boolean(errors.email)}
+                    helperText={
+                      errors.email
+                        ? errors.email.type === "required"
+                          ? "Email Id is required"
+                          : errors.email.message
+                        : null
+                    }
+                  />
 
-              <TextField
-                autoComplete="off"
-                type="password"
-                label="Password"
-                className="textInput"
-                placeholder="Enter your Password"
-                size="small"
-                {...register("password", {
-                  required: true,
-                })}
-                error={Boolean(errors.password)}
-                helperText={
-                  errors.password
-                    ? errors.password.type === "required"
-                      ? "Password is required"
-                      : null
-                    : null
-                }
-              />
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Role"
-                  name="Role"
-                  {...register("role", {
-                    required: true,
-                  })}
-                >
-                  <MenuItem value="volunteer">Volunteer</MenuItem>
-                  <MenuItem value="execom">Execom</MenuItem>
-                  {JSON.parse(sessionStorage.getItem("role")) === "admin" ? (<MenuItem value="admin">Admin</MenuItem>) : null}
-                </Select>
-              </FormControl>
-              <DialogActions sx={{ justifyContent: "space-between" }}>
-                <Button onClick={handleCloseDialog} variant="outlined">Cancel</Button>
+                  <TextField
+                    color="yellowBtn"
+                    autoComplete="off"
+                    type="password"
+                    label="Password"
+                    className="textInput"
+                    placeholder="Enter your Password"
+                    size="small"
+                    {...register("password", {
+                      required: true,
+                    })}
+                    error={Boolean(errors.password)}
+                    helperText={
+                      errors.password
+                        ? errors.password.type === "required"
+                          ? "Password is required"
+                          : null
+                        : null
+                    }
+                  />
+                  <FormControl fullWidth>
+                    <InputLabel color="yellowBtn" id="demo-simple-select-label">Role</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Role"
+                      color="yellowBtn"
+                      name="Role"
+                      {...register("role", {
+                        required: true,
+                      })}
+                    >
+                      <MenuItem value="volunteer">Volunteer</MenuItem>
+                      <MenuItem value="execom">Execom</MenuItem>
+                      {JSON.parse(sessionStorage.getItem("role")) === "admin" ? (<MenuItem value="admin">Admin</MenuItem>) : null}
+                    </Select>
+                  </FormControl>
+                </Stack>
+              </DialogContent>
+              <DialogActions sx={{ justifyContent: "space-around" }}>
+                <Button onClick={handleCloseDialog} color="yellowBtn" variant="outlined">Cancel</Button>
                 <LoadingButton
                   type="submit"
                   size="medium"
                   color={btnColor}
                   loading={loading}
-                  variant="outlined"
+                  variant="contained"
                 >
                   {
                     btnColor === 'success' ? <CheckCircleOutlineRoundedIcon /> : btnText
                   }
                 </LoadingButton>
               </DialogActions>
-            </Stack>
-          </form>
-        </Dialog>
-      </Container>
+            </form>
+          </Dialog>
+        </Container>
+      </ThemeProvider>
     </div>
   );
 }

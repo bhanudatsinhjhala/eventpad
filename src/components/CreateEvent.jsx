@@ -14,6 +14,7 @@ import { createEvent } from "../index.js";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadFile from "./UploadFile.jsx";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
@@ -50,6 +51,7 @@ function CreateEvent(props) {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setVisibility(true);
     };
     const handleChange = (newValue) => {
         setEventDatePicker(newValue);
@@ -106,107 +108,121 @@ function CreateEvent(props) {
             </IconButton>
         </React.Fragment>
     );
+    const yellowColorTheme = createTheme({
+        palette: {
+            yellowBtn: {
+                main: '#ffa306',
+                contrastText: '#fff',
+            },
+        },
+    });
     return (
         <div>
-            <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}>
-                <Button variant="outlined" onClick={handleClickOpenDialog} startIcon={<EventIcon />}>
-                    Create Event
-                </Button>
-                <Dialog open={openDialog} onClose={handleCloseDialog}>
-                    {visiblity ? (
-                        <>
-                            <DialogTitle>Event Setup</DialogTitle>
-                            <form onSubmit={handleSubmit(onSubmit, onError)}>
-                                <DialogContent>
-                                    <DialogContentText>
-                                        <Typography variant="h5" sx={{ marginBottom: "20px", color: "#00629b" }}>
-                                            Create Event
-                                        </Typography>
-                                    </DialogContentText>
-                                    <Stack spacing={4}>
-                                        <TextField
-                                            autoComplete="off"
-                                            type="text"
-                                            className="textInput"
-                                            name="eventName"
-                                            label="Event Name"
-                                            placeholder="Enter Event Name"
-                                            size="small"
-                                            {...register("eventName", {
-                                                required: true,
-                                                minLength: 5,
-                                            })}
-                                            error={Boolean(errors.eventName)}
-                                            helperText={
-                                                errors.eventName
-                                                    ? errors.eventName.type === "required"
-                                                        ? "Event Name  is required"
-                                                        : errors.eventName.type === "minLength"
-                                                            ? "Please enter event name with more than 5 charchters"
-                                                            : errors.eventName.message
-                                                    : null
-                                            }
-                                        />
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DateTimePicker
-                                                name="eventDate"
-                                                label="Date&Time picker"
-                                                value={eventDatePicker}
-                                                onChange={handleChange}
-                                                renderInput={(params) => <TextField {...params} />}
-                                                error={Boolean(errors.eventDate)}
+            <ThemeProvider theme={yellowColorTheme}>
+                <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}>
+                    <Button variant="outlined" color="yellowBtn" onClick={handleClickOpenDialog} startIcon={<EventIcon />}>
+                        Create Event
+                    </Button>
+                    <Dialog open={openDialog} onClose={handleCloseDialog}>
+                        {visiblity ? (
+                            <>
+                                <DialogTitle>Event Setup</DialogTitle>
+                                <form onSubmit={handleSubmit(onSubmit, onError)}>
+                                    <DialogContent>
+                                        <DialogContentText>
+                                            <Typography variant="h5" sx={{ marginBottom: "20px", color: "#ffa306" }}>
+                                                Create Event
+                                            </Typography>
+                                        </DialogContentText>
+                                        <Stack spacing={4}>
+                                            <TextField
+                                                autoComplete="off"
+                                                type="text"
+                                                color="yellowBtn"
+                                                className="textInput"
+                                                name="eventName"
+                                                label="Event Name"
+                                                placeholder="Enter Event Name"
+                                                size="small"
+                                                {...register("eventName", {
+                                                    required: true,
+                                                    minLength: 5,
+                                                })}
+                                                error={Boolean(errors.eventName)}
                                                 helperText={
-                                                    errors.eventDate
-                                                        ? errors.eventDate.type === "required"
-                                                            ? "Event Date is required"
-                                                            : null
+                                                    errors.eventName
+                                                        ? errors.eventName.type === "required"
+                                                            ? "Event Name  is required"
+                                                            : errors.eventName.type === "minLength"
+                                                                ? "Please enter event name with more than 5 charchters"
+                                                                : errors.eventName.message
                                                         : null
                                                 }
                                             />
-                                        </LocalizationProvider>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Event Type</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                label="Event Type"
-                                                name="eventType"
-                                                {...register("eventType", {
-                                                    required: true,
-                                                })}
-                                            >
-                                                <MenuItem value="technical">Technical</MenuItem>
-                                                <MenuItem value="non-technical">Non-Technical</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Stack>
-                                </DialogContent>
-                                <DialogActions sx={{ justifyContent: "space-around" }}>
-                                    <Button onClick={handleCloseDialog} variant="outlined">Cancel</Button>
-                                    <LoadingButton
-                                        type="submit"
-                                        size="medium"
-                                        loading={loading}
-                                        variant="contained"
-                                    >
-                                        Create Event
-                                    </LoadingButton>
-                                </DialogActions>
-                            </form>
-                        </>
-                    ) : (
-                        <UploadFile eventId={eventId} handleCloseDialog={handleCloseDialog} />
-                    )
-                    }
-                </Dialog>
-                <Snackbar
-                    className="regSnack"
-                    open={open}
-                    onClose={handleClose}
-                    message={snackText}
-                    action={action}
-                />
-            </Container>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    name="eventDate"
+                                                    label="Date&Time picker"
+                                                    value={eventDatePicker}
+                                                    onChange={handleChange}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                    color="yellowBtn"
+                                                    error={Boolean(errors.eventDate)}
+                                                    helperText={
+                                                        errors.eventDate
+                                                            ? errors.eventDate.type === "required"
+                                                                ? "Event Date is required"
+                                                                : null
+                                                            : null
+                                                    }
+                                                />
+                                            </LocalizationProvider>
+                                            <FormControl fullWidth>
+                                                <InputLabel color="yellowBtn" id="demo-simple-select-label">Event Type</InputLabel>
+                                                <Select
+                                                    color="yellowBtn"
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    label="Event Type"
+                                                    name="eventType"
+                                                    {...register("eventType", {
+                                                        required: true,
+                                                    })}
+                                                >
+                                                    <MenuItem value="technical">Technical</MenuItem>
+                                                    <MenuItem value="non-technical">Non-Technical</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Stack>
+                                    </DialogContent>
+                                    <DialogActions sx={{ justifyContent: "space-around" }}>
+                                        <Button onClick={handleCloseDialog} color="yellowBtn" variant="outlined">Cancel</Button>
+                                        <LoadingButton
+                                            type="submit"
+                                            size="medium"
+                                            loading={loading}
+                                            variant="contained"
+                                            color="yellowBtn"
+                                        >
+                                            Create Event
+                                        </LoadingButton>
+                                    </DialogActions>
+                                </form>
+                            </>
+                        ) : (
+                            <UploadFile eventId={eventId} handleCloseDialog={handleCloseDialog} />
+                        )
+                        }
+                    </Dialog>
+                    <Snackbar
+                        className="regSnack"
+                        open={open}
+                        onClose={handleClose}
+                        message={snackText}
+                        action={action}
+                    />
+                </Container>
+            </ThemeProvider>
         </div >
     )
 }

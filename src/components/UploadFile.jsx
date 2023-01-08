@@ -12,6 +12,7 @@ import {
   Snackbar, Button,
   DialogTitle, DialogContentText, DialogContent, DialogActions,
 } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -56,6 +57,14 @@ function UploadData(props) {
       setOpen(false);
     }
   }
+  const yellowColorTheme = createTheme({
+    palette: {
+      yellowBtn: {
+        main: '#ffa306',
+        contrastText: '#fff',
+      },
+    },
+  });
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -73,47 +82,50 @@ function UploadData(props) {
   );
   return (
     <div>
-      <DialogTitle>Event Setup</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Upload Your Participants Data's Excel Sheet here.
-        </DialogContentText>
-        <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>
-          <label htmlFor="contained-button-file">
-            <Stack spacing={3}>
-              <Input
-                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                id="contained-button-file"
-                single
-                type="file"
-                name="file"
-                color="primary"
-                variant="outlined"
-                onChange={handleChange}
-              />
-            </Stack>
-          </label>
-        </Box>
-        <Snackbar
-          className="regSnack"
-          open={open}
-          onClose={handleClose}
-          message={snackText}
-          action={action}
-        />
-      </DialogContent>
-      <DialogActions sx={{ justifyContent: "space-around" }}>
-        <Button onClick={props.handleCloseDialog} variant="outlined">Cancel</Button>
-        <LoadingButton
-          type="submit"
-          size="medium"
-          onClick={formSubmit}
-          loading={loading}
-          variant="contained"
-        >
-          Submit
-        </LoadingButton>
-      </DialogActions>
+      <ThemeProvider theme={yellowColorTheme}>
+        <DialogTitle>Event Setup</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Upload Your Participants Data's Excel Sheet here.
+          </DialogContentText>
+          <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>
+            <label htmlFor="contained-button-file">
+              <Stack spacing={3}>
+                <Input
+                  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  id="contained-button-file"
+                  single
+                  type="file"
+                  color="yellowBtn"
+                  name="file"
+                  variant="outlined"
+                  onChange={handleChange}
+                />
+              </Stack>
+            </label>
+          </Box>
+          <Snackbar
+            className="regSnack"
+            open={open}
+            onClose={handleClose}
+            message={snackText}
+            action={action}
+          />
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "space-around" }}>
+          <Button onClick={props.handleCloseDialog} variant="outlined" color="yellowBtn">Cancel</Button>
+          <LoadingButton
+            type="submit"
+            size="medium"
+            onClick={formSubmit}
+            loading={loading}
+            color="yellowBtn"
+            variant="contained"
+          >
+            Submit
+          </LoadingButton>
+        </DialogActions>
+      </ThemeProvider>
     </div>
   );
 }

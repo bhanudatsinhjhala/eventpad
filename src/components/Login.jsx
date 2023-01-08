@@ -12,7 +12,7 @@ import {
 import LoginForm from "./LoginForm.jsx";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-function Loginqr() {
+function Loginqr(props) {
   const [open, setOpen] = useState(false);
   const [snackText, setSnackText] = useState("hello");
   function handleClose() {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import RegistrationForm from "./RegistrationForm";
 import UserDetailsCard from "./userDetailsCard";
 import { Container, Snackbar, Box, Button } from "@mui/material";
@@ -45,6 +46,14 @@ function RegistrationId() {
       navigate("/");
     }
   }
+  const yellowColorTheme = createTheme({
+    palette: {
+      yellowBtn: {
+        main: '#ffa306',
+        contrastText: '#fff',
+      },
+    },
+  });
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -64,39 +73,42 @@ function RegistrationId() {
     <div>
       <Container>
         <Header />
-        <Container sx={{ margin: "10px auto" }}>
-          {visiblity ? (
-            <RegistrationForm
-              changeSnackText={changeSnackText}
-              changeVis={changeVis}
-              changeUserDetails={changeUserDetails}
+        <ThemeProvider theme={yellowColorTheme}>
+          <Container sx={{ margin: "10px auto" }}>
+            {visiblity ? (
+              <RegistrationForm
+                changeSnackText={changeSnackText}
+                changeVis={changeVis}
+                changeUserDetails={changeUserDetails}
+              />
+            ) : (
+              <UserDetailsCard
+                changeUserDetails={changeUserDetails}
+                userDetails={userDetails}
+                changeVis={changeVis}
+              />
+            )}
+            <Box sx={{ width: "fit-content", margin: "30px auto" }}>
+              <Button
+                sx={{ margin: "auto", color: "#ffa306" }}
+                variant="outlined"
+                color="yellowBtn"
+                onClick={() => handleClick("home")}
+              >
+                Back to Home
+              </Button>
+            </Box>
+            <Snackbar
+              className="regSnack"
+              open={open}
+              onClose={handleClose}
+              message={snackText}
+              action={action}
             />
-          ) : (
-            <UserDetailsCard
-              changeUserDetails={changeUserDetails}
-              userDetails={userDetails}
-              changeVis={changeVis}
-            />
-          )}
-          <Box sx={{ width: "fit-content", margin: "30px auto" }}>
-            <Button
-              sx={{ margin: "auto" }}
-              variant="outlined"
-              onClick={() => handleClick("home")}
-            >
-              Back to Home
-            </Button>
-          </Box>
-          <Snackbar
-            className="regSnack"
-            open={open}
-            onClose={handleClose}
-            message={snackText}
-            action={action}
-          />
-        </Container>
+          </Container>
+        </ThemeProvider>
       </Container>
-    </div>
+    </div >
   );
 }
 

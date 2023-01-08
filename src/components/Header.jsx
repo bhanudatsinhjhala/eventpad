@@ -137,7 +137,7 @@ export default function PersistentDrawerLeft(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#ffa306" }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -149,7 +149,7 @@ export default function PersistentDrawerLeft(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            {open === true ? null : "QR Scanner"}
+            {open === true ? null : "EventPad"}
           </Typography>
           <Button
             sx={{
@@ -185,11 +185,10 @@ export default function PersistentDrawerLeft(props) {
         <DrawerHeader sx={{ justifyContent: "space-between" }}>
           <Typography
             variant="h6"
-            color="primary"
-            sx={{ margin: 2, color: "#1976d2" }}
+            sx={{ margin: 2, color: "#ffa306" }}
           >
             <Link to={`/`} style={{ textDecoration: "none", color: "inherit" }}>
-              QR Scanner
+              EventPad
             </Link>
           </Typography>
 
@@ -206,13 +205,13 @@ export default function PersistentDrawerLeft(props) {
           {navItems.map((Obj) => {
             if (Obj.key !== 5) {
               return (
-                <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding>
+                <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding sx={{ display: "block" }}>
                   <Link
                     to={`/${Obj.to}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    <ListItemButton>
-                      <ListItemIcon>{Obj.icon}</ListItemIcon>
+                    <ListItemButton sx={{ color: "#ffa306" }}>
+                      <ListItemIcon sx={{ color: "#ffa306" }}>{Obj.icon}</ListItemIcon>
                       <ListItemText primary={Obj.text} />
                     </ListItemButton>
                   </Link>
@@ -231,8 +230,8 @@ export default function PersistentDrawerLeft(props) {
                     variant="outlined"
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    <ListItemButton onClick={logOut}>
-                      <ListItemIcon>
+                    <ListItemButton onClick={logOut} sx={{ color: "#ffa306" }}>
+                      <ListItemIcon sx={{ color: "#ffa306" }}>
                         <LogoutIcon />
                       </ListItemIcon>
                       Logout

@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 import FullScreen from "@mui/icons-material/Fullscreen";
 import Edit from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-function Home() {
+function Home(props) {
   const navigate = useNavigate();
   function handleClick(value) {
     if (value === "reg") {
@@ -39,9 +39,9 @@ function Home() {
               }}
             >
               <CardContent>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1" color="#ffa306">
                   <IconButton>
-                    <Edit></Edit>
+                    <Edit sx={{ color: "#ffa306" }} />
                   </IconButton>
                   Registration ID
                 </Typography>
@@ -54,9 +54,9 @@ function Home() {
               }}
             >
               <CardContent>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1" color="#ffa306">
                   <IconButton>
-                    <FullScreen></FullScreen>
+                    <FullScreen sx={{ color: "#ffa306" }} />
                   </IconButton>
                   QR Scanner
                 </Typography>

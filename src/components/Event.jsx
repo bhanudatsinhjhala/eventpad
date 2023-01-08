@@ -4,6 +4,7 @@ import {
     Table, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody,
 } from '@mui/material';
 import Header from "./Header.jsx";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
 import { getEventDetails, getEventReport, deleteEventDetails } from "../index.js";
@@ -86,9 +87,18 @@ export default function Event() {
         })
         console.log("Download Report", id);
     }
+    const yellowColorTheme = createTheme({
+        palette: {
+          yellowBtn: {
+            main: '#ffa306',
+            contrastText: '#fff',
+          },
+        },
+      });
     return (
         <div>
             <Header />
+            <ThemeProvider theme={yellowColorTheme}>
             <Container sx={{ margin: "auto", marginTop: "100px" }}>
                 <CreateEvent sx={{ marginBottom: "15px" }} getEvents={getEvents} />
                 <TableContainer component={Paper}>
@@ -115,7 +125,7 @@ export default function Event() {
                                     <TableCell align="left">{row.eventType}</TableCell>
                                     <TableCell align="left">{row.dateString}</TableCell>
                                     <TableCell align="left">
-                                        <Button variant="outlined" size="small" onClick={handleClickOpenDialog}>
+                                        <Button variant="outlined" color="yellowBtn" size="small" onClick={handleClickOpenDialog}>
                                             Upload Data
                                         </Button>
                                         <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -123,12 +133,12 @@ export default function Event() {
                                         </Dialog>
                                     </TableCell>
                                     <TableCell align="left">
-                                        <Button variant="outlined" startIcon={<FileDownloadIcon />} type="submit" size="small" onClick={() => downloadReport(row._id, row.eventName)}>
+                                        <Button variant="outlined" color="yellowBtn" startIcon={<FileDownloadIcon />} type="submit" size="small" onClick={() => downloadReport(row._id, row.eventName)}>
                                             Download
                                         </Button>
                                     </TableCell>
                                     <TableCell align="left">
-                                        <Button type="submit" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteEvent(row._id)}>
+                                        <Button type="submit" color="yellowBtn" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteEvent(row._id)}>
                                             Delete
                                         </Button>
                                     </TableCell>
@@ -138,6 +148,7 @@ export default function Event() {
                     </Table>
                 </TableContainer>
             </Container>
+            </ThemeProvider>
         </div>
     );
 }

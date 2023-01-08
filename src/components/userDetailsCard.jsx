@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Grow from "@mui/material/Grow";
 import Typography from "@mui/material/Typography";
 import DoneIcon from "@mui/icons-material/Done";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
@@ -38,7 +39,7 @@ function userDetailsCard(props) {
           __v: "",
         });
         props.changeVis(true);
-      } else{
+      } else {
         changeSnackText(res.response.data.message);
       }
     });
@@ -48,20 +49,30 @@ function userDetailsCard(props) {
       setOpen(false);
     }
   }
+  const yellowColorTheme = createTheme({
+    palette: {
+      yellowBtn: {
+        main: '#ffa306',
+        contrastText: '#fff',
+      },
+    },
+  });
 
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
         UNDO
       </Button> */}
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="primary"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
+      <ThemeProvider theme={yellowColorTheme}>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="yellowBtn"
+          onClick={handleClose}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </ThemeProvider>
     </React.Fragment>
   );
   return (
