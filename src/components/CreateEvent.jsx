@@ -35,6 +35,7 @@ function CreateEvent(props) {
     const {
         register,
         formState: { errors },
+        reset,
         handleSubmit,
     } = useForm();
     const [eventDatePicker, setEventDatePicker] = React.useState(dayjs(new Date()));
@@ -70,6 +71,11 @@ function CreateEvent(props) {
                 changeSnackText(res.data.message)
                 console.info("res datassss", res.data.data)
                 setEventId(res.data.data._id);
+                reset({
+                    eventType: "",
+                    eventDate: "",
+                    eventName: "",
+                });
                 setVisibility(false);
                 props.getEvents();
             } else if (res) {
@@ -165,8 +171,8 @@ function CreateEvent(props) {
                                                     label="Date&Time picker"
                                                     value={eventDatePicker}
                                                     onChange={handleChange}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                    color="yellowBtn"
+                                                    disablePast={true}
+                                                    renderInput={(params) => <TextField color="yellowBtn" sx={{ svg: { color: '#252525' }, input: { color: '#252525' }, label: { color: '#252525' } }} {...params} />}
                                                     error={Boolean(errors.eventDate)}
                                                     helperText={
                                                         errors.eventDate

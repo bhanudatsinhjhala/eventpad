@@ -17,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
 function UploadData(props) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [snackText, setSnackText] = useState(
