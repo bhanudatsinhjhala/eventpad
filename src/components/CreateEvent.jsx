@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-    TextField, Stack, Typography, Button, FormControl,
+    TextField, Stack, Typography, Button, FormControl, CssBaseline,
     InputLabel, Select, MenuItem, Snackbar,
     DialogTitle, DialogContentText, DialogContent, DialogActions, Dialog
 } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
 import { LoadingButton } from "@mui/lab";
 import { useForm } from "react-hook-form";
 import "./App.css";
@@ -14,9 +15,9 @@ import { createEvent } from "../index.js";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadFile from "./UploadFile.jsx";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from "react-router-dom";
+import { yellowColorTheme } from "../colorTheme.js"
 import Container from "@mui/material/Container";
 
 function CreateEvent(props) {
@@ -114,25 +115,18 @@ function CreateEvent(props) {
             </IconButton>
         </React.Fragment>
     );
-    const yellowColorTheme = createTheme({
-        palette: {
-            yellowBtn: {
-                main: '#ffa306',
-                contrastText: '#fff',
-            },
-        },
-    });
     return (
         <div>
             <ThemeProvider theme={yellowColorTheme}>
-                <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}>
-                    <Button variant="outlined" color="yellowBtn" onClick={handleClickOpenDialog} startIcon={<EventIcon />}>
+                <CssBaseline />
+                <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px", }}>
+                    <Button variant="outlined" color="primary" onClick={handleClickOpenDialog} startIcon={<EventIcon />}>
                         Create Event
                     </Button>
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
                         {visiblity ? (
                             <>
-                                <DialogTitle>Event Setup</DialogTitle>
+                                <DialogTitle sx={{ color: "#e0e0e0" }} >Event Setup</DialogTitle>
                                 <form onSubmit={handleSubmit(onSubmit, onError)}>
                                     <DialogContent>
                                         <DialogContentText>
@@ -144,7 +138,7 @@ function CreateEvent(props) {
                                             <TextField
                                                 autoComplete="off"
                                                 type="text"
-                                                color="yellowBtn"
+                                                color="primary"
                                                 className="textInput"
                                                 name="eventName"
                                                 label="Event Name"
@@ -172,7 +166,7 @@ function CreateEvent(props) {
                                                     value={eventDatePicker}
                                                     onChange={handleChange}
                                                     disablePast={true}
-                                                    renderInput={(params) => <TextField color="yellowBtn" sx={{ svg: { color: '#252525' }, input: { color: '#252525' }, label: { color: '#252525' } }} {...params} />}
+                                                    renderInput={(params) => <TextField color="primary" sx={{ svg: { color: '#252525' }, input: { color: '#252525' }, label: { color: '#252525' } }} {...params} />}
                                                     error={Boolean(errors.eventDate)}
                                                     helperText={
                                                         errors.eventDate
@@ -184,9 +178,9 @@ function CreateEvent(props) {
                                                 />
                                             </LocalizationProvider>
                                             <FormControl fullWidth>
-                                                <InputLabel color="yellowBtn" id="demo-simple-select-label">Event Type</InputLabel>
+                                                <InputLabel color="primary" id="demo-simple-select-label">Event Type</InputLabel>
                                                 <Select
-                                                    color="yellowBtn"
+                                                    color="primary"
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
                                                     label="Event Type"
@@ -202,13 +196,13 @@ function CreateEvent(props) {
                                         </Stack>
                                     </DialogContent>
                                     <DialogActions sx={{ justifyContent: "space-around" }}>
-                                        <Button onClick={handleCloseDialog} color="yellowBtn" variant="outlined">Cancel</Button>
+                                        <Button onClick={handleCloseDialog} color="primary" variant="outlined">Cancel</Button>
                                         <LoadingButton
                                             type="submit"
                                             size="medium"
                                             loading={loading}
                                             variant="contained"
-                                            color="yellowBtn"
+                                            color="primary"
                                         >
                                             Create Event
                                         </LoadingButton>

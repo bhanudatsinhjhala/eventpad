@@ -3,14 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
 import { getUserDetails } from "../index";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { yellowColorTheme } from "../colorTheme.js";
 import { QrReader } from "react-qr-reader";
-import Snackbar from "@mui/material/Snackbar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
+import { Box, CssBaseline, Snackbar, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-// import Button from "@mui/material/Button";
 import "./App.css";
 import { Typography } from "@mui/material";
 function QrScanner() {
@@ -74,14 +71,6 @@ function QrScanner() {
       });
     }
   }
-  const yellowColorTheme = createTheme({
-    palette: {
-      yellowBtn: {
-        main: '#ffa306',
-        contrastText: '#fff',
-      },
-    },
-  });
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -101,7 +90,8 @@ function QrScanner() {
   return (
     <div>
       <Header />
-      <ThemeProvider theme={yellowColorTheme}>
+      <ThemeProvider theme={yellowColorTheme} >
+        <CssBaseline />
         {visiblity ? (
           <div>
             <Typography
@@ -150,7 +140,7 @@ function QrScanner() {
           <Button
             sx={{ margin: "auto" }}
             variant="outlined"
-            color="yellowBtn"
+            color="primary"
             onClick={() => handleClick("home")}
           >
             Back to Home

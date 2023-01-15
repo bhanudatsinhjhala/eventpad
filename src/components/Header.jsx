@@ -1,23 +1,16 @@
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled, useTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+import { yellowColorTheme, headerTheme } from "../colorTheme.js";
+import {
+  Button, CssBaseline, Drawer, Toolbar, List, Typography, Divider,
+  IconButton, ListItem, ListItemText, ListItemButton, ListItemIcon
+} from "@mui/material";
+import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -135,115 +128,118 @@ export default function PersistentDrawerLeft(props) {
     navigate("/login");
   }
   return (
-    <Box sx={{ display: "flex" }}>
+    <ThemeProvider theme={yellowColorTheme} >
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#ffa306" }}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {open === true ? null : "EventPad"}
-          </Typography>
-          <Button
-            sx={{
-              position: "fixed",
-              right: "50px",
-              color: "#fff",
-              borderColor: "#fff",
-              display: {
-                xs: "none",
-                sm: "block",
-              },
-            }}
-            variant="outlined"
-            onClick={logOut}
-          >
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <ThemeProvider theme={headerTheme} >
+          <AppBar position="fixed" open={open} sx={{ backgroundColor: "#ffa306" }} color="primary">
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: "none" }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div">
+                {open === true ? null : "EventPad"}
+              </Typography>
+              <Button
+                sx={{
+                  position: "fixed",
+                  right: "50px",
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                  },
+                }}
+                variant="outlined"
+                onClick={logOut}
+              >
+                Logout
+              </Button>
+            </Toolbar>
+          </AppBar>
+        </ThemeProvider>
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader sx={{ justifyContent: "space-between" }}>
-          <Typography
-            variant="h6"
-            sx={{ margin: 2, color: "#ffa306" }}
-          >
-            <Link to={`/`} style={{ textDecoration: "none", color: "inherit" }}>
-              EventPad
-            </Link>
-          </Typography>
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader sx={{ justifyContent: "space-between" }}>
+            <Typography
+              variant="h6"
+              sx={{ margin: 2, color: "#ffa306" }}
+            >
+              <Link to={`/`} style={{ textDecoration: "none", color: "inherit" }}>
+                EventPad
+              </Link>
+            </Typography>
 
-          <IconButton onClick={handleDrawerClose} sx={{ color: "inherit" }}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {navItems.map((Obj) => {
-            if (Obj.key !== 5) {
-              return (
-                <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding sx={{ display: "block" }}>
-                  <Link
-                    to={`/${Obj.to}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton sx={{ color: "#ffa306" }}>
-                      <ListItemIcon sx={{ color: "#ffa306" }}>{Obj.icon}</ListItemIcon>
-                      <ListItemText primary={Obj.text} />
-                    </ListItemButton>
-                  </Link>
-                </ListItem>
-              );
-            } else {
-              return (
-                <ListItem
-                  key={Obj.key}
-                  onClick={handleNavBtn}
-                  variant="outlined"
-                  disablePadding
-                >
-                  <Link
-                    to={`/${Obj.to}`}
+            <IconButton onClick={handleDrawerClose} sx={{ color: "inherit" }}>
+              {theme.direction === "ltr" ? (
+                <ChevronLeftIcon sx={{ color: "#ffa306" }} />
+              ) : (
+                <ChevronRightIcon sx={{ color: "#ffa306" }} />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {navItems.map((Obj) => {
+              if (Obj.key !== 5) {
+                return (
+                  <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding sx={{ display: "block" }}>
+                    <Link
+                      to={`/${Obj.to}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <ListItemButton sx={{ color: "#ffa306" }}>
+                        <ListItemIcon sx={{ color: "#ffa306" }}>{Obj.icon}</ListItemIcon>
+                        <ListItemText primary={Obj.text} />
+                      </ListItemButton>
+                    </Link>
+                  </ListItem>
+                );
+              } else {
+                return (
+                  <ListItem
+                    key={Obj.key}
+                    onClick={handleNavBtn}
                     variant="outlined"
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    disablePadding
                   >
-                    <ListItemButton onClick={logOut} sx={{ color: "#ffa306" }}>
-                      <ListItemIcon sx={{ color: "#ffa306" }}>
-                        <LogoutIcon />
-                      </ListItemIcon>
-                      Logout
-                    </ListItemButton>
-                  </Link>
-                </ListItem>
-              );
-            }
-          })}
-        </List>
-        <Divider />
-      </Drawer>
-    </Box>
+                    <Link
+                      to={`/${Obj.to}`}
+                      variant="outlined"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <ListItemButton onClick={logOut} sx={{ color: "#ffa306" }}>
+                        <ListItemIcon sx={{ color: "#ffa306" }}>
+                          <LogoutIcon />
+                        </ListItemIcon>
+                        Logout
+                      </ListItemButton>
+                    </Link>
+                  </ListItem>
+                );
+              }
+            })}
+          </List>
+          <Divider />
+        </Drawer>
+      </Box>
+    </ThemeProvider>
   );
 }

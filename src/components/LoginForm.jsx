@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { TextField, Stack, InputAdornment, IconButton } from "@mui/material";
+import { TextField, Stack, InputAdornment, IconButton, CssBaseline } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Login from "@mui/icons-material/Login";
 import { loginUser } from "..";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { yellowColorTheme } from '../colorTheme.js';
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -25,7 +26,7 @@ function MyForm(props) {
   const onSubmit = (data) => {
     // console.log(data);
     setLoading(true);
-    loginUser(data).then((res, err) => {
+    loginUser(data).then((res) => {
       console.log(res);
       if (res.status !== 200) {
         let errorRes = res.response
@@ -49,23 +50,16 @@ function MyForm(props) {
   const onError = (error) => {
     console.log(error);
   };
-  const yellowColorTheme = createTheme({
-    palette: {
-      yellowBtn: {
-        main: '#ffa306',
-        contrastText: '#fff',
-      },
-    },
-  });
   return (
     <ThemeProvider theme={yellowColorTheme}>
+      <CssBaseline />
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack spacing={3}>
           <TextField
             autoComplete="off"
             type="text"
             className="textInput"
-            color="yellowBtn"
+            color="primary"
             name="membershipId"
             label="Membership-Id"
             placeholder="Enter your Membership Id"
@@ -97,7 +91,7 @@ function MyForm(props) {
             autoComplete="off"
             type={showPassword ? "text" : "password"}
             label="Password"
-            color="yellowBtn"
+            color="primary"
             className="textInput"
             placeholder="Enter your Password"
             size="small"
@@ -132,7 +126,7 @@ function MyForm(props) {
             size="medium"
             startIcon={<Login />}
             loading={loading}
-            color="yellowBtn"
+            color="primary"
             variant="outlined"
           >
             Login

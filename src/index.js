@@ -173,7 +173,7 @@ export async function loginUser(user) {
     return response;
   } catch (err) {
     console.error(err);
-    return err;
+    loginUser(user);
   }
 }
 // export async function totalAbsent() {

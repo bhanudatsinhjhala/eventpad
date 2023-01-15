@@ -1,8 +1,10 @@
 import React from "react";
-import { Box, Typography, Stack, TextField, Button } from "@mui/material";
+import { Box, Typography, Stack, TextField, Button, CssBaseline } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { getUserDetails } from "../index";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { yellowColorTheme } from "../colorTheme.js";
+
 
 export default function RegistrationForm(props) {
   const {
@@ -21,14 +23,6 @@ export default function RegistrationForm(props) {
   // useEffect(() => {
   //   checkAbsentCount();
   // });
-  const yellowColorTheme = createTheme({
-    palette: {
-      yellowBtn: {
-        main: '#ffa306',
-        contrastText: '#fff',
-      },
-    },
-  });
   const onSubmit = (data) => {
     // console.log(data);
     getUserDetails(data.regid, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
@@ -49,6 +43,7 @@ export default function RegistrationForm(props) {
   return (
     <div>
       <ThemeProvider theme={yellowColorTheme}>
+      <CssBaseline />
         <Box
           component="form"
           className="regForm"
@@ -74,7 +69,7 @@ export default function RegistrationForm(props) {
             <TextField
               autoComplete="off"
               name="regid"
-              color="yellowBtn"
+              color="primary"
               label="Registration-Id"
               type="text"
               size="small"
@@ -101,7 +96,7 @@ export default function RegistrationForm(props) {
               sx={{ height: "40px" }}
               className="submitBtn"
               type="submit"
-              color="yellowBtn"
+              color="primary"
               variant="contained"
               size="large"
             >

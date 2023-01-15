@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LoadingButton } from "@mui/lab";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import {
   TextField,
@@ -9,11 +9,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Typography,
+  Typography, CssBaseline,
   Button,
   DialogTitle, DialogContentText, DialogContent, DialogActions, Dialog
 } from "@mui/material";
 import { createUsers } from "..";
+import { yellowColorTheme } from "../colorTheme.js";
 // import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -21,7 +22,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 function MyForm(props) {
   const [loading, setLoading] = useState(false);
   const [btnText, setBtnText] = useState('Create');
-  const [btnColor, setBtnColor] = useState('yellowBtn');
+  const [btnColor, setBtnColor] = useState('primary');
   const [isAccountCreated, setAccountCreated] = useState(false);
   const {
     register,
@@ -41,14 +42,6 @@ function MyForm(props) {
     }
   }, [reset, isAccountCreated]);
   // const navigate = useNavigate();
-  const yellowColorTheme = createTheme({
-    palette: {
-      yellowBtn: {
-        main: '#ffa306',
-        contrastText: '#fff',
-      },
-    },
-  });
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const handleClickOpenDialog = () => {
@@ -107,9 +100,10 @@ function MyForm(props) {
   // console.log(open, snackText);
   return (
     <div>
-      <ThemeProvider theme={yellowColorTheme}>
+      <ThemeProvider theme={yellowColorTheme} >
+        <CssBaseline />
         <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}>
-          <Button variant="outlined" color="yellowBtn" onClick={handleClickOpenDialog} startIcon={<PersonAddIcon />}>
+          <Button variant="outlined" color="primary" onClick={handleClickOpenDialog} startIcon={<PersonAddIcon />}>
             Create Account
           </Button>
           <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -123,7 +117,7 @@ function MyForm(props) {
                 </DialogContentText>
                 <Stack spacing={4}>
                   <TextField
-                    color="yellowBtn"
+                    color="primary"
                     autoComplete="off"
                     type="text"
                     className="textInput"
@@ -154,7 +148,7 @@ function MyForm(props) {
                     }
                   />
                   <TextField
-                    color="yellowBtn"
+                    color="primary"
                     autoComplete="off"
                     type="text"
                     className="textInput"
@@ -185,7 +179,7 @@ function MyForm(props) {
                     }
                   />
                   <TextField
-                    color="yellowBtn"
+                    color="primary"
                     autoComplete="off"
                     type="text"
                     className="textInput"
@@ -211,7 +205,7 @@ function MyForm(props) {
                   />
 
                   <TextField
-                    color="yellowBtn"
+                    color="primary"
                     autoComplete="off"
                     type="password"
                     label="Password"
@@ -231,12 +225,12 @@ function MyForm(props) {
                     }
                   />
                   <FormControl fullWidth>
-                    <InputLabel color="yellowBtn" id="demo-simple-select-label">Role</InputLabel>
+                    <InputLabel color="primary" id="demo-simple-select-label">Role</InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       label="Role"
-                      color="yellowBtn"
+                      color="primary"
                       name="Role"
                       {...register("role", {
                         required: true,
@@ -250,7 +244,7 @@ function MyForm(props) {
                 </Stack>
               </DialogContent>
               <DialogActions sx={{ justifyContent: "space-around" }}>
-                <Button onClick={handleCloseDialog} color="yellowBtn" variant="outlined">Cancel</Button>
+                <Button onClick={handleCloseDialog} color="primary" variant="outlined">Cancel</Button>
                 <LoadingButton
                   type="submit"
                   size="medium"

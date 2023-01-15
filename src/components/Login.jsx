@@ -8,12 +8,15 @@ import {
   Box,
   Snackbar,
   Grow,
+  CssBaseline
 } from "@mui/material";
+import { yellowColorTheme } from "../colorTheme.js";
+import { ThemeProvider } from "@mui/material/styles";
 import LoginForm from "./LoginForm.jsx";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 function Loginqr(props) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [snackText, setSnackText] = useState("hello");
   function handleClose() {
     if (open === true) {
@@ -40,39 +43,42 @@ function Loginqr(props) {
     </React.Fragment>
   );
   return (
-    <Container>
-      <Grow in={true} {...(true ? { timeout: 1300 } : {})}>
-        <Card
-          sx={{
-            margin: "auto",
-            marginTop: {
-              xs: 13,
-              md: "12rem",
-            },
-            borderRadius: "3%",
-            maxWidth: 300,
-          }}
-          elevation={10}
-        >
-          <CardContent sx={{ maxWidth: 280, margin: "20px auto" }}>
-            <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-              Welcome, to IEEE Event Attendance System
-            </Typography>
+    <ThemeProvider theme={yellowColorTheme} >
+      <CssBaseline />
+      <Container sx={{ height: "84vh" }}>
+        <Grow in={true} {...(true ? { timeout: 1300 } : {})}>
+          <Card
+            sx={{
+              margin: "auto",
+              marginTop: {
+                xs: 13,
+                md: "12rem",
+              },
+              borderRadius: "3%",
+              maxWidth: 300,
+            }}
+            elevation={10}
+          >
+            <CardContent sx={{ maxWidth: 280, margin: "20px auto" }}>
+              <Typography variant="h5" sx={{ marginBottom: "20px" }}>
+                Welcome, to IEEE Event Attendance System
+              </Typography>
 
-            <Box>
-              <LoginForm changeSnackText={changeSnackText} />
-            </Box>
-          </CardContent>
-        </Card>
-      </Grow>
-      <Snackbar
-        className="regSnack"
-        open={open}
-        onClose={handleClose}
-        message={snackText}
-        action={action}
-      />
-    </Container>
+              <Box>
+                <LoginForm changeSnackText={changeSnackText} />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grow>
+        <Snackbar
+          className="regSnack"
+          open={open}
+          onClose={handleClose}
+          message={snackText}
+          action={action}
+        />
+      </Container>
+    </ThemeProvider>
   );
 }
 

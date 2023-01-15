@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Header from "./Header";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { yellowColorTheme } from "../colorTheme.js";
 import RegistrationForm from "./RegistrationForm";
 import UserDetailsCard from "./userDetailsCard";
-import { Container, Snackbar, Box, Button } from "@mui/material";
+import { Container, Snackbar, Box, Button, CssBaseline } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -46,14 +47,6 @@ function RegistrationId() {
       navigate("/");
     }
   }
-  const yellowColorTheme = createTheme({
-    palette: {
-      yellowBtn: {
-        main: '#ffa306',
-        contrastText: '#fff',
-      },
-    },
-  });
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
@@ -73,7 +66,8 @@ function RegistrationId() {
     <div>
       <Container>
         <Header />
-        <ThemeProvider theme={yellowColorTheme}>
+        <ThemeProvider theme={yellowColorTheme} >
+          <CssBaseline />
           <Container sx={{ margin: "10px auto" }}>
             {visiblity ? (
               <RegistrationForm
@@ -92,7 +86,7 @@ function RegistrationId() {
               <Button
                 sx={{ margin: "auto", color: "#ffa306" }}
                 variant="outlined"
-                color="yellowBtn"
+                color="primary"
                 onClick={() => handleClick("home")}
               >
                 Back to Home

@@ -1,6 +1,11 @@
 *{
   font-family: "Montserrat", "Roboto","Helvetica","Arial",sans-serif !important;
 }
+
+/* body{
+  background-color: #1d1d1d !important;
+} */
+
 .App {
   text-align: center;
 }
@@ -21,8 +26,11 @@
 
 .regSnack{
  margin-top: 15px;
- justify-content: center !important;
- position: inherit !important;
+ position: fixed !important;
+ left: auto !important;
+ top: 24px !important; 
+ right: 24px !important; 
+ bottom: unset !important; 
 }
 
 .submitBtn{

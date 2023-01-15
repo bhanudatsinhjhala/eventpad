@@ -6,7 +6,7 @@ import {
   Input,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { uploadFile } from "..";
 import {
   Snackbar, Button,
@@ -59,7 +59,7 @@ function UploadData(props) {
   }
   const yellowColorTheme = createTheme({
     palette: {
-      yellowBtn: {
+      primary: {
         main: '#ffa306',
         contrastText: '#fff',
       },
@@ -96,7 +96,7 @@ function UploadData(props) {
                   id="contained-button-file"
                   single
                   type="file"
-                  color="yellowBtn"
+                  color="primary"
                   name="file"
                   variant="outlined"
                   onChange={handleChange}
@@ -113,13 +113,13 @@ function UploadData(props) {
           />
         </DialogContent>
         <DialogActions sx={{ justifyContent: "space-around" }}>
-          <Button onClick={props.handleCloseDialog} variant="outlined" color="yellowBtn">Cancel</Button>
+          <Button onClick={props.handleCloseDialog} variant="outlined" color="primary">Cancel</Button>
           <LoadingButton
             type="submit"
             size="medium"
             onClick={formSubmit}
             loading={loading}
-            color="yellowBtn"
+            color="primary"
             variant="contained"
           >
             Submit

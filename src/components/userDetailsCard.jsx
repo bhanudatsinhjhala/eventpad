@@ -1,12 +1,8 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-// import Container from "@mui/material/Container";
-// import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Grow from "@mui/material/Grow";
-import Typography from "@mui/material/Typography";
+import { Typography, Grow, CssBaseline, Button, Box } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { yellowColorTheme } from "../colorTheme.js";
+import { ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
@@ -49,25 +45,18 @@ function userDetailsCard(props) {
       setOpen(false);
     }
   }
-  const yellowColorTheme = createTheme({
-    palette: {
-      yellowBtn: {
-        main: '#ffa306',
-        contrastText: '#fff',
-      },
-    },
-  });
 
   const action = (
     <React.Fragment>
       {/* <Button color="secondary" size="small" onClick={handleClose}>
         UNDO
       </Button> */}
-      <ThemeProvider theme={yellowColorTheme}>
+      <ThemeProvider theme={yellowColorTheme} >
+        <CssBaseline />
         <IconButton
           size="small"
           aria-label="close"
-          color="yellowBtn"
+          color="primary"
           onClick={handleClose}
         >
           <CloseIcon fontSize="small" />

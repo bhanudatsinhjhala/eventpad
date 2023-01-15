@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Container, Button, Dialog,
+    Container, Button, Dialog, CssBaseline,
     Table, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody,
 } from '@mui/material';
+import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
 import { getEventDetails, getEventReport, deleteEventDetails } from "../index.js";
@@ -87,67 +88,60 @@ export default function Event() {
         })
         console.log("Download Report", id);
     }
-    const yellowColorTheme = createTheme({
-        palette: {
-          yellowBtn: {
-            main: '#ffa306',
-            contrastText: '#fff',
-          },
-        },
-      });
     return (
         <div>
             <Header />
             <ThemeProvider theme={yellowColorTheme}>
-            <Container sx={{ margin: "auto", marginTop: "100px" }}>
-                <CreateEvent sx={{ marginBottom: "15px" }} getEvents={getEvents} />
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Event Name</TableCell>
-                                <TableCell align="left">Event Type</TableCell>
-                                <TableCell align="left">Event Date</TableCell>
-                                <TableCell align="left">Upload Data</TableCell>
-                                <TableCell align="left">Download Report</TableCell>
-                                <TableCell align="left">Deleted Event</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map((row) => (
-                                <TableRow
-                                    key={row._id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {row.eventName}
-                                    </TableCell>
-                                    <TableCell align="left">{row.eventType}</TableCell>
-                                    <TableCell align="left">{row.dateString}</TableCell>
-                                    <TableCell align="left">
-                                        <Button variant="outlined" color="yellowBtn" size="small" onClick={handleClickOpenDialog}>
-                                            Upload Data
-                                        </Button>
-                                        <Dialog open={openDialog} onClose={handleCloseDialog}>
-                                            <UploadFile eventId={row._id} handleCloseDialog={handleCloseDialog} />
-                                        </Dialog>
-                                    </TableCell>
-                                    <TableCell align="left">
-                                        <Button variant="outlined" color="yellowBtn" startIcon={<FileDownloadIcon />} type="submit" size="small" onClick={() => downloadReport(row._id, row.eventName)}>
-                                            Download
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell align="left">
-                                        <Button type="submit" color="yellowBtn" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteEvent(row._id)}>
-                                            Delete
-                                        </Button>
-                                    </TableCell>
+                <CssBaseline />
+                <Container sx={{ margin: "auto", marginTop: "100px" }}>
+                    <CreateEvent sx={{ marginBottom: "15px" }} getEvents={getEvents} />
+                    <TableContainer component={Paper} >
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Event Name</TableCell>
+                                    <TableCell align="left" >Event Type</TableCell>
+                                    <TableCell align="left" >Event Date</TableCell>
+                                    <TableCell align="left">Upload Data</TableCell>
+                                    <TableCell align="left" >Download Report</TableCell>
+                                    <TableCell align="left" >Deleted Event</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Container>
+                            </TableHead>
+                            <TableBody>
+                                {rows.map((row) => (
+                                    <TableRow
+                                        key={row._id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row" >
+                                            {row.eventName}
+                                        </TableCell>
+                                        <TableCell align="left" >{row.eventType}</TableCell>
+                                        <TableCell align="left" >{row.dateString}</TableCell>
+                                        <TableCell align="left">
+                                            <Button variant="outlined" color="primary" size="small" onClick={handleClickOpenDialog}>
+                                                Upload Data
+                                            </Button>
+                                            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                                                <UploadFile eventId={row._id} handleCloseDialog={handleCloseDialog} />
+                                            </Dialog>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Button variant="outlined" color="primary" startIcon={<FileDownloadIcon />} type="submit" size="small" onClick={() => downloadReport(row._id, row.eventName)}>
+                                                Download
+                                            </Button>
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            <Button type="submit" color="primary" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteEvent(row._id)}>
+                                                Delete
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
             </ThemeProvider>
         </div>
     );
