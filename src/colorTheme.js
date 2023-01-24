@@ -18,6 +18,8 @@ export const yellowColorTheme = createTheme({
         mode: 'dark',
         primary: {
             main: '#ffa306',
+            light: '#ffa306bd',
+            dark: '#ffa206',
             contrastText: '#fff',
         },
     },
