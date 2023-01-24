@@ -11,7 +11,7 @@ import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
 import { getAllMemberDetails, deleteMember } from "../index.js";
 import { useNavigate } from "react-router-dom";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -64,6 +64,9 @@ function CreateUsers() {
   const changeSnackText = (value) => {
     setSnackText(value);
     setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 2000)
   };
   const action = (
     <React.Fragment>

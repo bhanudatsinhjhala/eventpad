@@ -15,11 +15,12 @@ import {
 } from "@mui/material";
 import { createUsers } from "..";
 import { yellowColorTheme } from "../colorTheme.js";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 function MyForm(props) {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [btnText, setBtnText] = useState('Create');
   const [btnColor, setBtnColor] = useState('primary');
@@ -60,7 +61,24 @@ function MyForm(props) {
     createUsers(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
       console.log(res);
       // console.log(err.response);
-      if (res.status === 200) {
+      if (res.status !== 200) {
+        if (res.response.status == 401 || res.response.status == 403) {
+          props.changeSnackText(res.response.data.message);
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        } else if (res.response.status === 409) {
+          setBtnText(res.response.data.message)
+          props.changeSnackText(res.response.data.message);
+          setBtnColor('error');
+          setTimeout(() => {
+            setBtnText('Create');
+            setBtnColor('primary')
+          }, 2000)
+        } else {
+          props.changeSnackText(res.response.data.message);
+        }
+      } else {
         // console.log(res.data);
         if (res.data.message) {
           // console.log(res.data);
@@ -75,29 +93,13 @@ function MyForm(props) {
           setAccountCreated(true);
           handleCloseDialog();
         }
-      } else {
-        if (res.response.status === 409) {
-          setBtnText(res.response.data.message)
-          setBtnColor('error');
-          setTimeout(() => {
-            setBtnText('Create');
-            setBtnColor('primary')
-          }, 2000)
-        } else {
-          props.changeSnackText(res.response.data.message);
-        }
-        setLoading(false);
       }
+      setLoading(false);
     });
   };
-  // console.log(onSubmit);
   const onError = (error) => {
     console.log(error);
   };
-  // console.log(onError);
-  //eslint-disable-next-line
-  // const formContext = useFormContext();
-  // console.log(open, snackText);
   return (
     <div>
       <ThemeProvider theme={yellowColorTheme} >
@@ -235,6 +237,12 @@ function MyForm(props) {
                       {...register("role", {
                         required: true,
                       })}
+                      error={Boolean(errors.role)}
+                      helperText={
+                        errors.role.type === "required"
+                          ? "Role is required"
+                          : null
+                      }
                     >
                       <MenuItem value="volunteer">Volunteer</MenuItem>
                       <MenuItem value="execom">Execom</MenuItem>

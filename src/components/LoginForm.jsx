@@ -26,8 +26,11 @@ function MyForm(props) {
   const onSubmit = (data) => {
     // console.log(data);
     setLoading(true);
-    loginUser(data).then((res) => {
+    loginUser(data).then((res, err) => {
       console.log(res);
+      if (err) {
+        navigate("/login");
+      }
       if (res.status !== 200) {
         let errorRes = res.response
         if (errorRes.data.message) {
