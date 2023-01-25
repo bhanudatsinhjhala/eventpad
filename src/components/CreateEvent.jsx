@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
     TextField, Stack, Typography, Button, FormControl, CssBaseline,
-    InputLabel, Select, MenuItem, Snackbar,
+    InputLabel, Select, MenuItem,
     DialogTitle, DialogContentText, DialogContent, DialogActions, Dialog
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -12,8 +12,6 @@ import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { createEvent } from "../index.js";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import UploadFile from "./UploadFile.jsx";
 import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from "react-router-dom";
@@ -40,9 +38,7 @@ function CreateEvent(props) {
         handleSubmit,
     } = useForm();
     const [eventDatePicker, setEventDatePicker] = React.useState(dayjs(new Date()));
-    const [open, setOpen] = useState(false);
     const [eventId, setEventId] = useState();
-    const [snackText, setSnackText] = useState("hello");
     const [loading, setLoading] = useState(false);
     const [visiblity, setVisibility] = useState(true);
     const [openDialog, setOpenDialog] = React.useState(false);
@@ -69,7 +65,7 @@ function CreateEvent(props) {
         createEvent(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
             console.info(res);
             if (res.status === 200) {
-                changeSnackText(res.data.message)
+                props.changeSnackText(res.data.message)
                 console.info("res datassss", res.data.data)
                 setEventId(res.data.data._id);
                 reset({
@@ -80,7 +76,7 @@ function CreateEvent(props) {
                 setVisibility(false);
                 props.getEvents();
             } else if (res) {
-                changeSnackText(res.response.data.message)
+                props.changeSnackText(res.response.data.message)
             }
             else {
                 console.info(err);
@@ -91,30 +87,6 @@ function CreateEvent(props) {
     const onError = (error) => {
         console.log(error);
     };
-    function handleClose() {
-        if (open === true) {
-            setOpen(false);
-        }
-    }
-    const changeSnackText = (value) => {
-        setSnackText(value);
-        setOpen(true);
-    };
-    const action = (
-        <React.Fragment>
-            {/* <Button color="secondary" size="small" onClick={handleClose}>
-            UNDO
-          </Button> */}
-            <IconButton
-                size="small"
-                aria-label="close"
-                color="primary"
-                onClick={handleClose}
-            >
-                <CloseIcon fontSize="small" />
-            </IconButton>
-        </React.Fragment>
-    );
     return (
         <div>
             <ThemeProvider theme={yellowColorTheme}>
@@ -188,6 +160,14 @@ function CreateEvent(props) {
                                                     {...register("eventType", {
                                                         required: true,
                                                     })}
+                                                    error={Boolean(errors.eventType)}
+                                                    helperText={
+                                                        errors.eventType
+                                                            ? errors.eventType.type === "required"
+                                                                ? "Event Name  is required"
+                                                                : null
+                                                            : null
+                                                    }
                                                 >
                                                     <MenuItem value="technical">Technical</MenuItem>
                                                     <MenuItem value="non-technical">Non-Technical</MenuItem>
@@ -214,13 +194,6 @@ function CreateEvent(props) {
                         )
                         }
                     </Dialog>
-                    <Snackbar
-                        className="regSnack"
-                        open={open}
-                        onClose={handleClose}
-                        message={snackText}
-                        action={action}
-                    />
                 </Container>
             </ThemeProvider>
         </div >

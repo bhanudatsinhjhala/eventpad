@@ -6,7 +6,7 @@ import {
   Input,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { uploadFile } from "..";
 import {
   Snackbar, Button,
@@ -17,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
 function UploadData(props) {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [snackText, setSnackText] = useState(
@@ -26,7 +26,9 @@ function UploadData(props) {
   const [user, setUser] = useState("");
   const changeSnackText = (value) => {
     setSnackText(value);
-    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 5000)
   };
   function handleChange(e) {
     e.preventDefault();
@@ -41,13 +43,16 @@ function UploadData(props) {
     // console.log(user, "user");
     uploadFile(user, JSON.parse(sessionStorage.getItem("token")), props.eventId).then((res, err) => {
       // console.log(res);
-      if (res.request.status === 200) {
+      if (res.request.status !== 200) {
+        if (res.response.status === 401 || res.response.status === 403) {
+          changeSnackText(res.response.data.message);
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        }
+      } else {
         changeSnackText(res.data.message);
         props.handleCloseDialog();
-      } else if (res) {
-        changeSnackText(res.response.data.message);
-      } else {
-        console.info(err);
       }
       setLoading(false);
     });

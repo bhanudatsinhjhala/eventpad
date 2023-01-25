@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Stack, TextField, Button, CssBaseline } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { getUserDetails } from "../index";
 import { ThemeProvider } from '@mui/material/styles';
 import { yellowColorTheme } from "../colorTheme.js";
@@ -12,6 +13,7 @@ export default function RegistrationForm(props) {
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const navigate = useNavigate();
   // var [absentCount, setAbsentCount] = useState();
 
   // function checkAbsentCount() {
@@ -27,23 +29,26 @@ export default function RegistrationForm(props) {
     // console.log(data);
     getUserDetails(data.regid, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
       console.log(res);
-      if (res.status === 200) {
-        // console.log(res.data);
+      if (res.response.data !== 200) {
+        if (res.response.status === 401) {
+          props.changeSnackText(res.response.data.message);
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        } else {
+          props.changeSnackText(res.response.data.message);
+        }
+        props.changeVis(true);
+      } else {
         props.changeUserDetails(res.data);
         props.changeVis(false);
-        // console.log(visiblity);
-      } else {
-        props.changeSnackText(
-          res.response.data.message
-        );
-        props.changeVis(true);
       }
     });
   };
   return (
     <div>
       <ThemeProvider theme={yellowColorTheme}>
-      <CssBaseline />
+        <CssBaseline />
         <Box
           component="form"
           className="regForm"

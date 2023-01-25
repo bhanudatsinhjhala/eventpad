@@ -34,9 +34,10 @@ function CreateUsers() {
           }, 2000);
         }
         changeSnackText(res.response.data.message);
+      } else {
+        console.log(res);
+        setRows(res.data.data);
       }
-      console.log(res);
-      setRows(res.data.data);
     });
   }
   useEffect(() => {

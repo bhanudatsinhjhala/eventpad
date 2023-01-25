@@ -35,6 +35,9 @@ function RegistrationId() {
   const changeSnackText = (value) => {
     setSnackText(value);
     setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 5000)
   };
 
   function handleClose() {
@@ -79,6 +82,7 @@ function RegistrationId() {
               <UserDetailsCard
                 changeUserDetails={changeUserDetails}
                 userDetails={userDetails}
+                changeSnackText={changeSnackText}
                 changeVis={changeVis}
               />
             )}

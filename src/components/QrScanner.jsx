@@ -42,7 +42,9 @@ function QrScanner() {
   };
   const changeSnackText = (value) => {
     setSnackText(value);
-    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 5000)
   };
   function handleClose() {
     if (open === true) {
@@ -59,14 +61,18 @@ function QrScanner() {
       console.info("qr data====>", data);
       getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then((res) => {
         console.log(res);
-        if (res.request.status === 200) {
+        if (res.status !== 200) {
+          if (res.response.status === 401) {
+            changeSnackText(res.response.data.message);
+            setTimeout(() => {
+              navigate("/login");
+            }, 2000);
+          } else {
+            changeSnackText(res.response.data.message);
+          }
+        } else {
           setUserDetails(res.data);
           changeVis(false);
-        } else if (res.request.status === 401) {
-          navigate("/login");
-        } else {
-          changeSnackText(res.response.data);
-          changeVis(true);
         }
       });
     }

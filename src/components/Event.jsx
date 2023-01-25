@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Container, Button, Dialog, CssBaseline,
+    Container, Button, Dialog, CssBaseline, Snackbar,
     Table, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody,
 } from '@mui/material';
 import { yellowColorTheme } from "../colorTheme.js";
@@ -12,6 +12,8 @@ import { getEventDetails, getEventReport, deleteEventDetails } from "../index.js
 import { useNavigate } from "react-router-dom";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Event() {
     const [rows, setRows] = useState([{
@@ -23,13 +25,23 @@ export default function Event() {
     function getEvents() {
         getEventDetails(JSON.parse(sessionStorage.getItem('token'))).then((res) => {
             console.log(res);
-            res.data.forEach((event) => {
-                let date = new Date(event.eventDate * 1000);
-                let dateString = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-                console.log(dateString);
-                event.dateString = dateString;
-            })
-            setRows(res.data);
+            if (res.status !== 200) {
+                if (res.response.status === 401 || res.response.status === 403) {
+                    changeSnackText(res.response.data.message);
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 2000);
+                }
+                changeSnackText(res.response.data.message);
+            } else {
+                res.data.forEach((event) => {
+                    let date = new Date(event.eventDate * 1000);
+                    let dateString = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+                    console.log(dateString);
+                    event.dateString = dateString;
+                })
+                setRows(res.data);
+            }
         });
     }
     useEffect(() => {
@@ -49,6 +61,8 @@ export default function Event() {
     useEffect(() => {
         isAuthenticated();
     }, []);
+    const [open, setOpen] = useState(false);
+    const [snackText, setSnackText] = useState("hello");
     const [openDialog, setOpenDialog] = React.useState(false);
 
     const handleClickOpenDialog = () => {
@@ -61,7 +75,15 @@ export default function Event() {
     function deleteEvent(id) {
         deleteEventDetails(id, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
             console.log(res);
-            if (res.status === 200) {
+            if (res.status !== 200) {
+                if (res.response.status === 401 || res.response.status === 403) {
+                    changeSnackText(res.response.data.message);
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 2000);
+                }
+                changeSnackText(res.response.data.message);
+            } else {
                 console.log(res.data.message);
                 getEvents();
             }
@@ -72,29 +94,66 @@ export default function Event() {
         let filename = `${eventName}-report.xlsx`;
         getEventReport(id, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
             console.log("Download response", res.data);
-            const url = window.URL.createObjectURL(new Blob([res.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            if (typeof window.navigator.msSaveBlob === 'function') {
-                window.navigator.msSaveBlob(
-                    res.data,
-                    filename
-                );
+            if (res.status !== 200) {
+                if (res.response.status === 401 || res.response.status === 403) {
+                    changeSnackText(res.response.data.message);
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 2000);
+                }
+                changeSnackText(res.response.data.message);
             } else {
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                if (typeof window.navigator.msSaveBlob === 'function') {
+                    window.navigator.msSaveBlob(
+                        res.data,
+                        filename
+                    );
+                } else {
+                    link.setAttribute('download', filename);
+                    document.body.appendChild(link);
+                    link.click();
+                }
             }
         })
         console.log("Download Report", id);
     }
+    function handleClose() {
+        if (open === true) {
+            setOpen(false);
+        }
+    }
+    const changeSnackText = (value) => {
+        setSnackText(value);
+        setOpen(true);
+        setTimeout(() => {
+            setOpen(false);
+        }, 2000)
+    };
+    const action = (
+        <React.Fragment>
+            {/* <Button color="secondary" size="small" onClick={handleClose}>
+            UNDO
+          </Button> */}
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="primary"
+                onClick={handleClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    );
     return (
         <div>
             <Header />
             <ThemeProvider theme={yellowColorTheme}>
                 <CssBaseline />
                 <Container sx={{ margin: "auto", marginTop: "100px" }}>
-                    <CreateEvent sx={{ marginBottom: "15px" }} getEvents={getEvents} />
+                    <CreateEvent sx={{ marginBottom: "15px" }} getEvents={getEvents} changeSnackText={changeSnackText} />
                     <TableContainer component={Paper} >
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
@@ -141,6 +200,13 @@ export default function Event() {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <Snackbar
+                        className="regSnack"
+                        open={open}
+                        onClose={handleClose}
+                        message={snackText}
+                        action={action}
+                    />
                 </Container>
             </ThemeProvider>
         </div>
