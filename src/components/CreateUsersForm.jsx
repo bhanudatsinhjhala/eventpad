@@ -38,6 +38,7 @@ function MyForm(props) {
         password: "",
         email: "",
         name: "",
+        role: "",
       });
       setAccountCreated(false);
     }
@@ -62,7 +63,7 @@ function MyForm(props) {
       console.log(res);
       // console.log(err.response);
       if (res.status !== 200) {
-        if (res.response.status == 401 || res.response.status == 403) {
+        if (res.response.status === 401 || res.response.status === 403) {
           props.changeSnackText(res.response.data.message);
           setTimeout(() => {
             navigate("/login");
@@ -78,21 +79,18 @@ function MyForm(props) {
         } else {
           props.changeSnackText(res.response.data.message);
         }
-      } else {
+      } else if (res.data.message) {
         // console.log(res.data);
-        if (res.data.message) {
-          // console.log(res.data);
-          setBtnColor('success');
-          props.getMembers();
-          props.changeSnackText(res.data.message);
-          setTimeout(() => {
-            setBtnText('Create');
-            setBtnColor('primary')
-          }, 2000)
-          setLoading(false);
-          setAccountCreated(true);
-          handleCloseDialog();
-        }
+        setBtnColor('success');
+        props.getMembers();
+        props.changeSnackText(res.data.message);
+        setTimeout(() => {
+          setBtnText('Create');
+          setBtnColor('primary')
+        }, 2000)
+        setLoading(false);
+        setAccountCreated(true);
+        handleCloseDialog();
       }
       setLoading(false);
     });
@@ -222,7 +220,7 @@ function MyForm(props) {
                       errors.password
                         ? errors.password.type === "required"
                           ? "Password is required"
-                          : null
+                          : errors.password.message
                         : null
                     }
                   />
@@ -233,14 +231,16 @@ function MyForm(props) {
                       id="demo-simple-select"
                       label="Role"
                       color="primary"
-                      name="Role"
+                      name="role"
                       {...register("role", {
                         required: true,
                       })}
                       error={Boolean(errors.role)}
                       helperText={
-                        errors.role.type === "required"
-                          ? "Role is required"
+                        errors.role
+                          ? errors.role.type === "required"
+                            ? "Role is required"
+                            : errors.role.message
                           : null
                       }
                     >
