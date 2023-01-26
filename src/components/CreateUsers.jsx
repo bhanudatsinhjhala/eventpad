@@ -31,7 +31,7 @@ function CreateUsers() {
           changeSnackText(res.response.data.message);
           setTimeout(() => {
             navigate("/login");
-          }, 2000);
+          }, 3000);
         }
         changeSnackText(res.response.data.message);
       } else {
@@ -67,7 +67,7 @@ function CreateUsers() {
           changeSnackText(res.response.data.message);
           setTimeout(() => {
             navigate("/login");
-          }, 2000);
+          }, 3000);
         }
         changeSnackText(res.response.data.message);
       }
@@ -85,7 +85,7 @@ function CreateUsers() {
     setOpen(true);
     setTimeout(() => {
       setOpen(false);
-    }, 2000)
+    }, 8000)
   };
   const action = (
     <React.Fragment>

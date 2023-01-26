@@ -67,7 +67,7 @@ function MyForm(props) {
           props.changeSnackText(res.response.data.message);
           setTimeout(() => {
             navigate("/login");
-          }, 2000);
+          }, 3000);
         } else if (res.response.status === 409) {
           setBtnText(res.response.data.message)
           props.changeSnackText(res.response.data.message);

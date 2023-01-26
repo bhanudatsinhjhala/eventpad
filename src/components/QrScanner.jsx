@@ -44,7 +44,7 @@ function QrScanner() {
     setSnackText(value);
     setTimeout(() => {
       setOpen(false);
-    }, 5000)
+    }, 8000)
   };
   function handleClose() {
     if (open === true) {
@@ -66,7 +66,7 @@ function QrScanner() {
             changeSnackText(res.response.data.message);
             setTimeout(() => {
               navigate("/login");
-            }, 2000);
+            }, 3000);
           } else {
             changeSnackText(res.response.data.message);
           }

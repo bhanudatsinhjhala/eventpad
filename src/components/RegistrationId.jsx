@@ -37,7 +37,7 @@ function RegistrationId() {
     setOpen(true);
     setTimeout(() => {
       setOpen(false);
-    }, 5000)
+    }, 8000)
   };
 
   function handleClose() {

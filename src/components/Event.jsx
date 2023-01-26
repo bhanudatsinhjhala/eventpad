@@ -8,6 +8,7 @@ import Header from "./Header.jsx";
 import { ThemeProvider } from '@mui/material/styles';
 import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
+import EventParticipant from "./EventParticipant.jsx";
 import { getEventDetails, getEventReport, deleteEventDetails } from "../index.js";
 import { useNavigate } from "react-router-dom";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -80,7 +81,7 @@ export default function Event() {
                     changeSnackText(res.response.data.message);
                     setTimeout(() => {
                         navigate("/login");
-                    }, 2000);
+                    }, 8000);
                 }
                 changeSnackText(res.response.data.message);
             } else {
@@ -120,6 +121,7 @@ export default function Event() {
         })
         console.log("Download Report", id);
     }
+
     function handleClose() {
         if (open === true) {
             setOpen(false);
@@ -130,7 +132,7 @@ export default function Event() {
         setOpen(true);
         setTimeout(() => {
             setOpen(false);
-        }, 2000)
+        }, 8000)
     };
     const action = (
         <React.Fragment>
@@ -173,7 +175,7 @@ export default function Event() {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell component="th" scope="row" >
-                                            {row.eventName}
+                                            <EventParticipant eventId={row._id} eventName={row.eventName} changeSnackText={changeSnackText} />
                                         </TableCell>
                                         <TableCell align="left" >{row.eventType}</TableCell>
                                         <TableCell align="left" >{row.dateString}</TableCell>

@@ -264,6 +264,37 @@ export async function getUserDetails(id, token) {
     return err;
   }
 }
+
+
+export async function getAllParticipantDetails(eventId, token) {
+  try {
+    console.log(token);
+    const bodyParameters = {
+      eventId: eventId
+    }
+    const response = await axios({
+        method: "GET",
+        url: `${api_url}/getalluserdetails`,
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        params: bodyParameters,
+      })
+      .then((res, err) => {
+        if (res) {
+          // console.log(res.data);
+          return res;
+        } else {
+          console.log(err);
+          return err;
+        }
+      });
+    return response;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+}
 export async function markPresence(id, token) {
   try {
     console.log(token);

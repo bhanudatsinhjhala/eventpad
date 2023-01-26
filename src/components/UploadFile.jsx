@@ -28,7 +28,7 @@ function UploadData(props) {
     setSnackText(value);
     setTimeout(() => {
       setOpen(false);
-    }, 5000)
+    }, 8000)
   };
   function handleChange(e) {
     e.preventDefault();
@@ -48,7 +48,7 @@ function UploadData(props) {
           changeSnackText(res.response.data.message);
           setTimeout(() => {
             navigate("/login");
-          }, 2000);
+          }, 3000);
         }
       } else {
         changeSnackText(res.data.message);

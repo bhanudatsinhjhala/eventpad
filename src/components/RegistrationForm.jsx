@@ -29,12 +29,12 @@ export default function RegistrationForm(props) {
     // console.log(data);
     getUserDetails(data.regid, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
       console.log(res);
-      if (res.response.data !== 200) {
+      if (res.status !== 200) {
         if (res.response.status === 401) {
           props.changeSnackText(res.response.data.message);
           setTimeout(() => {
             navigate("/login");
-          }, 2000);
+          }, 3000);
         } else {
           props.changeSnackText(res.response.data.message);
         }
