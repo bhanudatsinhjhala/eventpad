@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
     Button, Dialog, CssBaseline, AppBar, Toolbar, Typography, Container,
-    Table, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody,
 } from '@mui/material';
 import { getAllParticipantDetails } from "../index.js";
+import EnhancedTable from "./ParticipantTable.jsx";
 import { useNavigate } from "react-router-dom";
 import { yellowColorTheme } from "../colorTheme.js";
 import { ThemeProvider } from '@mui/material/styles';
@@ -59,6 +59,8 @@ export default function EventParticpant(props) {
             setParticipantDetails([]);
         }
     }
+
+
     return (
         <>
             <ThemeProvider theme={yellowColorTheme}>
@@ -81,38 +83,12 @@ export default function EventParticpant(props) {
                                 <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                     {props.eventName}
                                 </Typography>
-                                <Button autoFocus color="inherit" onClick={handleParticipantClose}>
-                                    Total Participants: {participantDetails.length}
+                                <Button variant="outlined">
+                                    PR: {participantDetails.length}
                                 </Button>
                             </Toolbar>
                         </AppBar>
-                        <TableContainer component={Paper} >
-                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Participant Name</TableCell>
-                                        <TableCell align="left" >RegistrationId</TableCell>
-                                        <TableCell align="left">Email</TableCell>
-                                        <TableCell align="left" >Attendance</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {participantDetails.map((participant) => (
-                                        <TableRow
-                                            key={participant.regId}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                            <TableCell component="th" scope="row" >
-                                                {participant.name}
-                                            </TableCell>
-                                            <TableCell align="left" >{participant.regId}</TableCell>
-                                            <TableCell align="left" >{participant.email}</TableCell>
-                                            <TableCell align="left" sx={{ color: participant.present === false ? "#ffaa8c" : "#02e076" }}>{JSON.stringify(participant.present)}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <EnhancedTable rows={participantDetails} />
                     </Dialog>
                 </Container>
             </ThemeProvider>

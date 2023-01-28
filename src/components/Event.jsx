@@ -13,6 +13,7 @@ import { getEventDetails, getEventReport, deleteEventDetails } from "../index.js
 import { useNavigate } from "react-router-dom";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -165,7 +166,7 @@ export default function Event() {
                                     <TableCell align="left" >Event Date</TableCell>
                                     <TableCell align="left">Upload Data</TableCell>
                                     <TableCell align="left" >Download Report</TableCell>
-                                    <TableCell align="left" >Deleted Event</TableCell>
+                                    <TableCell align="left" >Delete Event</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -180,8 +181,8 @@ export default function Event() {
                                         <TableCell align="left" >{row.eventType}</TableCell>
                                         <TableCell align="left" >{row.dateString}</TableCell>
                                         <TableCell align="left">
-                                            <Button variant="outlined" color="primary" size="small" onClick={handleClickOpenDialog}>
-                                                Upload Data
+                                            <Button variant="outlined" color="primary" size="small" startIcon={<FileUploadIcon />} onClick={handleClickOpenDialog}>
+                                                Upload
                                             </Button>
                                             <Dialog open={openDialog} onClose={handleCloseDialog}>
                                                 <UploadFile eventId={row._id} handleCloseDialog={handleCloseDialog} />
