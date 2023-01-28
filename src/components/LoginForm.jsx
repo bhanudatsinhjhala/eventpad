@@ -60,7 +60,7 @@ function MyForm(props) {
         <Stack spacing={3}>
           <TextField
             autoComplete="off"
-            type="text"
+            type="number"
             className="textInput"
             color="primary"
             name="membershipId"
