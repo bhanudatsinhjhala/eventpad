@@ -14,7 +14,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LogoutIcon from "@mui/icons-material/Logout";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
+import EventIcon from '@mui/icons-material/Event';
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const drawerWidth = 240;
@@ -97,7 +97,7 @@ export default function PersistentDrawerLeft(props) {
           key: 3,
           text: "Event",
           to: "event",
-          icon: <FileUploadIcon />,
+          icon: <EventIcon />,
         },
         {
           key: 4,
@@ -219,6 +219,7 @@ export default function PersistentDrawerLeft(props) {
                     onClick={handleNavBtn}
                     variant="outlined"
                     disablePadding
+                    sx={{ display: "block" }}
                   >
                     <Link
                       to={`/${Obj.to}`}
