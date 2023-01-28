@@ -76,7 +76,7 @@ export default function RegistrationForm(props) {
               name="regid"
               color="primary"
               label="Registration-Id"
-              type="text"
+              type="number"
               size="small"
               placeholder="Enter your Registration Id"
               {...register("regid", {
