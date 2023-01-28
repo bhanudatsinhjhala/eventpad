@@ -66,11 +66,11 @@ export default function EventParticpant(props) {
             <ThemeProvider theme={yellowColorTheme}>
                 <CssBaseline />
                 <Container sx={{ margin: "auto" }}>
-                    <Button variant="text" color="primary" onClick={handleClickOpenParticipantDialog}>
+                    <Button variant="text" sx={{ textTransform: "capitalize", padding: "0" }} color="primary" onClick={handleClickOpenParticipantDialog}>
                         {props.eventName}
                     </Button>
                     <Dialog open={openParticipantDialog} onClose={handleClickOpenParticipantDialog} fullScreen>
-                        <AppBar sx={{ position: 'relative', backgroundColor: "#ffa306" }}>
+                        <AppBar sx={{ position: 'fixed', backgroundColor: "#ffa306" }}>
                             <Toolbar>
                                 <IconButton
                                     edge="start"
@@ -83,12 +83,14 @@ export default function EventParticpant(props) {
                                 <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                     {props.eventName}
                                 </Typography>
-                                <Button variant="outlined">
+                                <Button variant="outlined" color="inherit">
                                     PR: {participantDetails.length}
                                 </Button>
                             </Toolbar>
                         </AppBar>
-                        <EnhancedTable rows={participantDetails} />
+                        <Container>
+                            <EnhancedTable rows={participantDetails} />
+                        </Container>
                     </Dialog>
                 </Container>
             </ThemeProvider>

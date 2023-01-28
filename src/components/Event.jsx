@@ -175,7 +175,7 @@ export default function Event() {
                                         key={row._id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
-                                        <TableCell component="th" scope="row" >
+                                        <TableCell align="left" sx={{ padding: 0 }} component="th" scope="row" >
                                             <EventParticipant eventId={row._id} eventName={row.eventName} changeSnackText={changeSnackText} />
                                         </TableCell>
                                         <TableCell align="left" >{row.eventType}</TableCell>

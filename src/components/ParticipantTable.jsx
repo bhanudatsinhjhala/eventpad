@@ -95,6 +95,7 @@ function EnhancedTableHead(props) {
             <TableRow>
                 {headCells.map((headCell) => (
                     <TableCell
+                        sx={{ padding: headCell.id === "name" ? "1rem" : "1rem" }}
                         key={headCell.id}
                         align="left"
                         padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -178,8 +179,8 @@ export default function EnhancedTable(props) {
 
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
+        <Box sx={{ width: '100%', marginTop: "68px" }}>
+            <Paper sx={{ width: '100%', my: 1, mb: 2 }}>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -214,6 +215,7 @@ export default function EnhancedTable(props) {
                                                 id={labelId}
                                                 scope="row"
                                                 padding="none"
+                                                sx={{ textTransform: "capitalize",padding: "1rem" }}
                                             >
                                                 {row.name}
                                             </TableCell>
