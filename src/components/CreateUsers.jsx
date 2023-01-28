@@ -131,14 +131,18 @@ function CreateUsers() {
                     </TableCell>
                     <TableCell align="left">{row.membershipId}</TableCell>
                     <TableCell align="left">{row.email}</TableCell>
-                    <TableCell align="left">{row.role}</TableCell>
+                    <TableCell align="left" sx={{ textTransform: "uppercase" }}>{row.role}</TableCell>
                     {
                       (row.role !== JSON.parse(sessionStorage.getItem("role"))) ?
                         (<TableCell align="left">
                           <Button type="submit" color="primary" startIcon={<DeleteIcon />} variant="outlined" size="small" onClick={() => deleteAccount(row.membershipId)}>
                             Delete
                           </Button>
-                        </TableCell>) : null
+                        </TableCell>) : (<TableCell align="left">
+                          <Button type="submit" color="primary" startIcon={<DeleteIcon />} variant="outlined" size="small" disabled>
+                            Delete
+                          </Button>
+                        </TableCell>)
                     }
                   </TableRow>
                 ))}

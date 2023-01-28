@@ -119,7 +119,7 @@ function MyForm(props) {
                   <TextField
                     color="primary"
                     autoComplete="off"
-                    type="text"
+                    type="number"
                     className="textInput"
                     name="membershipId"
                     label="Membership-Id"
@@ -181,7 +181,7 @@ function MyForm(props) {
                   <TextField
                     color="primary"
                     autoComplete="off"
-                    type="text"
+                    type="email"
                     className="textInput"
                     name="email"
                     label="Email-Id"
