@@ -45,15 +45,11 @@ function Loginqr(props) {
   return (
     <ThemeProvider theme={yellowColorTheme} >
       <CssBaseline />
-      <Container sx={{ height: "84vh" }}>
+      <Container sx={{ height: "100vh", display: "flex" }}>
         <Grow in={true} {...(true ? { timeout: 1300 } : {})}>
           <Card
             sx={{
               margin: "auto",
-              marginTop: {
-                xs: 13,
-                md: "12rem",
-              },
               borderRadius: "3%",
               maxWidth: 300,
             }}
