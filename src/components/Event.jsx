@@ -178,7 +178,7 @@ export default function Event() {
                                         <TableCell align="left" sx={{ padding: 0 }} component="th" scope="row" >
                                             <EventParticipant eventId={row._id} eventName={row.eventName} changeSnackText={changeSnackText} />
                                         </TableCell>
-                                        <TableCell align="left" >{row.eventType}</TableCell>
+                                        <TableCell align="left" sx={{ textTransform: "capitalize" }} >{row.eventType}</TableCell>
                                         <TableCell align="left" >{row.dateString}</TableCell>
                                         <TableCell align="left">
                                             <Button variant="outlined" color="primary" size="small" startIcon={<FileUploadIcon />} onClick={handleClickOpenDialog}>

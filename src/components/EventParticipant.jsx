@@ -31,6 +31,9 @@ export default function EventParticpant(props) {
                 }
                 props.changeSnackText(res.response.data.message);
             } else {
+                res.data.forEach((element) => {
+                    element.present = JSON.stringify(element.present);
+                })
                 setParticipantDetails(res.data);
             }
         });
