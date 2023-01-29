@@ -90,7 +90,7 @@ export default function PersistentDrawerLeft(props) {
     },
   ];
   if (role) {
-    if (role === "admin") {
+    if (role === "admin" || role === "super-admin") {
       navItems = [
         ...navItems.slice(0, 2),
         {

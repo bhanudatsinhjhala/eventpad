@@ -246,7 +246,7 @@ function MyForm(props) {
                     >
                       <MenuItem value="volunteer">Volunteer</MenuItem>
                       <MenuItem value="execom">Execom</MenuItem>
-                      {JSON.parse(sessionStorage.getItem("role")) === "admin" ? (<MenuItem value="admin">Admin</MenuItem>) : null}
+                      {JSON.parse(sessionStorage.getItem("role")) === "admin" || JSON.parse(sessionStorage.getItem("role")) === "super-admin" ? (<MenuItem value="admin">Admin</MenuItem>) : null}
                     </Select>
                   </FormControl>
                 </Stack>
