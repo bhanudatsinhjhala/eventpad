@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails } from "../index";
+import { getUserDetails } from "../api.js";
 import { ThemeProvider } from '@mui/material/styles';
 import { yellowColorTheme } from "../colorTheme.js";
 import { QrReader } from "react-qr-reader";

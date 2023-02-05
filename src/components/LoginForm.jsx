@@ -3,7 +3,7 @@ import { TextField, Stack, InputAdornment, IconButton, CssBaseline } from "@mui/
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Login from "@mui/icons-material/Login";
-import { loginUser } from "..";
+import { loginUser } from "../api.js";
 import { ThemeProvider } from '@mui/material/styles';
 import { yellowColorTheme } from '../colorTheme.js';
 import { useNavigate } from "react-router-dom";

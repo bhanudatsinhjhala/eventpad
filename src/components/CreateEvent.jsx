@@ -11,7 +11,7 @@ import "./App.css";
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { createEvent } from "../index.js";
+import { createEvent } from "../api.js";
 import UploadFile from "./UploadFile.jsx";
 import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from "react-router-dom";

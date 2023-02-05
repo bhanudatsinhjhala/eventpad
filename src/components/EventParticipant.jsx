@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Button, Dialog, CssBaseline, AppBar, Toolbar, Typography, Container,
 } from '@mui/material';
-import { getAllParticipantDetails } from "../index.js";
+import { getAllParticipantDetails } from "../api.js";
 import EnhancedTable from "./ParticipantTable.jsx";
 import { useNavigate } from "react-router-dom";
 import { yellowColorTheme } from "../colorTheme.js";

@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
-import { uploadFile } from "..";
+import { uploadFile } from "../api.js";
 import {
   Snackbar, Button,
   DialogTitle, DialogContentText, DialogContent, DialogActions,

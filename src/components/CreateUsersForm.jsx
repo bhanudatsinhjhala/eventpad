@@ -13,7 +13,7 @@ import {
   Button,
   DialogTitle, DialogContentText, DialogContent, DialogActions, Dialog
 } from "@mui/material";
-import { createUsers } from "..";
+import { createUsers } from "../api.js";
 import { yellowColorTheme } from "../colorTheme.js";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";

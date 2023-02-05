@@ -9,7 +9,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
 import EventParticipant from "./EventParticipant.jsx";
-import { getEventDetails, getEventReport, deleteEventDetails } from "../index.js";
+import { getEventDetails, getEventReport, deleteEventDetails } from "../api.js";
 import { useNavigate } from "react-router-dom";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';

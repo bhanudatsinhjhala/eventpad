@@ -9,7 +9,7 @@ import {
 import CreateUsersForm from "./CreateUsersForm.jsx";
 import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
-import { getAllMemberDetails, deleteMember } from "../index.js";
+import { getAllMemberDetails, deleteMember } from "../api.js";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";

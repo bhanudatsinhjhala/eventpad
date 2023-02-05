@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Stack, TextField, Button, CssBaseline } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { getUserDetails } from "../index";
+import { getUserDetails } from "../api.js";
 import { ThemeProvider } from '@mui/material/styles';
 import { yellowColorTheme } from "../colorTheme.js";
 
