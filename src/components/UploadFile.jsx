@@ -90,7 +90,7 @@ function UploadData(props) {
       <ThemeProvider theme={yellowColorTheme}>
         <DialogTitle>Event Setup</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText sx={{ color: "#fff" }}>
             Upload Your Participants Data's Excel Sheet here.
           </DialogContentText>
           <Box component="form" sx={{ maxWidth: 280, margin: "20px auto" }}>

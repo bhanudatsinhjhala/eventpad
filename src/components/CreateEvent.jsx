@@ -138,7 +138,7 @@ function CreateEvent(props) {
                                                     value={eventDatePicker}
                                                     onChange={handleChange}
                                                     disablePast={true}
-                                                    renderInput={(params) => <TextField color="primary" sx={{ svg: { color: '#252525' }, input: { color: '#252525' }, label: { color: '#252525' } }} {...params} />}
+                                                    renderInput={(params) => <TextField color="primary" sx={{ svg: { color: '#ffa306' }, input: { color: '#ffa306' }, label: { color: '#ffa306' } }} {...params} />}
                                                     error={Boolean(errors.eventDate)}
                                                     helperText={
                                                         errors.eventDate
