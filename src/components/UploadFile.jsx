@@ -18,18 +18,18 @@ import CloseIcon from "@mui/icons-material/Close";
 
 function UploadData(props) {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [snackText, setSnackText] = useState(
-    "Please Upload Excel or Spread Sheet."
-  );
+  // const [snackText, setSnackText] = useState(
+  //   "Please Upload Excel or Spread Sheet."
+  // );
   const [user, setUser] = useState("");
-  const changeSnackText = (value) => {
-    setSnackText(value);
-    setTimeout(() => {
-      setOpen(false);
-    }, 8000)
-  };
+  // const changeSnackText = (value) => {
+  //   setSnackText(value);
+  //   setTimeout(() => {
+  //     setOpen(false);
+  //   }, 8000)
+  // };
   function handleChange(e) {
     e.preventDefault();
     console.log(e.target.files[0].name);
@@ -41,27 +41,34 @@ function UploadData(props) {
     setLoading(true);
     e.preventDefault();
     // console.log(user, "user");
-    uploadFile(user, JSON.parse(sessionStorage.getItem("token")), props.eventId).then((res, err) => {
-      // console.log(res);
-      if (res.request.status !== 200) {
-        if (res.response.status === 401 || res.response.status === 403) {
-          changeSnackText(res.response.data.message);
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
+    if (user === null) {
+      props.changeSnackText("Please Upload Excel or Spread Sheet.");
+    } else {
+      uploadFile(user, JSON.parse(sessionStorage.getItem("token")), props.eventId).then((res, err) => {
+        // console.log(res);
+        if (res.request.status !== 200) {
+          if (res.response.status === 401 || res.response.status === 403) {
+            props.changeSnackText(res.response.data.message);
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
+          } else {
+            console.log("409 error working");
+            props.changeSnackText(res.response.data.message);
+          }
+        } else {
+          props.changeSnackText(res.data.message);
+          props.handleCloseDialog();
         }
-      } else {
-        changeSnackText(res.data.message);
-        props.handleCloseDialog();
-      }
-      setLoading(false);
-    });
-  }
-  function handleClose() {
-    if (open === true) {
-      setOpen(false);
+        setLoading(false);
+      });
     }
   }
+  // function handleClose() {
+  //   if (open === true) {
+  //     setOpen(false);
+  //   }
+  // }
   const yellowColorTheme = createTheme({
     palette: {
       primary: {
@@ -70,21 +77,21 @@ function UploadData(props) {
       },
     },
   });
-  const action = (
-    <React.Fragment>
-      {/* <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button> */}
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="primary"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
+  // const action = (
+  //   <React.Fragment>
+  //     {/* <Button color="secondary" size="small" onClick={handleClose}>
+  //       UNDO
+  //     </Button> */}
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="primary"
+  //       onClick={handleClose}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </React.Fragment>
+  // );
   return (
     <div>
       <ThemeProvider theme={yellowColorTheme}>
@@ -109,13 +116,6 @@ function UploadData(props) {
               </Stack>
             </label>
           </Box>
-          <Snackbar
-            className="regSnack"
-            open={open}
-            onClose={handleClose}
-            message={snackText}
-            action={action}
-          />
         </DialogContent>
         <DialogActions sx={{ justifyContent: "space-around" }}>
           <Button onClick={props.handleCloseDialog} variant="outlined" color="primary">Cancel</Button>

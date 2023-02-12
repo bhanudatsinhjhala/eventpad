@@ -138,7 +138,7 @@ function CreateEvent(props) {
                                                     value={eventDatePicker}
                                                     onChange={handleChange}
                                                     disablePast={true}
-                                                    renderInput={(params) => <TextField color="primary" sx={{ svg: { color: '#ffa306' }, input: { color: '#ffa306' }, label: { color: '#ffa306' } }} {...params} />}
+                                                    renderInput={(params) => <TextField color="primary" sx={{ svg: { color: '#ffa306' }, input: { color: '#ffff' }, label: { color: '#ffa306' } }} {...params} />}
                                                     error={Boolean(errors.eventDate)}
                                                     helperText={
                                                         errors.eventDate
@@ -190,7 +190,7 @@ function CreateEvent(props) {
                                 </form>
                             </>
                         ) : (
-                            <UploadFile eventId={eventId} handleCloseDialog={handleCloseDialog} />
+                            <UploadFile eventId={eventId} handleCloseDialog={handleCloseDialog} changeSnackText={props.changeSnackText} />
                         )
                         }
                     </Dialog>

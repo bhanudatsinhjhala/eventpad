@@ -185,7 +185,7 @@ export default function Event() {
                                                 Upload
                                             </Button>
                                             <Dialog open={openDialog} onClose={handleCloseDialog}>
-                                                <UploadFile eventId={row._id} handleCloseDialog={handleCloseDialog} />
+                                                <UploadFile eventId={row._id} handleCloseDialog={handleCloseDialog} changeSnackText={changeSnackText} />
                                             </Dialog>
                                         </TableCell>
                                         <TableCell align="left">
