@@ -6,39 +6,61 @@ import { ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
-import { markPresence } from "../api.js";
+import { markPresence, decodeJwt } from "../api.js";
+import { useNavigate } from "react-router-dom";
+
 
 function userDetailsCard(props) {
   const checked = true;
   const [open, setOpen] = useState(false);
   const [snackText, setSnackText] = useState("hello");
+  const navigate = useNavigate();
+
   // const snackText = "hello";
 
   const changeSnackText = (value) => {
     setSnackText(value);
     setOpen(true);
   };
-  function handlePresent() {
-    // console.log(props);
-    markPresence(props.userDetails.regId, JSON.parse(sessionStorage.getItem("token"))).then(async (res) => {
-      // console.log(res);
-      if (res.request.status === 200) {
-        changeSnackText(res.data.message);
-        // console.log(res.data.acknowledged);
-        props.changeUserDetails({
-          name: "",
-          email: "",
-          regId: "",
-          seatNo: "",
-          present: "",
-          _id: "",
-          __v: "",
-        });
-        props.changeVis(true);
-      } else {
-        changeSnackText(res.response.data.message);
+  const isJwtExpired = async () => {
+    const result = await decodeJwt();
+    if (result !== true) {
+      if (result.status !== 200) {
+        props.changeSnackText(result.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        return;
       }
-    });
+      sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+      return false;
+    }
+    return false;
+  }
+  async function handlePresent() {
+    // console.log(props);
+    const result = await isJwtExpired();
+    if (!result) {
+      markPresence(props.userDetails.regId, JSON.parse(sessionStorage.getItem("token"))).then(async (res) => {
+        // console.log(res);
+        if (res.request.status === 200) {
+          changeSnackText(res.data.message);
+          // console.log(res.data.acknowledged);
+          props.changeUserDetails({
+            name: "",
+            email: "",
+            regId: "",
+            seatNo: "",
+            present: "",
+            _id: "",
+            __v: "",
+          });
+          props.changeVis(true);
+        } else {
+          changeSnackText(res.response.data.message);
+        }
+      });
+    }
   }
   function handleClose() {
     if (open === true) {

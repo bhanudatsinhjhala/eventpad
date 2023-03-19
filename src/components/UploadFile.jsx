@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
-import { uploadFile } from "../api.js";
+import { uploadFile, decodeJwt } from "../api.js";
 import {
   Snackbar, Button,
   DialogTitle, DialogContentText, DialogContent, DialogActions,
@@ -37,31 +37,49 @@ function UploadData(props) {
     setUser(file);
     // console.log(user);
   }
-  function formSubmit(e) {
+  const isJwtExpired = async () => {
+    const result = await decodeJwt();
+    if (result !== true) {
+      if (result.status !== 200) {
+        props.changeSnackText(result.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        return;
+      }
+      sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+      return false;
+    }
+    return false;
+  }
+  async function formSubmit(e) {
     setLoading(true);
     e.preventDefault();
     // console.log(user, "user");
     if (user === null) {
       props.changeSnackText("Please Upload Excel or Spread Sheet.");
     } else {
-      uploadFile(user, JSON.parse(sessionStorage.getItem("token")), props.eventId).then((res, err) => {
-        // console.log(res);
-        if (res.request.status !== 200) {
-          if (res.response.status === 401 || res.response.status === 403) {
-            props.changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 3000);
+      const result = await isJwtExpired();
+      if (!result) {
+        uploadFile(user, JSON.parse(sessionStorage.getItem("token")), props.eventId).then((res, err) => {
+          // console.log(res);
+          if (res.request.status !== 200) {
+            if (res.response.status === 401 || res.response.status === 403) {
+              props.changeSnackText(res.response.data.message);
+              setTimeout(() => {
+                navigate("/login");
+              }, 3000);
+            } else {
+              console.log("409 error working");
+              props.changeSnackText(res.response.data.message);
+            }
           } else {
-            console.log("409 error working");
-            props.changeSnackText(res.response.data.message);
+            props.changeSnackText(res.data.message);
+            props.handleCloseDialog();
           }
-        } else {
-          props.changeSnackText(res.data.message);
-          props.handleCloseDialog();
-        }
-        setLoading(false);
-      });
+          setLoading(false);
+        });
+      }
     }
   }
   // function handleClose() {

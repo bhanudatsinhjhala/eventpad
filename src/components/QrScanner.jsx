@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails } from "../api.js";
+import { getUserDetails, decodeJwt } from "../api.js";
 import { ThemeProvider } from '@mui/material/styles';
 import { yellowColorTheme } from "../colorTheme.js";
 import { QrReader } from "react-qr-reader";
@@ -56,25 +56,43 @@ function QrScanner() {
       navigate("/");
     }
   }
-  function qrData(data) {
+  const isJwtExpired = async () => {
+    const result = await decodeJwt();
+    if (result !== true) {
+      if (result.status !== 200) {
+        changeSnackText(result.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        return;
+      }
+      sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+      return false;
+    }
+    return false;
+  }
+  async function qrData(data) {
     if (data !== null) {
       console.info("qr data====>", data);
-      getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then((res) => {
-        console.log(res);
-        if (res.status !== 200) {
-          if (res.response.status === 401) {
-            changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 3000);
+      const result = await isJwtExpired();
+      if (!result) {
+        getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then((res) => {
+          console.log(res);
+          if (res.status !== 200) {
+            if (res.response.status === 401) {
+              changeSnackText(res.response.data.message);
+              setTimeout(() => {
+                navigate("/login");
+              }, 3000);
+            } else {
+              changeSnackText(res.response.data.message);
+            }
           } else {
-            changeSnackText(res.response.data.message);
+            setUserDetails(res.data);
+            changeVis(false);
           }
-        } else {
-          setUserDetails(res.data);
-          changeVis(false);
-        }
-      });
+        });
+      }
     }
   }
   const action = (

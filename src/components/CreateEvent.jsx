@@ -11,7 +11,7 @@ import "./App.css";
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { createEvent } from "../api.js";
+import { createEvent, decodeJwt } from "../api.js";
 import UploadFile from "./UploadFile.jsx";
 import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from "react-router-dom";
@@ -55,35 +55,53 @@ function CreateEvent(props) {
         setEventDatePicker(newValue);
     };
     // const navigate = useNavigate();
+    const isJwtExpired = async () => {
+        const result = await decodeJwt();
+        if (result !== true) {
+            if (result.status !== 200) {
+                props.changeSnackText(result.data.message);
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+                return;
+            }
+            sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+            return false;
+        }
+        return false;
+    }
     const form = useForm({ defaultValues: { eventName: "", eventDate: "" } });
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         // console.log(data);
         setLoading(true);
         console.info(data);
         console.log(new Date(eventDatePicker));
         data.eventDate = Math.round(new Date(eventDatePicker).getTime() / 1000);
-        createEvent(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
-            console.info(res);
-            if (res.status === 200) {
-                props.changeSnackText(res.data.message)
-                console.info("res datassss", res.data.data)
-                setEventId(res.data.data._id);
-                reset({
-                    eventType: "",
-                    eventDate: "",
-                    eventName: "",
-                });
-                setVisibility(false);
-                props.getEvents();
-            } else if (res) {
-                props.changeSnackText(res.response.data.message)
-            }
-            else {
-                console.info(err);
-            }
-            setLoading(false);
-        })
-    };
+        const result = await isJwtExpired();
+        if (!result) {
+            createEvent(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
+                console.info(res);
+                if (res.status === 200) {
+                    props.changeSnackText(res.data.message)
+                    console.info("res datassss", res.data.data)
+                    setEventId(res.data.data._id);
+                    reset({
+                        eventType: "",
+                        eventDate: "",
+                        eventName: "",
+                    });
+                    setVisibility(false);
+                    props.getEvents();
+                } else if (res) {
+                    props.changeSnackText(res.response.data.message)
+                }
+                else {
+                    console.info(err);
+                }
+                setLoading(false);
+            })
+        };
+    }
     const onError = (error) => {
         console.log(error);
     };

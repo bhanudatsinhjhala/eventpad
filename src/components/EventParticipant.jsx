@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Button, Dialog, CssBaseline, AppBar, Toolbar, Typography, Container,
 } from '@mui/material';
-import { getAllParticipantDetails } from "../api.js";
+import { getAllParticipantDetails, decodeJwt } from "../api.js";
 import EnhancedTable from "./ParticipantTable.jsx";
 import { useNavigate } from "react-router-dom";
 import { yellowColorTheme } from "../colorTheme.js";
@@ -19,24 +19,42 @@ export default function EventParticpant(props) {
         email: " ",
         present: " ",
     }])
-    function getAllParticipant() {
-        getAllParticipantDetails(props.eventId, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
-            console.log(res);
-            if (res.status !== 200) {
-                if (res.response.status === 401 || res.response.status === 403) {
-                    props.changeSnackText(res.response.data.message);
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 3000);
-                }
-                props.changeSnackText(res.response.data.message);
-            } else {
-                res.data.forEach((element) => {
-                    element.present = JSON.stringify(element.present);
-                })
-                setParticipantDetails(res.data);
+    const isJwtExpired = async () => {
+        const result = await decodeJwt();
+        if (result !== true) {
+            if (result.status !== 200) {
+                props.changeSnackText(result.data.message);
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+                return;
             }
-        });
+            sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+            return false;
+        }
+        return false;
+    }
+    async function getAllParticipant() {
+        const result = await isJwtExpired();
+        if (!result) {
+            getAllParticipantDetails(props.eventId, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+                console.log(res);
+                if (res.status !== 200) {
+                    if (res.response.status === 401 || res.response.status === 403) {
+                        props.changeSnackText(res.response.data.message);
+                        setTimeout(() => {
+                            navigate("/login");
+                        }, 3000);
+                    }
+                    props.changeSnackText(res.response.data.message);
+                } else {
+                    res.data.forEach((element) => {
+                        element.present = JSON.stringify(element.present);
+                    })
+                    setParticipantDetails(res.data);
+                }
+            });
+        }
     }
     async function isAuthenticated() {
         const token = sessionStorage.getItem("token");

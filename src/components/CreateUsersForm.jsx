@@ -13,7 +13,7 @@ import {
   Button,
   DialogTitle, DialogContentText, DialogContent, DialogActions, Dialog
 } from "@mui/material";
-import { createUsers } from "../api.js";
+import { createUsers, decodeJwt } from "../api.js";
 import { yellowColorTheme } from "../colorTheme.js";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -56,44 +56,63 @@ function MyForm(props) {
   const form = useForm({
     defaultValues: { membershipId: "", password: "", email: "", role: "" },
   });
-  const onSubmit = (data) => {
+
+  const isJwtExpired = async () => {
+    const result = await decodeJwt();
+    if (result !== true) {
+      if (result.status !== 200) {
+        props.changeSnackText(result.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        return;
+      }
+      sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+      return false;
+    }
+    return false;
+  }
+  const onSubmit = async (data) => {
     // console.log(data);
     setLoading(true);
-    createUsers(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
-      console.log(res);
-      // console.log(err.response);
-      if (res.status !== 200) {
-        if (res.response.status === 401 || res.response.status === 403) {
-          props.changeSnackText(res.response.data.message);
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
-        } else if (res.response.status === 409) {
-          setBtnText(res.response.data.message)
-          props.changeSnackText(res.response.data.message);
-          setBtnColor('error');
+    const result = await isJwtExpired();
+    if (!result) {
+      createUsers(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
+        console.log(res);
+        // console.log(err.response);
+        if (res.status !== 200) {
+          if (res.response.status === 401 || res.response.status === 403) {
+            props.changeSnackText(res.response.data.message);
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
+          } else if (res.response.status === 409) {
+            setBtnText(res.response.data.message)
+            props.changeSnackText(res.response.data.message);
+            setBtnColor('error');
+            setTimeout(() => {
+              setBtnText('Create');
+              setBtnColor('primary')
+            }, 2000)
+          } else {
+            props.changeSnackText(res.response.data.message);
+          }
+        } else if (res.data.message) {
+          // console.log(res.data);
+          setBtnColor('success');
+          props.getMembers();
+          props.changeSnackText(res.data.message);
           setTimeout(() => {
             setBtnText('Create');
             setBtnColor('primary')
           }, 2000)
-        } else {
-          props.changeSnackText(res.response.data.message);
+          setLoading(false);
+          setAccountCreated(true);
+          handleCloseDialog();
         }
-      } else if (res.data.message) {
-        // console.log(res.data);
-        setBtnColor('success');
-        props.getMembers();
-        props.changeSnackText(res.data.message);
-        setTimeout(() => {
-          setBtnText('Create');
-          setBtnColor('primary')
-        }, 2000)
         setLoading(false);
-        setAccountCreated(true);
-        handleCloseDialog();
-      }
-      setLoading(false);
-    });
+      });
+    }
   };
   const onError = (error) => {
     console.log(error);

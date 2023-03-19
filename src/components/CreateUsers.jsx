@@ -9,7 +9,7 @@ import {
 import CreateUsersForm from "./CreateUsersForm.jsx";
 import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
-import { getAllMemberDetails, deleteMember } from "../api.js";
+import { getAllMemberDetails, deleteMember, decodeJwt } from "../api.js";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from '@mui/material/styles';
 import IconButton from "@mui/material/IconButton";
@@ -24,21 +24,39 @@ function CreateUsers() {
     role: "-",
     email: "-"
   }])
-  function getMembers() {
-    getAllMemberDetails(JSON.parse(sessionStorage.getItem('token'))).then((res) => {
-      if (res.status !== 200) {
-        if (res.response.status === 401 || res.response.status === 403) {
-          changeSnackText(res.response.data.message);
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
-        }
-        changeSnackText(res.response.data.message);
-      } else {
-        console.log(res);
-        setRows(res.data.data);
+  const isJwtExpired = async () => {
+    const result = await decodeJwt();
+    if (result !== true) {
+      if (result.status !== 200) {
+        changeSnackText(result.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        return;
       }
-    });
+      sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+      return false;
+    }
+    return false;
+  }
+  async function getMembers() {
+    const result = await isJwtExpired();
+    if (!result) {
+      getAllMemberDetails(JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+        if (res.status !== 200) {
+          if (res.response.status === 401 || res.response.status === 403) {
+            changeSnackText(res.response.data.message);
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
+          }
+          changeSnackText(res.response.data.message);
+        } else {
+          console.log(res);
+          setRows(res.data.data);
+        }
+      });
+    }
   }
   useEffect(() => {
     isAuthenticated();

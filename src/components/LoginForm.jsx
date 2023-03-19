@@ -23,7 +23,7 @@ function MyForm(props) {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // console.log(data);
     setLoading(true);
     loginUser(data).then((res, err) => {
@@ -32,7 +32,7 @@ function MyForm(props) {
         navigate("/login");
       }
       if (res.status !== 200) {
-        let errorRes = res.response
+        let errorRes = res.response;
         if (errorRes.data.message) {
           // console.log(res.data);
           props.changeSnackText(errorRes.data.message);

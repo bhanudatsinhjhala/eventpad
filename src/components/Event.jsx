@@ -9,7 +9,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CreateEvent from "./CreateEvent.jsx";
 import UploadFile from "./UploadFile.jsx";
 import EventParticipant from "./EventParticipant.jsx";
-import { getEventDetails, getEventReport, deleteEventDetails } from "../api.js";
+import { getEventDetails, getEventReport, deleteEventDetails, decodeJwt } from "../api.js";
 import { useNavigate } from "react-router-dom";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -24,27 +24,45 @@ export default function Event() {
         evenDate: "-",
         eventType: "-"
     }])
-    function getEvents() {
-        getEventDetails(JSON.parse(sessionStorage.getItem('token'))).then((res) => {
-            console.log(res);
-            if (res.status !== 200) {
-                if (res.response.status === 401 || res.response.status === 403) {
-                    changeSnackText(res.response.data.message);
-                    setTimeout(() => {
-                        navigate("/login");
-                    }, 2000);
-                }
-                changeSnackText(res.response.data.message);
-            } else {
-                res.data.forEach((event) => {
-                    let date = new Date(event.eventDate * 1000);
-                    let dateString = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-                    console.log(dateString);
-                    event.dateString = dateString;
-                })
-                setRows(res.data);
+    const isJwtExpired = async () => {
+        const result = await decodeJwt();
+        if (result !== true) {
+            if (result.status !== 200) {
+                changeSnackText(result.data.message);
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+                return;
             }
-        });
+            sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+            return false;
+        }
+        return false;
+    }
+    async function getEvents() {
+        const result = await isJwtExpired();
+        if (!result) {
+            getEventDetails(JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+                console.log(res);
+                if (res.status !== 200) {
+                    if (res.response.status === 401 || res.response.status === 403) {
+                        changeSnackText(res.response.data.message);
+                        setTimeout(() => {
+                            navigate("/login");
+                        }, 2000);
+                    }
+                    changeSnackText(res.response.data.message);
+                } else {
+                    res.data.forEach((event) => {
+                        let date = new Date(event.eventDate * 1000);
+                        let dateString = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+                        console.log(dateString);
+                        event.dateString = dateString;
+                    })
+                    setRows(res.data);
+                }
+            });
+        }
     }
     useEffect(() => {
         isAuthenticated();

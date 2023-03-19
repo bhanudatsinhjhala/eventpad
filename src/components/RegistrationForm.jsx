@@ -25,26 +25,43 @@ export default function RegistrationForm(props) {
   // useEffect(() => {
   //   checkAbsentCount();
   // });
-  const onSubmit = (data) => {
+  const isJwtExpired = async () => {
+    const result = await decodeJwt();
+    if (result !== true) {
+      if (result.status !== 200) {
+        props.changeSnackText(result.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+        return;
+      }
+      sessionStorage.setItem("token", JSON.stringify(result.data.accessToken));
+      return false;
+    }
+    return false;
+  }
+  const onSubmit = async (data) => {
     // console.log(data);
-    console.log(decodeJwt());
-    // getUserDetails(data.regid, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
-    //   console.log(res);
-    //   if (res.status !== 200) {
-    //     if (res.response.status === 401) {
-    //       props.changeSnackText(res.response.data.message);
-    //       setTimeout(() => {
-    //         navigate("/login");
-    //       }, 3000);
-    //     } else {
-    //       props.changeSnackText(res.response.data.message);
-    //     }
-    //     props.changeVis(true);
-    //   } else {
-    //     props.changeUserDetails(res.data);
-    //     props.changeVis(false);
-    //   }
-    // });
+    const result = await isJwtExpired();
+    if (!result) {
+      getUserDetails(data.regid, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+        console.log(res);
+        if (res.status !== 200) {
+          if (res.response.status === 401) {
+            props.changeSnackText(res.response.data.message);
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
+          } else {
+            props.changeSnackText(res.response.data.message);
+          }
+          props.changeVis(true);
+        } else {
+          props.changeUserDetails(res.data);
+          props.changeVis(false);
+        }
+      });
+    }
   };
   return (
     <div>
