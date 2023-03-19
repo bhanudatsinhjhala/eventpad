@@ -10,6 +10,7 @@ import QrGenerate from "./qrGenerate.jsx";
 import Form from "./Form.jsx";
 // import Event from "./CreateEvent.jsx";
 import Event from "./Event.jsx";
+import Test from "./Test.jsx";
 import UploadFile from "./UploadFile.jsx";
 import { Routes, Route } from "react-router-dom";
 import CreateUsers from "./CreateUsers";
@@ -28,6 +29,7 @@ function App() {
       <Route path="/qrscan" element={<QrScanner />} />
       <Route path="/uploadfile" element={<UploadFile />} />
       <Route path="/getQr" element={<QrGenerate />} />
+      <Route path="/test" element={<Test />} />
     </Routes>
   );
 }
