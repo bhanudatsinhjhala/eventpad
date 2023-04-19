@@ -4,17 +4,28 @@ import { styled, useTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { yellowColorTheme, headerTheme } from "../colorTheme.js";
 import {
-  Button, CssBaseline, Drawer, Toolbar, List, Typography, Divider,
-  IconButton, ListItem, ListItemText, ListItemButton, ListItemIcon
+  Button,
+  CssBaseline,
+  Drawer,
+  Toolbar,
+  List,
+  Typography,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemText,
+  ListItemButton,
+  ListItemIcon,
 } from "@mui/material";
-import MuiAppBar from '@mui/material/AppBar';
+import MuiAppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import LogoutIcon from "@mui/icons-material/Logout";
-import EventIcon from '@mui/icons-material/Event';
+import GroupIcon from "@mui/icons-material/Group";
+import EventIcon from "@mui/icons-material/Event";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const drawerWidth = 240;
@@ -54,7 +65,7 @@ export default function PersistentDrawerLeft(props) {
     if (token === null || token === undefined) {
       navigate("/login");
     }
-    setRole(JSON.parse(sessionStorage.getItem('role')));
+    setRole(JSON.parse(sessionStorage.getItem("role")));
   }
   React.useEffect(() => {
     isAuthenticated();
@@ -87,6 +98,7 @@ export default function PersistentDrawerLeft(props) {
       key: 5,
       text: "Log Out",
       to: "login",
+      icon: <LogoutIcon />,
     },
   ];
   if (role) {
@@ -104,6 +116,12 @@ export default function PersistentDrawerLeft(props) {
           text: "Volunteers Account",
           to: "createusers",
           icon: <PersonAddIcon />,
+        },
+        {
+          key: 6,
+          text: "Participants Data",
+          to: "participants",
+          icon: <GroupIcon />,
         },
         ...navItems.slice(2),
       ];
@@ -128,12 +146,17 @@ export default function PersistentDrawerLeft(props) {
     navigate("/login");
   }
   return (
-    <ThemeProvider theme={yellowColorTheme} >
+    <ThemeProvider theme={yellowColorTheme}>
       <CssBaseline />
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <ThemeProvider theme={headerTheme} >
-          <AppBar position="fixed" open={open} sx={{ backgroundColor: "#ffa306" }} color="primary">
+        <ThemeProvider theme={headerTheme}>
+          <AppBar
+            position="fixed"
+            open={open}
+            sx={{ backgroundColor: "#ffa306" }}
+            color="primary"
+          >
             <Toolbar>
               <IconButton
                 color="inherit"
@@ -178,11 +201,11 @@ export default function PersistentDrawerLeft(props) {
           open={open}
         >
           <DrawerHeader sx={{ justifyContent: "space-between" }}>
-            <Typography
-              variant="h6"
-              sx={{ margin: 2, color: "#ffa306" }}
-            >
-              <Link to={`/`} style={{ textDecoration: "none", color: "inherit" }}>
+            <Typography variant="h6" sx={{ margin: 2, color: "#ffa306" }}>
+              <Link
+                to={`/`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 EventPad
               </Link>
             </Typography>
@@ -200,13 +223,20 @@ export default function PersistentDrawerLeft(props) {
             {navItems.map((Obj) => {
               if (Obj.key !== 5) {
                 return (
-                  <ListItem key={Obj.key} onClick={handleNavBtn} disablePadding sx={{ display: "block" }}>
+                  <ListItem
+                    key={Obj.key}
+                    onClick={handleNavBtn}
+                    disablePadding
+                    sx={{ display: "block" }}
+                  >
                     <Link
                       to={`/${Obj.to}`}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <ListItemButton sx={{ color: "#ffa306" }}>
-                        <ListItemIcon sx={{ color: "#ffa306" }}>{Obj.icon}</ListItemIcon>
+                        <ListItemIcon sx={{ color: "#ffa306" }}>
+                          {Obj.icon}
+                        </ListItemIcon>
                         <ListItemText primary={Obj.text} />
                       </ListItemButton>
                     </Link>
@@ -226,7 +256,10 @@ export default function PersistentDrawerLeft(props) {
                       variant="outlined"
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
-                      <ListItemButton onClick={logOut} sx={{ color: "#ffa306" }}>
+                      <ListItemButton
+                        onClick={logOut}
+                        sx={{ color: "#ffa306" }}
+                      >
                         <ListItemIcon sx={{ color: "#ffa306" }}>
                           <LogoutIcon />
                         </ListItemIcon>

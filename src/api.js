@@ -21,6 +21,7 @@ const getJwtToken = async (membershipId) => {
         membershipId,
       },
     });
+    console.log("response.data", response.data);
     if (response.status === 200) {
       sessionStorage.setItem(
         "token",
@@ -33,6 +34,41 @@ const getJwtToken = async (membershipId) => {
     }
   } catch (error) {
     console.error("catch getJwtToken error", error);
+  }
+};
+export const getAllParticipantsList = async () => {
+  try {
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    console.log("token", token);
+    const response = await axios({
+      method: "GET",
+      url: `${api_url}/getallparticipantslist`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("response.data", response.data);
+    return response;
+  } catch (error) {
+    console.error("catch getAllparticipantsList error", error);
+  }
+};
+export const downloadAllParticipantsList = async () => {
+  try {
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    console.log("token", token);
+    const response = await axios({
+      method: "GET",
+      url: `${api_url}/downloadallparticipantslist`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: "blob",
+    });
+    console.log("response.data", response.data);
+    return response;
+  } catch (error) {
+    console.error("catch getAllparticipantsList error", error);
   }
 };
 export const checkJwtTokenExpire = async () => {
@@ -49,7 +85,6 @@ export const checkJwtTokenExpire = async () => {
   }
   return false;
 };
-
 export async function uploadFile(file, token, eventId) {
   try {
     // console.log(file);

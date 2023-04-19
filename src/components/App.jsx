@@ -5,6 +5,7 @@ import RegistrationId from "./RegistrationId.jsx";
 import QrScanner from "./QrScanner.jsx";
 import Home from "./Home.jsx";
 import Login from "./Login.jsx";
+import Participants from "./Participants.jsx";
 // import PresenceData from "./PresenceData.jsx";
 import QrGenerate from "./qrGenerate.jsx";
 import Form from "./Form.jsx";
@@ -21,6 +22,7 @@ function App() {
       <Route path="/" element={<Home />} />
       {/* <Route path="/presentdata" element={<PresenceData />} /> */}
       <Route path="/login" element={<Login />} />
+      <Route path="/participants" element={<Participants />} />
       <Route path="/createusers" element={<CreateUsers />} />
       <Route path="/Form" element={<Form />} />
       <Route path="/event" element={<Event />} />
