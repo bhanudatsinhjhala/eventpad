@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails } from "../api.js";
-import { ThemeProvider } from '@mui/material/styles';
+import { getUserDetails, checkJwtTokenExpire } from "../api.js";
+import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
 import { QrReader } from "react-qr-reader";
 import { Box, CssBaseline, Snackbar, Button, IconButton } from "@mui/material";
@@ -11,15 +11,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./App.css";
 import { Typography } from "@mui/material";
 function QrScanner() {
-  // function checkAbsentCount() {
-  //   totalAbsent().then((res) => {
-  //     // console.log(res);
-  //     setAbsentCount(res.data.count);
-  //   });
-  // }
-  // useEffect(() => {
-  //   checkAbsentCount();
-  // });
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   // const [data, setData] = useState();
@@ -42,9 +33,11 @@ function QrScanner() {
   };
   const changeSnackText = (value) => {
     setSnackText(value);
+    console.log("snack text changed");
+    setOpen(true);
     setTimeout(() => {
       setOpen(false);
-    }, 8000)
+    }, 8000);
   };
   function handleClose() {
     if (open === true) {
@@ -56,25 +49,29 @@ function QrScanner() {
       navigate("/");
     }
   }
-  function qrData(data) {
+  async function qrData(data) {
     if (data !== null) {
       console.info("qr data====>", data);
-      getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then((res) => {
-        console.log(res);
-        if (res.status !== 200) {
-          if (res.response.status === 401) {
-            changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 3000);
+      await checkJwtTokenExpire();
+      getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then(
+        (res) => {
+          console.log(res);
+          if (res.status !== 200) {
+            if (res.response.status === 401) {
+              changeSnackText(res.response.data.message);
+              setTimeout(() => {
+                navigate("/login");
+              }, 3000);
+            } else {
+              console.error("It reached here");
+              changeSnackText(res.response.data.message);
+            }
           } else {
-            changeSnackText(res.response.data.message);
+            setUserDetails(res.data);
+            changeVis(false);
           }
-        } else {
-          setUserDetails(res.data);
-          changeVis(false);
         }
-      });
+      );
     }
   }
   const action = (
@@ -96,7 +93,7 @@ function QrScanner() {
   return (
     <div>
       <Header />
-      <ThemeProvider theme={yellowColorTheme} >
+      <ThemeProvider theme={yellowColorTheme}>
         <CssBaseline />
         {visiblity ? (
           <div>

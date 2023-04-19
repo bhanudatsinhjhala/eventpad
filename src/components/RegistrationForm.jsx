@@ -1,11 +1,17 @@
 import React from "react";
-import { Box, Typography, Stack, TextField, Button, CssBaseline } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Stack,
+  TextField,
+  Button,
+  CssBaseline,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { getUserDetails } from "../api.js";
-import { ThemeProvider } from '@mui/material/styles';
+import { getUserDetails, checkJwtTokenExpire } from "../api.js";
+import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
-
 
 export default function RegistrationForm(props) {
   const {
@@ -25,9 +31,13 @@ export default function RegistrationForm(props) {
   // useEffect(() => {
   //   checkAbsentCount();
   // });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // console.log(data);
-    getUserDetails(data.regid, JSON.parse(sessionStorage.getItem('token'))).then((res) => {
+    await checkJwtTokenExpire();
+    getUserDetails(
+      data.regid,
+      JSON.parse(sessionStorage.getItem("token"))
+    ).then((res) => {
       console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401) {
@@ -90,10 +100,10 @@ export default function RegistrationForm(props) {
                   ? errors.regid.type === "required"
                     ? "Please Enter Registration Id"
                     : errors.regid.type === "minLength"
-                      ? "Please Enter 11 digit Regitration Id"
-                      : errors.regid.type === "maxLength"
-                        ? "Please Enter Registration Id of 11 digit only."
-                        : null
+                    ? "Please Enter 11 digit Regitration Id"
+                    : errors.regid.type === "maxLength"
+                    ? "Please Enter Registration Id of 11 digit only."
+                    : null
                   : null
               }
             />

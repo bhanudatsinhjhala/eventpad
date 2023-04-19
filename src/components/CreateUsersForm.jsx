@@ -1,29 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { LoadingButton } from "@mui/lab";
-import { ThemeProvider } from '@mui/material/styles';
-import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import { ThemeProvider } from "@mui/material/styles";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import {
   TextField,
-  Stack, Container,
+  Stack,
+  Container,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Typography, CssBaseline,
+  Typography,
+  CssBaseline,
   Button,
-  DialogTitle, DialogContentText, DialogContent, DialogActions, Dialog
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
+  Dialog,
 } from "@mui/material";
-import { createUsers } from "../api.js";
+import { createUsers, checkJwtTokenExpire } from "../api.js";
 import { yellowColorTheme } from "../colorTheme.js";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 function MyForm(props) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [btnText, setBtnText] = useState('Create');
-  const [btnColor, setBtnColor] = useState('primary');
+  const [btnText, setBtnText] = useState("Create");
+  const [btnColor, setBtnColor] = useState("primary");
   const [isAccountCreated, setAccountCreated] = useState(false);
   const {
     register,
@@ -56,54 +62,64 @@ function MyForm(props) {
   const form = useForm({
     defaultValues: { membershipId: "", password: "", email: "", role: "" },
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // console.log(data);
     setLoading(true);
-    createUsers(data, JSON.parse(sessionStorage.getItem('token'))).then((res, err) => {
-      console.log(res);
-      // console.log(err.response);
-      if (res.status !== 200) {
-        if (res.response.status === 401 || res.response.status === 403) {
-          props.changeSnackText(res.response.data.message);
+    await checkJwtTokenExpire();
+    createUsers(data, JSON.parse(sessionStorage.getItem("token"))).then(
+      (res, err) => {
+        console.log(res);
+        // console.log(err.response);
+        if (res.status !== 200) {
+          if (res.response.status === 401 || res.response.status === 403) {
+            props.changeSnackText(res.response.data.message);
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
+          } else if (res.response.status === 409) {
+            setBtnText(res.response.data.message);
+            props.changeSnackText(res.response.data.message);
+            setBtnColor("error");
+            setTimeout(() => {
+              setBtnText("Create");
+              setBtnColor("primary");
+            }, 2000);
+          } else {
+            props.changeSnackText(res.response.data.message);
+          }
+        } else if (res.data.message) {
+          // console.log(res.data);
+          setBtnColor("success");
+          props.getMembers();
+          props.changeSnackText(res.data.message);
           setTimeout(() => {
-            navigate("/login");
-          }, 3000);
-        } else if (res.response.status === 409) {
-          setBtnText(res.response.data.message)
-          props.changeSnackText(res.response.data.message);
-          setBtnColor('error');
-          setTimeout(() => {
-            setBtnText('Create');
-            setBtnColor('primary')
-          }, 2000)
-        } else {
-          props.changeSnackText(res.response.data.message);
+            setBtnText("Create");
+            setBtnColor("primary");
+          }, 2000);
+          setLoading(false);
+          setAccountCreated(true);
+          handleCloseDialog();
         }
-      } else if (res.data.message) {
-        // console.log(res.data);
-        setBtnColor('success');
-        props.getMembers();
-        props.changeSnackText(res.data.message);
-        setTimeout(() => {
-          setBtnText('Create');
-          setBtnColor('primary')
-        }, 2000)
         setLoading(false);
-        setAccountCreated(true);
-        handleCloseDialog();
       }
-      setLoading(false);
-    });
+    );
   };
   const onError = (error) => {
     console.log(error);
   };
   return (
     <div>
-      <ThemeProvider theme={yellowColorTheme} >
+      <ThemeProvider theme={yellowColorTheme}>
         <CssBaseline />
-        <Container sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}>
-          <Button variant="outlined" color="primary" onClick={handleClickOpenDialog} startIcon={<PersonAddIcon />}>
+        <Container
+          sx={{ margin: "auto", marginTop: "100px", marginBottom: "15px" }}
+        >
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleClickOpenDialog}
+            startIcon={<PersonAddIcon />}
+          >
             Create Account
           </Button>
           <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -111,7 +127,10 @@ function MyForm(props) {
             <form onSubmit={handleSubmit(onSubmit, onError)}>
               <DialogContent sx={{ padding: "20px 20px" }}>
                 <DialogContentText>
-                  <Typography variant="h5" sx={{ paddingBottom: "20px", color: "#ffa306" }}>
+                  <Typography
+                    variant="h5"
+                    sx={{ paddingBottom: "20px", color: "#ffa306" }}
+                  >
                     Create Volunteer's Account
                   </Typography>
                 </DialogContentText>
@@ -140,10 +159,10 @@ function MyForm(props) {
                         ? errors.membershipId.type === "required"
                           ? "Membership Id is required"
                           : errors.membershipId.type === "minLength"
-                            ? "Please Enter 8 Digit Membership Id"
-                            : errors.membershipId.type === "maxLength"
-                              ? "Please enter Membership Id of 8 Digit Only"
-                              : errors.membershipId.message
+                          ? "Please Enter 8 Digit Membership Id"
+                          : errors.membershipId.type === "maxLength"
+                          ? "Please enter Membership Id of 8 Digit Only"
+                          : errors.membershipId.message
                         : null
                     }
                   />
@@ -171,10 +190,10 @@ function MyForm(props) {
                         ? errors.name.type === "required"
                           ? "User Name is required"
                           : errors.name.type === "minLength"
-                            ? "Please Enter User name of min length of 5 charachters"
-                            : errors.name.type === "maxLength"
-                              ? "Please Enter User name of max length of 20 charachters Only"
-                              : errors.name.message
+                          ? "Please Enter User name of min length of 5 charachters"
+                          : errors.name.type === "maxLength"
+                          ? "Please Enter User name of max length of 20 charachters Only"
+                          : errors.name.message
                         : null
                     }
                   />
@@ -225,7 +244,9 @@ function MyForm(props) {
                     }
                   />
                   <FormControl fullWidth>
-                    <InputLabel color="primary" id="demo-simple-select-label">Role</InputLabel>
+                    <InputLabel color="primary" id="demo-simple-select-label">
+                      Role
+                    </InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
@@ -246,13 +267,23 @@ function MyForm(props) {
                     >
                       <MenuItem value="volunteer">Volunteer</MenuItem>
                       <MenuItem value="execom">Execom</MenuItem>
-                      {JSON.parse(sessionStorage.getItem("role")) === "admin" || JSON.parse(sessionStorage.getItem("role")) === "super-admin" ? (<MenuItem value="admin">Admin</MenuItem>) : null}
+                      {JSON.parse(sessionStorage.getItem("role")) === "admin" ||
+                      JSON.parse(sessionStorage.getItem("role")) ===
+                        "super-admin" ? (
+                        <MenuItem value="admin">Admin</MenuItem>
+                      ) : null}
                     </Select>
                   </FormControl>
                 </Stack>
               </DialogContent>
               <DialogActions sx={{ justifyContent: "space-around" }}>
-                <Button onClick={handleCloseDialog} color="primary" variant="outlined">Cancel</Button>
+                <Button
+                  onClick={handleCloseDialog}
+                  color="primary"
+                  variant="outlined"
+                >
+                  Cancel
+                </Button>
                 <LoadingButton
                   type="submit"
                   size="medium"
@@ -260,9 +291,11 @@ function MyForm(props) {
                   loading={loading}
                   variant="contained"
                 >
-                  {
-                    btnColor === 'success' ? <CheckCircleOutlineRoundedIcon /> : btnText
-                  }
+                  {btnColor === "success" ? (
+                    <CheckCircleOutlineRoundedIcon />
+                  ) : (
+                    btnText
+                  )}
                 </LoadingButton>
               </DialogActions>
             </form>

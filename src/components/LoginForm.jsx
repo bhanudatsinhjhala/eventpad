@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { TextField, Stack, InputAdornment, IconButton, CssBaseline } from "@mui/material";
+import {
+  TextField,
+  Stack,
+  InputAdornment,
+  IconButton,
+  CssBaseline,
+} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Login from "@mui/icons-material/Login";
 import { loginUser } from "../api.js";
-import { ThemeProvider } from '@mui/material/styles';
-import { yellowColorTheme } from '../colorTheme.js';
+import { ThemeProvider } from "@mui/material/styles";
+import { yellowColorTheme } from "../colorTheme.js";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -23,7 +29,7 @@ function MyForm(props) {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // console.log(data);
     setLoading(true);
     loginUser(data).then((res, err) => {
@@ -32,7 +38,7 @@ function MyForm(props) {
         navigate("/login");
       }
       if (res.status !== 200) {
-        let errorRes = res.response
+        let errorRes = res.response;
         if (errorRes.data.message) {
           // console.log(res.data);
           props.changeSnackText(errorRes.data.message);
@@ -40,10 +46,13 @@ function MyForm(props) {
         } else {
           props.changeSnackText(res.data);
           setLoading(false);
-        };
+        }
       } else {
         sessionStorage.setItem("token", JSON.stringify(res.data.accessToken));
-        sessionStorage.setItem("refreshToken", JSON.stringify(res.data.refreshToken));
+        sessionStorage.setItem(
+          "refreshToken",
+          JSON.stringify(res.data.refreshToken)
+        );
         sessionStorage.setItem("role", JSON.stringify(res.data.role));
         navigate("/");
       }
@@ -82,10 +91,10 @@ function MyForm(props) {
                 ? errors.membershipId.type === "required"
                   ? "Membership Id is required"
                   : errors.membershipId.type === "minLength"
-                    ? "Please Enter 8 Digit Membership Id"
-                    : errors.membershipId.type === "maxLength"
-                      ? "Please enter Membership Id of 8 Digit Only"
-                      : errors.membershipId.message
+                  ? "Please Enter 8 Digit Membership Id"
+                  : errors.membershipId.type === "maxLength"
+                  ? "Please enter Membership Id of 8 Digit Only"
+                  : errors.membershipId.message
                 : null
             }
           />

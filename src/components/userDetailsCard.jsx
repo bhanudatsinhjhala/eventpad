@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Typography, Grow, CssBaseline, Button, Box } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import { yellowColorTheme } from "../colorTheme.js";
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
-import { markPresence } from "../api.js";
+import { markPresence, checkJwtTokenExpire } from "../api.js";
 
 function userDetailsCard(props) {
   const checked = true;
@@ -18,9 +18,13 @@ function userDetailsCard(props) {
     setSnackText(value);
     setOpen(true);
   };
-  function handlePresent() {
+  async function handlePresent() {
     // console.log(props);
-    markPresence(props.userDetails.regId, JSON.parse(sessionStorage.getItem("token"))).then(async (res) => {
+    await checkJwtTokenExpire();
+    markPresence(
+      props.userDetails.regId,
+      JSON.parse(sessionStorage.getItem("token"))
+    ).then(async (res) => {
       // console.log(res);
       if (res.request.status === 200) {
         changeSnackText(res.data.message);
@@ -51,7 +55,7 @@ function userDetailsCard(props) {
       {/* <Button color="secondary" size="small" onClick={handleClose}>
         UNDO
       </Button> */}
-      <ThemeProvider theme={yellowColorTheme} >
+      <ThemeProvider theme={yellowColorTheme}>
         <CssBaseline />
         <IconButton
           size="small"

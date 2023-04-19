@@ -2,19 +2,18 @@ import React, { useState } from "react";
 import "./App.css";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import {
-  Input,
-} from "@mui/material";
+import { Input } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
-import { uploadFile } from "../api.js";
+import { uploadFile, checkJwtTokenExpire } from "../api.js";
 import {
-  Snackbar, Button,
-  DialogTitle, DialogContentText, DialogContent, DialogActions,
+  Button,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function UploadData(props) {
   const navigate = useNavigate();
@@ -37,14 +36,19 @@ function UploadData(props) {
     setUser(file);
     // console.log(user);
   }
-  function formSubmit(e) {
+  async function formSubmit(e) {
     setLoading(true);
     e.preventDefault();
     // console.log(user, "user");
     if (user === null) {
       props.changeSnackText("Please Upload Excel or Spread Sheet.");
     } else {
-      uploadFile(user, JSON.parse(sessionStorage.getItem("token")), props.eventId).then((res, err) => {
+      await checkJwtTokenExpire();
+      uploadFile(
+        user,
+        JSON.parse(sessionStorage.getItem("token")),
+        props.eventId
+      ).then((res, err) => {
         // console.log(res);
         if (res.request.status !== 200) {
           if (res.response.status === 401 || res.response.status === 403) {
@@ -72,8 +76,8 @@ function UploadData(props) {
   const yellowColorTheme = createTheme({
     palette: {
       primary: {
-        main: '#ffa306',
-        contrastText: '#fff',
+        main: "#ffa306",
+        contrastText: "#fff",
       },
     },
   });
@@ -118,7 +122,13 @@ function UploadData(props) {
           </Box>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "space-around" }}>
-          <Button onClick={props.handleCloseDialog} variant="outlined" color="primary">Cancel</Button>
+          <Button
+            onClick={props.handleCloseDialog}
+            variant="outlined"
+            color="primary"
+          >
+            Cancel
+          </Button>
           <LoadingButton
             type="submit"
             size="medium"
