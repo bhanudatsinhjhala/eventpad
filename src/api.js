@@ -65,7 +65,6 @@ export const downloadAllParticipantsList = async () => {
       },
       responseType: "blob",
     });
-    console.log("response.data", response.data);
     return response;
   } catch (error) {
     console.error("catch getAllparticipantsList error", error);
