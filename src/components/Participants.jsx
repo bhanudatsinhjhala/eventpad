@@ -166,12 +166,7 @@ export default function Event() {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ textTransform: "capitalize" }}
-                    >
-                      {row.email}
-                    </TableCell>
+                    <TableCell align="left">{row.email}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
