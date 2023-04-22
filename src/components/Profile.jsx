@@ -17,15 +17,30 @@ import {
   CardContent,
   Card,
 } from "@mui/material";
+
+import { getProfile, checkJwtTokenExpire } from "../api.js";
+
 export default function Profile() {
+  const [userProfile, setUserProfile] = useState({});
   async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
       navigate("/login");
     }
   }
+
+  const getUserProfile = async () => {
+    await checkJwtTokenExpire();
+    await getProfile().then((res, err) => {
+      console.log("userProfile ----", res);
+      if (res.status === 200) {
+        setUserProfile((userProfile) => ({ ...userProfile, ...res.data.data }));
+      }
+    });
+  };
   useEffect(() => {
     isAuthenticated();
+    getUserProfile();
   }, []);
   const navigate = useNavigate();
 
@@ -47,16 +62,20 @@ export default function Profile() {
                 color="text.secondary"
                 gutterBottom
               >
-                Super Admin
+                {userProfile.role}
               </Typography>
               <Typography variant="h5" component="div">
-                Bhanudatsinh Jhala
+                {userProfile.firstName ? (
+                  userProfile.firstName + userProfile.lastName
+                ) : (
+                  <>Please update your name</>
+                )}
               </Typography>
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                jhala@gmail.com
+                {userProfile.email}
               </Typography>
               <Typography variant="body2">
-                96970879
+                {userProfile.membershipId}
                 <br />
               </Typography>
             </CardContent>
@@ -68,7 +87,7 @@ export default function Profile() {
                 marginBottom: "1rem",
               }}
             >
-              <UpdateProfileDialog />
+              <UpdateProfileDialog userProfile={userProfile} />
               <PasswordChangeDialog />
             </CardActions>
           </Card>

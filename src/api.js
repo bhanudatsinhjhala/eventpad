@@ -53,6 +53,41 @@ export const getAllParticipantsList = async () => {
     console.error("catch getAllparticipantsList error", error);
   }
 };
+export const getProfile = async () => {
+  try {
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    console.log("token", token);
+    const response = await axios({
+      method: "GET",
+      url: `${api_url}/getprofile`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("response.data", response.data);
+    return response;
+  } catch (error) {
+    console.error("catch getProfile error", error);
+  }
+};
+export const updateProfile = async (data) => {
+  try {
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    console.log("token", token);
+    const response = await axios({
+      method: "PATCH",
+      url: `${api_url}/memberdetails`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: qs.stringify(data),
+    });
+    console.log("response.data", response.data);
+    return response;
+  } catch (error) {
+    console.error("catch getProfile error", error);
+  }
+};
 export const downloadAllParticipantsList = async () => {
   try {
     const token = JSON.parse(sessionStorage.getItem("token"));
@@ -414,7 +449,8 @@ export async function createUsers(user, token) {
         role: user.role,
         email: user.email,
         password: user.password,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
       }),
     }).then((res, err) => {
       if (res) {

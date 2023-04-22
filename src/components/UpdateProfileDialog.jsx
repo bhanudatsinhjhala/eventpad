@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -7,7 +6,6 @@ import {
   Dialog,
   Typography,
   TextField,
-  InputAdornment,
   Stack,
   DialogTitle,
   DialogContentText,
@@ -15,11 +13,11 @@ import {
   DialogActions,
 } from "@mui/material";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
-import EventIcon from "@mui/icons-material/Event";
+import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import { LoadingButton } from "@mui/lab";
-export default function UpdateProfile() {
+import { checkJwtTokenExpire, updateProfile } from "../api";
+
+export default function UpdateProfile(props) {
   const {
     register,
     formState: { errors },
@@ -30,15 +28,10 @@ export default function UpdateProfile() {
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [visiblity, setVisibility] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
   };
-
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setVisibility(true);
@@ -50,6 +43,10 @@ export default function UpdateProfile() {
   }
   const onSubmit = async (data) => {
     console.log("data", data);
+    await checkJwtTokenExpire();
+    await updateProfile(data).then((res, err) => {
+      console.log("updateProfile res -----", res);
+    });
   };
   const onError = (error) => {
     console.log(error);
@@ -60,7 +57,7 @@ export default function UpdateProfile() {
         variant="outlined"
         color="primary"
         onClick={handleClickOpenDialog}
-        startIcon={<EventIcon />}
+        startIcon={<ModeEditOutlineIcon />}
       >
         Update Details
       </Button>
@@ -82,29 +79,62 @@ export default function UpdateProfile() {
                 autoComplete="off"
                 type="text"
                 className="textInput"
-                name="name"
-                label="User Name"
-                placeholder="Enter your user name"
+                name="firstName"
+                label="First Name"
+                defaultValue={props.userProfile.firstName}
+                placeholder="Enter your First name"
                 size="small"
-                {...register("name", {
+                {...register("firstName", {
                   required: true,
-                  minLength: 5,
+                  minLength: 2,
                   maxLength: 20,
                   pattern: {
                     value: /^\S+$/,
                     message: "Please do not leave blank space",
                   },
                 })}
-                error={Boolean(errors.name)}
+                error={Boolean(errors.firstName)}
                 helperText={
-                  errors.name
-                    ? errors.name.type === "required"
-                      ? "User Name is required"
-                      : errors.name.type === "minLength"
-                      ? "Please Enter User name of min length of 5 charachters"
-                      : errors.name.type === "maxLength"
-                      ? "Please Enter User name of max length of 20 charachters Only"
-                      : errors.name.message
+                  errors.firstName
+                    ? errors.firstName.type === "required"
+                      ? "First Name is required"
+                      : errors.firstName.type === "minLength"
+                      ? "Please Enter First name of min length of 2 charachters"
+                      : errors.firstName.type === "maxLength"
+                      ? "Please Enter First name of max length of 20 charachters Only"
+                      : errors.firstName.message
+                    : null
+                }
+              />
+              <TextField
+                color="primary"
+                autoComplete="off"
+                type="text"
+                className="textInput"
+                name="lastName"
+                label="Last Name"
+                defaultValue={props.userProfile.lastName}
+                placeholder="Enter your Last name"
+                size="small"
+                {...register("lastName", {
+                  required: true,
+                  minLength: 2,
+                  maxLength: 20,
+                  pattern: {
+                    value: /^\S+$/,
+                    message: "Please do not leave blank space",
+                  },
+                })}
+                error={Boolean(errors.lastName)}
+                helperText={
+                  errors.lastName
+                    ? errors.lastName.type === "required"
+                      ? "Last Name is required"
+                      : errors.lastName.type === "minLength"
+                      ? "Please Enter Last name of min length of 2 charachters"
+                      : errors.lastName.type === "maxLength"
+                      ? "Please Enter Last name of max length of 20 charachters Only"
+                      : errors.lastName.message
                     : null
                 }
               />
@@ -115,6 +145,7 @@ export default function UpdateProfile() {
                 className="textInput"
                 name="email"
                 label="Email-Id"
+                defaultValue={props.userProfile.email}
                 placeholder="Enter your Email Id"
                 size="small"
                 {...register("email", {
