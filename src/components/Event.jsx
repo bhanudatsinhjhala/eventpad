@@ -16,8 +16,8 @@ import {
 import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
 import { ThemeProvider } from "@mui/material/styles";
-import CreateEvent from "./CreateEvent.jsx";
-import UploadFile from "./UploadFile.jsx";
+import CreateEventDialog from "./CreateEventDialog.jsx";
+import UploadFile from "./UploadFileDialog.jsx";
 import EventParticipant from "./EventParticipant.jsx";
 import {
   getEventDetails,
@@ -174,7 +174,7 @@ export default function Event() {
       <ThemeProvider theme={yellowColorTheme}>
         <CssBaseline />
         <Container sx={{ margin: "auto", marginTop: "100px" }}>
-          <CreateEvent
+          <CreateEventDialog
             sx={{ marginBottom: "15px" }}
             getEvents={getEvents}
             changeSnackText={changeSnackText}

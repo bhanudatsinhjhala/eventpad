@@ -44,6 +44,7 @@ export default function EventParticpant(props) {
         res.data.forEach((element) => {
           element.present = JSON.stringify(element.present);
         });
+        console.log("data", res.data[0]);
         setParticipantDetails(res.data);
       }
     });

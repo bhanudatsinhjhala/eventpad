@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Container,
   Button,
-  Dialog,
   CssBaseline,
   Snackbar,
   Table,
@@ -16,9 +15,6 @@ import {
 import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
 import { ThemeProvider } from "@mui/material/styles";
-import CreateEvent from "./CreateEvent.jsx";
-import UploadFile from "./UploadFile.jsx";
-import EventParticipant from "./EventParticipant.jsx";
 import {
   getAllParticipantsList,
   checkJwtTokenExpire,
