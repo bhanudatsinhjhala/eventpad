@@ -27,6 +27,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import GroupIcon from "@mui/icons-material/Group";
 import EventIcon from "@mui/icons-material/Event";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonIcon from "@mui/icons-material/Person";
 
 const drawerWidth = 240;
 
@@ -86,7 +87,7 @@ export default function PersistentDrawerLeft(props) {
       key: 7,
       text: "Profile",
       to: "profile",
-      icon: <AppRegistrationIcon />,
+      icon: <PersonIcon />,
     },
     {
       key: 1,
