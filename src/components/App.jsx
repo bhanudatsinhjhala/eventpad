@@ -9,9 +9,9 @@ import Participants from "./Participants.jsx";
 // import PresenceData from "./PresenceData.jsx";
 import QrGenerate from "./qrGenerate.jsx";
 import Form from "./Form.jsx";
-// import Event from "./CreateEvent.jsx";
+import Profile from "./Profile.jsx";
 import Event from "./Event.jsx";
-import UploadFile from "./UploadFile.jsx";
+import UploadFile from "./UploadFileDialog.jsx";
 import { Routes, Route } from "react-router-dom";
 import CreateUsers from "./CreateUsers";
 // import QrScan from "./qrScan";
@@ -22,6 +22,7 @@ function App() {
       <Route path="/" element={<Home />} />
       {/* <Route path="/presentdata" element={<PresenceData />} /> */}
       <Route path="/login" element={<Login />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/participants" element={<Participants />} />
       <Route path="/createusers" element={<CreateUsers />} />
       <Route path="/Form" element={<Form />} />

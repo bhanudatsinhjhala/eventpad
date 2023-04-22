@@ -83,6 +83,12 @@ export default function PersistentDrawerLeft(props) {
   };
   var navItems = [
     {
+      key: 7,
+      text: "Profile",
+      to: "profile",
+      icon: <AppRegistrationIcon />,
+    },
+    {
       key: 1,
       text: "QrScanner",
       to: "qrscan",
