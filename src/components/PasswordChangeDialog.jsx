@@ -17,21 +17,33 @@ import {
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-import EventIcon from "@mui/icons-material/Event";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import { LoadingButton } from "@mui/lab";
 
-export default function PasswordChangeDialog() {
+import { checkJwtTokenExpire, resetPassword } from "../api";
+
+export default function PasswordChangeDialog(props) {
   const {
     register,
     formState: { errors },
     reset,
     handleSubmit,
   } = useForm();
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [visiblity, setVisibility] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordChanged, setPasswordChanged] = useState(false);
+
+  useEffect(() => {
+    if (isPasswordChanged) {
+      reset({
+        updatePassword: "",
+        confirmPassword: "",
+      });
+      setPasswordChanged(false);
+    }
+  }, [isPasswordChanged]);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -42,15 +54,30 @@ export default function PasswordChangeDialog() {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setVisibility(true);
   };
-  function handleClose() {
-    if (open === true) {
-      setOpen(false);
-    }
-  }
   const onSubmit = async (data) => {
     console.log("data", data);
+    setLoading(true);
+    if (data.updatePassword !== data.confirmPassword) {
+      setLoading(false);
+      return props.changeSnackText("Confirm Password does not match");
+    }
+    await checkJwtTokenExpire();
+    await resetPassword(data).then((res, err) => {
+      console.log("resetpassword ----", res);
+      setLoading(false);
+      if (res.status === 201) {
+        props.changeSnackText("Password Changed Successfully");
+        setPasswordChanged(true);
+        return handleCloseDialog();
+      } else if (res.response.status === 401 || res.response.status === 403) {
+        props.changeSnackText(res.response.data.message);
+        return setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
+      return props.changeSnackText(res.response.data.message);
+    });
   };
   const onError = (error) => {
     console.log(error);
@@ -61,14 +88,14 @@ export default function PasswordChangeDialog() {
         variant="outlined"
         color="primary"
         onClick={handleClickOpenDialog}
-        startIcon={<EventIcon />}
+        startIcon={<LockResetIcon />}
       >
         Change Password
       </Button>
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle sx={{ color: "#e0e0e0" }}>Event Setup</DialogTitle>
         <form onSubmit={handleSubmit(onSubmit, onError)}>
-          <DialogContent>
+          <DialogContent sx={{ maxWidth: "500px" }}>
             <DialogContentText>
               <Typography
                 variant="h5"
@@ -81,19 +108,19 @@ export default function PasswordChangeDialog() {
               <TextField
                 autoComplete="off"
                 type={showPassword ? "text" : "password"}
-                label="Password"
+                label="Update Password"
                 color="primary"
                 className="textInput"
-                placeholder="Enter your Password"
+                placeholder="Enter your Update Password"
                 size="small"
-                {...register("password", {
+                {...register("updatePassword", {
                   required: true,
                 })}
-                error={Boolean(errors.password)}
+                error={Boolean(errors.updatePassword)}
                 helperText={
-                  errors.password
-                    ? errors.password.type === "required"
-                      ? "Password is required"
+                  errors.updatePassword
+                    ? errors.updatePassword.type === "required"
+                      ? "Update Password is required"
                       : null
                     : null
                 }
@@ -115,19 +142,19 @@ export default function PasswordChangeDialog() {
               <TextField
                 autoComplete="off"
                 type={showPassword ? "text" : "password"}
-                label="Password"
+                label="Confirm Password"
                 color="primary"
                 className="textInput"
-                placeholder="Enter your Password"
+                placeholder="Enter your Update Password again"
                 size="small"
-                {...register("password", {
+                {...register("confirmPassword", {
                   required: true,
                 })}
-                error={Boolean(errors.password)}
+                error={Boolean(errors.confirmPassword)}
                 helperText={
-                  errors.password
-                    ? errors.password.type === "required"
-                      ? "Password is required"
+                  errors.confirmPassword
+                    ? errors.confirmPassword.type === "required"
+                      ? "Confirm Password is required"
                       : null
                     : null
                 }
@@ -163,7 +190,7 @@ export default function PasswordChangeDialog() {
               variant="contained"
               color="primary"
             >
-              Update Details
+              Update Password
             </LoadingButton>
           </DialogActions>
         </form>
