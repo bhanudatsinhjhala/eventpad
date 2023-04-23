@@ -51,8 +51,11 @@ export default function EventParticpant(props) {
   }
   async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
+    const role = sessionStorage.getItem("role");
     if (token === null) {
       navigate("/login");
+    } else if (role === "volunteer" || role === "execom") {
+      return navigate("/");
     }
   }
   useEffect(() => {

@@ -66,8 +66,11 @@ function CreateUsers() {
   const [snackText, setSnackText] = useState("hello");
   async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
+    const role = sessionStorage.getItem("role");
     if (token === null) {
-      navigate("/login");
+      return navigate("/login");
+    } else if (role === "volunteer") {
+      return navigate("/");
     }
   }
   const deleteAccount = async (membershipId) => {

@@ -84,8 +84,11 @@ export default function Event() {
   const navigate = useNavigate();
   async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
+    const role = sessionStorage.getItem("role");
     if (token === null) {
       navigate("/login");
+    } else if (role === "volunteer" || role === "execom") {
+      return navigate("/");
     }
   }
   useEffect(() => {
