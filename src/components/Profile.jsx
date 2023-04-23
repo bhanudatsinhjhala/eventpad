@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 
 import Header from "./Header.jsx";
 import UpdateProfileDialog from "./UpdateProfileDialog.jsx";
@@ -8,7 +7,8 @@ import PasswordChangeDialog from "./PasswordChangeDialog.jsx";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
-import { Container } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 import {
   CssBaseline,
@@ -16,12 +16,16 @@ import {
   CardActions,
   CardContent,
   Card,
+  Container,
+  Snackbar,
 } from "@mui/material";
 
 import { getProfile, checkJwtTokenExpire } from "../api.js";
 
 export default function Profile() {
   const [userProfile, setUserProfile] = useState({});
+  const [open, setOpen] = useState(false);
+  const [snackText, setSnackText] = useState("hello");
   async function isAuthenticated() {
     const token = sessionStorage.getItem("token");
     if (token === null) {
@@ -38,17 +42,38 @@ export default function Profile() {
       }
     });
   };
+  const changeUserProfile = (data) => {
+    setUserProfile((userProfile) => ({ ...userProfile, ...data }));
+  };
   useEffect(() => {
     isAuthenticated();
     getUserProfile();
   }, []);
   const navigate = useNavigate();
-
-  //   const changeSnackText = (value) => {
-  //     setSnackText(value);
-  //     setOpen(true);
-  //   };
-
+  function handleClose() {
+    if (open === true) {
+      setOpen(false);
+    }
+  }
+  const changeSnackText = (value) => {
+    setSnackText(value);
+    setOpen(true);
+  };
+  const action = (
+    <React.Fragment>
+      {/* <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button> */}
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="primary"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
   return (
     <>
       <Header />
@@ -66,7 +91,7 @@ export default function Profile() {
               </Typography>
               <Typography variant="h5" component="div">
                 {userProfile.firstName ? (
-                  userProfile.firstName + userProfile.lastName
+                  `${userProfile.firstName}  ${userProfile.lastName}`
                 ) : (
                   <>Please update your name</>
                 )}
@@ -87,10 +112,21 @@ export default function Profile() {
                 marginBottom: "1rem",
               }}
             >
-              <UpdateProfileDialog userProfile={userProfile} />
-              <PasswordChangeDialog />
+              <UpdateProfileDialog
+                userProfile={userProfile}
+                changeUserProfile={changeUserProfile}
+                changeSnackText={changeSnackText}
+              />
+              <PasswordChangeDialog changeSnackText={changeSnackText} />
             </CardActions>
           </Card>
+          <Snackbar
+            className="regSnack"
+            open={open}
+            onClose={handleClose}
+            message={snackText}
+            action={action}
+          />
         </Container>
       </ThemeProvider>
     </>

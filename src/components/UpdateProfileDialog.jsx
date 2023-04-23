@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import {
@@ -15,37 +16,51 @@ import {
 
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import { LoadingButton } from "@mui/lab";
-import { checkJwtTokenExpire, updateProfile } from "../api";
+import { checkJwtTokenExpire, updateProfile, getProfile } from "../api";
 
 export default function UpdateProfile(props) {
   const {
     register,
     formState: { errors },
-    reset,
     handleSubmit,
   } = useForm();
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [visiblity, setVisibility] = useState(true);
+  const navigate = useNavigate();
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
   };
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setVisibility(true);
   };
-  function handleClose() {
-    if (open === true) {
-      setOpen(false);
-    }
-  }
+  const getUserProfile = async () => {
+    await checkJwtTokenExpire();
+    await getProfile().then((res, err) => {
+      console.log("userProfile ----", res);
+      if (res.status === 200) {
+        props.changeUserProfile(res.data.data);
+      } else if (res.response.status === 401 || res.response.status === 403) {
+        props.changeSnackText(res.response.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      } else {
+        props.changeSnackText(res.response.data.message);
+      }
+    });
+  };
   const onSubmit = async (data) => {
+    setLoading(true);
     console.log("data", data);
     await checkJwtTokenExpire();
     await updateProfile(data).then((res, err) => {
       console.log("updateProfile res -----", res);
+      if (res.status === 200) {
+        setLoading(false);
+        handleCloseDialog();
+        getUserProfile();
+      }
     });
   };
   const onError = (error) => {
