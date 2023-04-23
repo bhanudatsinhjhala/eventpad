@@ -7,11 +7,11 @@ import Home from "./Home.jsx";
 import Login from "./Login.jsx";
 import Participants from "./Participants.jsx";
 // import PresenceData from "./PresenceData.jsx";
-import QrGenerate from "./qrGenerate.jsx";
-import Form from "./Form.jsx";
+// import QrGenerate from "./qrGenerate.jsx";
+// import Form from "./Form.jsx";
 import Profile from "./Profile.jsx";
 import Event from "./Event.jsx";
-import UploadFile from "./UploadFileDialog.jsx";
+// import UploadFile from "./UploadFileDialog.jsx";
 import { Routes, Route } from "react-router-dom";
 import CreateUsers from "./CreateUsers";
 // import QrScan from "./qrScan";
@@ -25,12 +25,12 @@ function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/participants" element={<Participants />} />
       <Route path="/createusers" element={<CreateUsers />} />
-      <Route path="/Form" element={<Form />} />
       <Route path="/event" element={<Event />} />
       <Route path="/registrationid" element={<RegistrationId />} />
       <Route path="/qrscan" element={<QrScanner />} />
-      <Route path="/uploadfile" element={<UploadFile />} />
-      <Route path="/getQr" element={<QrGenerate />} />
+      {/* <Route path="/Form" element={<Form />} /> */}
+      {/* <Route path="/uploadfile" element={<UploadFile />} /> */}
+      {/* <Route path="/getQr" element={<QrGenerate />} /> */}
     </Routes>
   );
 }
