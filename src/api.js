@@ -88,6 +88,24 @@ export const updateProfile = async (data) => {
     console.error("catch getProfile error", error);
   }
 };
+export const resetPassword = async (data) => {
+  try {
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    console.log("token", token);
+    const response = await axios({
+      method: "PATCH",
+      url: `${api_url}/resetpassword`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: qs.stringify(data),
+    });
+    console.log("response.data", response.data);
+    return response;
+  } catch (error) {
+    console.error("catch resetpassword error", error);
+  }
+};
 export const downloadAllParticipantsList = async () => {
   try {
     const token = JSON.parse(sessionStorage.getItem("token"));
