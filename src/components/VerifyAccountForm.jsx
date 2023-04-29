@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import Login from "@mui/icons-material/Login";
+import VerifiedIcon from '@mui/icons-material/Verified';
 import { verifyAccount } from "../api.js";
 import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
@@ -210,12 +210,12 @@ export default function VerifyAccountForm(props) {
           <LoadingButton
             type="submit"
             size="medium"
-            startIcon={<Login />}
+            startIcon={<VerifiedIcon />}
             loading={loading}
             color="primary"
             variant="outlined"
           >
-            Login
+            Verfiy Account
           </LoadingButton>
         </Stack>
       </form>
