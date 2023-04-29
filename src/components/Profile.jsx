@@ -106,7 +106,7 @@ export default function Profile() {
             </CardContent>
             <CardActions
               sx={{
-                maxWidth: "80%",
+                maxWidth: "90%",
                 display: "flex",
                 justifyContent: "space-between",
                 marginBottom: "1rem",

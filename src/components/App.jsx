@@ -14,7 +14,7 @@ import Event from "./Event.jsx";
 // import UploadFile from "./UploadFileDialog.jsx";
 import { Routes, Route } from "react-router-dom";
 import CreateUsers from "./CreateUsers";
-// import QrScan from "./qrScan";
+import VerifyAccount from "./VerifyAccount.jsx";
 
 function App() {
   return (
@@ -22,6 +22,7 @@ function App() {
       <Route path="/" element={<Home />} />
       {/* <Route path="/presentdata" element={<PresenceData />} /> */}
       <Route path="/login" element={<Login />} />
+      <Route path="/verification" element={<VerifyAccount />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/participants" element={<Participants />} />
       <Route path="/createusers" element={<CreateUsers />} />

@@ -77,15 +77,15 @@ export default function UpdateProfile(props) {
         Update Details
       </Button>
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle sx={{ color: "#e0e0e0" }}>Event Setup</DialogTitle>
+        <DialogTitle sx={{ color: "#e0e0e0" }}>Update Details</DialogTitle>
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <DialogContent>
             <DialogContentText>
               <Typography
-                variant="h5"
+                variant="h6"
                 sx={{ marginBottom: "20px", color: "#ffa306" }}
               >
-                Update Profile
+                Please Edit your Details
               </Typography>
             </DialogContentText>
             <Stack spacing={4}>

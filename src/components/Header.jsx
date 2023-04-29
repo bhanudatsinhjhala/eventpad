@@ -111,7 +111,7 @@ export default function PersistentDrawerLeft(props) {
   if (role) {
     if (role === "admin" || role === "super-admin") {
       navItems = [
-        ...navItems.slice(0, 2),
+        ...navItems.slice(0, 3),
         {
           key: 3,
           text: "Event",
@@ -130,18 +130,18 @@ export default function PersistentDrawerLeft(props) {
           to: "participants",
           icon: <GroupIcon />,
         },
-        ...navItems.slice(2),
+        ...navItems.slice(3),
       ];
     } else if (role === "execom") {
       navItems = [
-        ...navItems.slice(0, 2),
+        ...navItems.slice(0, 3),
         {
           key: 4,
           text: "Volunteers Account",
           to: "createusers",
           icon: <PersonAddIcon />,
         },
-        ...navItems.slice(2),
+        ...navItems.slice(3),
       ];
     }
   }

@@ -90,18 +90,18 @@ export default function PasswordChangeDialog(props) {
         onClick={handleClickOpenDialog}
         startIcon={<LockResetIcon />}
       >
-        Change Password
+        Reset Password
       </Button>
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle sx={{ color: "#e0e0e0" }}>Event Setup</DialogTitle>
+        <DialogTitle sx={{ color: "#e0e0e0" }}>Reset Password</DialogTitle>
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <DialogContent sx={{ maxWidth: "500px" }}>
             <DialogContentText>
               <Typography
-                variant="h5"
+                variant="h6"
                 sx={{ marginBottom: "20px", color: "#ffa306" }}
               >
-                Change Password
+                Please Enter your new Password
               </Typography>
             </DialogContentText>
             <Stack spacing={4}>

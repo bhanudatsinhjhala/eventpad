@@ -41,7 +41,6 @@ function MyForm(props) {
     if (isAccountCreated) {
       reset({
         membershipId: "",
-        password: "",
         email: "",
         firstName: "",
         lastName: "",
@@ -61,7 +60,7 @@ function MyForm(props) {
     setOpenDialog(false);
   };
   const form = useForm({
-    defaultValues: { membershipId: "", password: "", email: "", role: "" },
+    defaultValues: { membershipId: "",  email: "", role: "" },
   });
   const onSubmit = async (data) => {
     console.log(data);
@@ -251,27 +250,6 @@ function MyForm(props) {
                         ? errors.email.type === "required"
                           ? "Email Id is required"
                           : errors.email.message
-                        : null
-                    }
-                  />
-
-                  <TextField
-                    color="primary"
-                    autoComplete="off"
-                    type="password"
-                    label="Password"
-                    className="textInput"
-                    placeholder="Enter your Password"
-                    size="small"
-                    {...register("password", {
-                      required: true,
-                    })}
-                    error={Boolean(errors.password)}
-                    helperText={
-                      errors.password
-                        ? errors.password.type === "required"
-                          ? "Password is required"
-                          : errors.password.message
                         : null
                     }
                   />
