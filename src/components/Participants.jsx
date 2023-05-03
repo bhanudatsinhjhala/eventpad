@@ -150,6 +150,10 @@ export default function Event() {
                 <TableRow>
                   <TableCell>Participant Name</TableCell>
                   <TableCell align="left">Email</TableCell>
+                  <TableCell align="left">Membership Id</TableCell>
+                  <TableCell align="left">College</TableCell>
+                  <TableCell align="left">Branch</TableCell>
+                  <TableCell align="left">Sem</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -165,7 +169,21 @@ export default function Event() {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell align="left">{row.email}</TableCell>
+                    <TableCell align="left">
+                      {row.email ? row.email : "-"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {row.membershipId ? row.membershipId : "Not Member"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {row.college ? row.college : "-"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {row.branch ? row.branch : "-"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {row.sem ? row.sem : "-"}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
