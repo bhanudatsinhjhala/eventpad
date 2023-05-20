@@ -33,10 +33,7 @@ export default function RegistrationForm(props) {
   // });
   const onSubmit = async (data) => {
     // console.log(data);
-    getUserDetails(
-      data.regid,
-      JSON.parse(sessionStorage.getItem("token"))
-    ).then((res) => {
+    getUserDetails(data.regid).then((res) => {
       console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401) {

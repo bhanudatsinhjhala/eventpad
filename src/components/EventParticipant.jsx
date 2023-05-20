@@ -26,10 +26,7 @@ export default function EventParticpant(props) {
     },
   ]);
   async function getAllParticipant() {
-    getAllParticipantDetails(
-      props.eventId,
-      JSON.parse(sessionStorage.getItem("token"))
-    ).then((res) => {
+    getAllParticipantDetails(props.eventId).then((res) => {
       console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {

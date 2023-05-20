@@ -43,11 +43,7 @@ function UploadData(props) {
     if (user === null) {
       props.changeSnackText("Please Upload Excel or Spread Sheet.");
     } else {
-      uploadFile(
-        user,
-        JSON.parse(sessionStorage.getItem("token")),
-        props.eventId
-      ).then((res, err) => {
+      uploadFile(user, props.eventId).then((res, err) => {
         // console.log(res);
         if (res.request.status !== 200) {
           if (res.response.status === 401 || res.response.status === 403) {

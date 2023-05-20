@@ -32,22 +32,20 @@ export default function Event() {
   ]);
 
   async function getAllParticipants() {
-    getAllParticipantsList(JSON.parse(sessionStorage.getItem("token"))).then(
-      (res) => {
-        console.log(res);
-        if (res.status !== 200) {
-          if (res.response.status === 401 || res.response.status === 403) {
-            changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 2000);
-          }
+    getAllParticipantsList().then((res) => {
+      console.log(res);
+      if (res.status !== 200) {
+        if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
-        } else {
-          setRows(res.data.data);
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
         }
+        changeSnackText(res.response.data.message);
+      } else {
+        setRows(res.data.data);
       }
-    );
+    });
   }
   async function downloadParticipantData() {
     let filename = "ieeeParticipantDB.xlsx";

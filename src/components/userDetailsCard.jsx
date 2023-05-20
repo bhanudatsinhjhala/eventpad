@@ -19,10 +19,7 @@ function userDetailsCard(props) {
     setOpen(true);
   };
   async function handlePresent() {
-    markPresence(
-      props.userDetails.regId,
-      JSON.parse(sessionStorage.getItem("token"))
-    ).then(async (res) => {
+    markPresence(props.userDetails.regId).then(async (res) => {
       // console.log(res);
       if (res.request.status === 200) {
         changeSnackText(res.data.message);

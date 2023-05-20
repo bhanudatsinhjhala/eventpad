@@ -65,43 +65,41 @@ function MyForm(props) {
   const onSubmit = async (data) => {
     console.log(data);
     setLoading(true);
-    createUsers(data, JSON.parse(sessionStorage.getItem("token"))).then(
-      (res, err) => {
-        console.log(res);
-        // console.log(err.response);
-        if (res.status !== 200) {
-          if (res.response.status === 401 || res.response.status === 403) {
-            props.changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 3000);
-          } else if (res.response.status === 409) {
-            setBtnText(res.response.data.message);
-            props.changeSnackText(res.response.data.message);
-            setBtnColor("error");
-            setTimeout(() => {
-              setBtnText("Create");
-              setBtnColor("primary");
-            }, 2000);
-          } else {
-            props.changeSnackText(res.response.data.message);
-          }
-        } else if (res.data.message) {
-          // console.log(res.data);
-          setBtnColor("success");
-          props.getMembers();
-          props.changeSnackText(res.data.message);
+    createUsers(data).then((res, err) => {
+      console.log(res);
+      // console.log(err.response);
+      if (res.status !== 200) {
+        if (res.response.status === 401 || res.response.status === 403) {
+          props.changeSnackText(res.response.data.message);
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+        } else if (res.response.status === 409) {
+          setBtnText(res.response.data.message);
+          props.changeSnackText(res.response.data.message);
+          setBtnColor("error");
           setTimeout(() => {
             setBtnText("Create");
             setBtnColor("primary");
           }, 2000);
-          setLoading(false);
-          setAccountCreated(true);
-          handleCloseDialog();
+        } else {
+          props.changeSnackText(res.response.data.message);
         }
+      } else if (res.data.message) {
+        // console.log(res.data);
+        setBtnColor("success");
+        props.getMembers();
+        props.changeSnackText(res.data.message);
+        setTimeout(() => {
+          setBtnText("Create");
+          setBtnColor("primary");
+        }, 2000);
         setLoading(false);
+        setAccountCreated(true);
+        handleCloseDialog();
       }
-    );
+      setLoading(false);
+    });
   };
   const onError = (error) => {
     console.log(error);

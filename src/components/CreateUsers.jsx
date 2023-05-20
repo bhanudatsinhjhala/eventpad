@@ -33,22 +33,20 @@ function CreateUsers() {
     },
   ]);
   async function getMembers() {
-    getAllMemberDetails(JSON.parse(sessionStorage.getItem("token"))).then(
-      (res) => {
-        if (res.status !== 200) {
-          if (res.response.status === 401 || res.response.status === 403) {
-            changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 3000);
-          }
+    getAllMemberDetails().then((res) => {
+      if (res.status !== 200) {
+        if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
-        } else {
-          console.log(res);
-          setRows(res.data.data);
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
         }
+        changeSnackText(res.response.data.message);
+      } else {
+        console.log(res);
+        setRows(res.data.data);
       }
-    );
+    });
   }
   useEffect(() => {
     isAuthenticated();
@@ -70,10 +68,7 @@ function CreateUsers() {
     }
   }
   const deleteAccount = async (membershipId) => {
-    deleteMember(
-      membershipId,
-      JSON.parse(sessionStorage.getItem("token"))
-    ).then((res) => {
+    deleteMember(membershipId).then((res) => {
       console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {

@@ -75,28 +75,26 @@ function CreateEvent(props) {
     console.info(data);
     console.log(new Date(eventDatePicker));
     data.eventDate = Math.round(new Date(eventDatePicker).getTime() / 1000);
-    createEvent(data, JSON.parse(sessionStorage.getItem("token"))).then(
-      (res, err) => {
-        console.info(res);
-        if (res.status === 200) {
-          props.changeSnackText(res.data.message);
-          console.info("res datassss", res.data.data);
-          setEventId(res.data.data._id);
-          reset({
-            eventType: "",
-            eventDate: "",
-            eventName: "",
-          });
-          setVisibility(false);
-          props.getEvents();
-        } else if (res) {
-          props.changeSnackText(res.response.data.message);
-        } else {
-          console.info(err);
-        }
-        setLoading(false);
+    createEvent(data).then((res, err) => {
+      console.info(res);
+      if (res.status === 200) {
+        props.changeSnackText(res.data.message);
+        console.info("res datassss", res.data.data);
+        setEventId(res.data.data._id);
+        reset({
+          eventType: "",
+          eventDate: "",
+          eventName: "",
+        });
+        setVisibility(false);
+        props.getEvents();
+      } else if (res) {
+        props.changeSnackText(res.response.data.message);
+      } else {
+        console.info(err);
       }
-    );
+      setLoading(false);
+    });
   };
   const onError = (error) => {
     console.log(error);

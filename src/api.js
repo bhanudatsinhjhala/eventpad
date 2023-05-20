@@ -7,37 +7,27 @@ require("dotenv").config();
 const api_url = process.env.REACT_APP_API_URL;
 
 axios.defaults.withCredentials = true;
-const getJwtToken = async (membershipId) => {
-  try {
-    console.log("membershipId", membershipId);
-    const token = JSON.parse(sessionStorage.getItem("refreshToken"));
-    console.log("token", token);
-    const response = await axios({
-      method: "GET",
-      url: `${api_url}/getjwttoken`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        membershipId,
-      },
-    });
-    console.log("response.data", response.data);
-    if (response.status === 200) return;
-  } catch (error) {
-    console.error("catch getJwtToken error", error);
-  }
-};
+// const getJwtToken = async (membershipId) => {
+//   try {
+//     console.log("membershipId", membershipId);
+//     const response = await axios({
+//       method: "GET",
+//       url: `${api_url}/getjwttoken`,
+//       params: {
+//         membershipId,
+//       },
+//     });
+//     console.log("response.data", response.data);
+//     if (response.status === 200) return;
+//   } catch (error) {
+//     console.error("catch getJwtToken error", error);
+//   }
+// };
 export const getAllParticipantsList = async () => {
   try {
-    const token = JSON.parse(sessionStorage.getItem("token"));
-    console.log("token", token);
     const response = await axios({
       method: "GET",
       url: `${api_url}/getallparticipantslist`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     console.log("response.data", response.data);
     return response;
@@ -47,14 +37,9 @@ export const getAllParticipantsList = async () => {
 };
 export const getProfile = async () => {
   try {
-    const token = JSON.parse(sessionStorage.getItem("token"));
-    console.log("token", token);
     const response = await axios({
       method: "GET",
       url: `${api_url}/getprofile`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       withCredentials: true,
     });
     console.log("response.data", response.data);
@@ -65,14 +50,9 @@ export const getProfile = async () => {
 };
 export const updateProfile = async (data) => {
   try {
-    const token = JSON.parse(sessionStorage.getItem("token"));
-    console.log("token", token);
     const response = await axios({
       method: "PATCH",
       url: `${api_url}/memberdetails`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: qs.stringify(data),
     });
     console.log("response.data", response.data);
@@ -83,14 +63,9 @@ export const updateProfile = async (data) => {
 };
 export const resetPassword = async (data) => {
   try {
-    const token = JSON.parse(sessionStorage.getItem("token"));
-    console.log("token", token);
     const response = await axios({
       method: "PATCH",
       url: `${api_url}/resetpassword`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: qs.stringify(data),
     });
     console.log("response.data", response.data);
@@ -101,14 +76,9 @@ export const resetPassword = async (data) => {
 };
 export const verifyAccount = async (data) => {
   try {
-    const token = JSON.parse(sessionStorage.getItem("token"));
-    console.log("token", token);
     const response = await axios({
       method: "POST",
       url: `${api_url}/verify`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: qs.stringify(data),
     });
     console.log("response.data", response.data);
@@ -119,14 +89,9 @@ export const verifyAccount = async (data) => {
 };
 export const downloadAllParticipantsList = async () => {
   try {
-    const token = JSON.parse(sessionStorage.getItem("token"));
-    console.log("token", token);
     const response = await axios({
       method: "GET",
       url: `${api_url}/downloadallparticipantslist`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       responseType: "blob",
     });
     return response;
@@ -135,8 +100,6 @@ export const downloadAllParticipantsList = async () => {
   }
 };
 // export const checkJwtTokenExpire = async () => {
-//   const token = JSON.parse(sessionStorage.getItem("token"));
-//   const decodeToken = jwt.decode(token);
 //   console.log("decodeToken", decodeToken);
 //   const expTime = decodeToken.exp;
 //   console.log("expTime", expTime);
@@ -148,7 +111,7 @@ export const downloadAllParticipantsList = async () => {
 //   }
 //   return false;
 // };
-export async function uploadFile(file, token, eventId) {
+export async function uploadFile(file, eventId) {
   try {
     // console.log(file);
     const formData = new FormData();
@@ -160,9 +123,6 @@ export async function uploadFile(file, token, eventId) {
       url: `${api_url}/uploadsheet`,
       params: {
         eventId: eventId,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
       },
       data: formData,
     }).then((res, err) => {
@@ -182,14 +142,11 @@ export async function uploadFile(file, token, eventId) {
   }
 }
 
-export async function deleteMember(membershipId, token) {
+export async function deleteMember(membershipId) {
   try {
     const response = await axios({
       method: "DELETE",
       url: `${api_url}/deletemember`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: {
         membershipId: membershipId,
       },
@@ -199,16 +156,13 @@ export async function deleteMember(membershipId, token) {
     console.log("delete member error", error);
   }
 }
-export async function getEventReport(eventId, token) {
+export async function getEventReport(eventId) {
   try {
     console.log("eventId in index.js", eventId);
     // console.log("eventId in index.js", typeOf eventId);
     const response = await axios({
       method: "GET",
       url: `${api_url}/geteventreport`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         eventId: eventId,
       },
@@ -221,14 +175,11 @@ export async function getEventReport(eventId, token) {
   }
 }
 
-export async function deleteEventDetails(eventId, token) {
+export async function deleteEventDetails(eventId) {
   try {
     const response = await axios({
       method: "DELETE",
       url: `${api_url}/deleteevent`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: {
         eventId: eventId,
       },
@@ -240,14 +191,11 @@ export async function deleteEventDetails(eventId, token) {
     console.log(error);
   }
 }
-export async function getEventDetails(token) {
+export async function getEventDetails() {
   try {
     const response = await axios({
       method: "GET",
       url: `${api_url}/getevent`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     console.info("get event ===>", response);
     return response;
@@ -255,14 +203,11 @@ export async function getEventDetails(token) {
     console.info(error);
   }
 }
-export async function getAllMemberDetails(token) {
+export async function getAllMemberDetails() {
   try {
     const response = await axios({
       method: "GET",
       url: `${api_url}/getallmemberdetails`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     console.info("get member ===>", response);
     return response;
@@ -270,13 +215,10 @@ export async function getAllMemberDetails(token) {
     console.info(error);
   }
 }
-// export async function verifyjwt(token) {
+// export async function verifyjwt() {
 //   try {
 //     const response = await axios
 //       .get(`${api_url}/verifyjwt`, {
-//         params: {
-//           token: token,
-//         },
 //       })
 //       .then((res, err) => {
 //         if (res) {
@@ -314,7 +256,6 @@ export async function loginUser(user) {
 }
 // export async function totalAbsent() {
 //   try {
-//     var verifyres = await verifyjwt(sessionStorage.getItem("token"));
 //     if (verifyres.status === 200) {
 //       const response = await axios
 //         .get(`${api_url}/totalAbsent`)
@@ -366,27 +307,17 @@ export async function totalAbsent() {
   }
 }
 
-export async function getUserDetails(id, token) {
+export async function getUserDetails(id) {
   try {
-    console.log(token);
     const bodyParameters = {
       regId: id,
     };
-    // const config = {
-    //   headers: {
-    //     "Authorization": `Bearer ${token}`
-    //   },
-    // }
     const response = await axios({
       method: "GET",
       url: `${api_url}/getuserdetails`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: bodyParameters,
     }).then((res, err) => {
       if (res) {
-        // console.log(res.data);
         return res;
       } else {
         console.log(err);
@@ -400,19 +331,15 @@ export async function getUserDetails(id, token) {
   }
 }
 
-export async function getAllParticipantDetails(eventId, token) {
+export async function getAllParticipantDetails(eventId) {
   try {
-    console.log(token);
     const bodyParameters = {
       eventId: eventId,
     };
     const response = await axios({
       method: "GET",
       url: `${api_url}/getalluserdetails`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        withCredentials: true,
-      },
+      withCredentials: true,
       params: bodyParameters,
     }).then((res, err) => {
       if (res) {
@@ -429,26 +356,17 @@ export async function getAllParticipantDetails(eventId, token) {
     return err;
   }
 }
-export async function markPresence(id, token) {
+export async function markPresence(id) {
   try {
-    console.log(token);
-    // console.log("present", user.present);
-    // console.log("present", id);
-    // const present = user.present;
-    // const regId = user.regId;
     const response = await axios({
       method: "PUT",
       url: `${api_url}/markpresence`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: {
         present: true,
         regId: id,
       },
     }).then((res, err) => {
       if (res) {
-        // console.log(res);
         return res;
       } else {
         console.log(err);
@@ -461,19 +379,11 @@ export async function markPresence(id, token) {
     return err;
   }
 }
-export async function createUsers(user, token) {
+export async function createUsers(user) {
   try {
-    // const formData = new FormData();
-    // formData.append("membershipId", parseInt(user.membershipId));
-    // formData.append("email", user.email);
-    // formData.append("password", user.password);
-    // formData.append("role", user.role);
     const response = await axios({
       method: "POST",
       url: `${api_url}/signup`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: qs.stringify({
         membershipId: parseInt(user.membershipId),
         role: user.role,
@@ -497,14 +407,11 @@ export async function createUsers(user, token) {
   }
 }
 
-export async function createEvent(event, token) {
+export async function createEvent(event) {
   try {
     const response = await axios({
       method: "POST",
       url: `${api_url}/createevent`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: event,
     }).then((res, err) => {
       if (res) {

@@ -52,25 +52,23 @@ function QrScanner() {
   async function qrData(data) {
     if (data !== null) {
       console.info("qr data====>", data);
-      getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then(
-        (res) => {
-          console.log(res);
-          if (res.status !== 200) {
-            if (res.response.status === 401) {
-              changeSnackText(res.response.data.message);
-              setTimeout(() => {
-                navigate("/login");
-              }, 3000);
-            } else {
-              console.error("It reached here");
-              changeSnackText(res.response.data.message);
-            }
+      getUserDetails(data).then((res) => {
+        console.log(res);
+        if (res.status !== 200) {
+          if (res.response.status === 401) {
+            changeSnackText(res.response.data.message);
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
           } else {
-            setUserDetails(res.data);
-            changeVis(false);
+            console.error("It reached here");
+            changeSnackText(res.response.data.message);
           }
+        } else {
+          setUserDetails(res.data);
+          changeVis(false);
         }
-      );
+      });
     }
   }
   const action = (

@@ -37,7 +37,7 @@ export default function Event() {
     },
   ]);
   async function getEvents() {
-    getEventDetails(JSON.parse(sessionStorage.getItem("token"))).then((res) => {
+    getEventDetails().then((res) => {
       console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
@@ -88,52 +88,48 @@ export default function Event() {
     setOpenDialog(false);
   };
   async function deleteEvent(id) {
-    deleteEventDetails(id, JSON.parse(sessionStorage.getItem("token"))).then(
-      (res) => {
-        console.log(res);
-        if (res.status !== 200) {
-          if (res.response.status === 401 || res.response.status === 403) {
-            changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 8000);
-          }
+    deleteEventDetails(id).then((res) => {
+      console.log(res);
+      if (res.status !== 200) {
+        if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
-        } else {
-          console.log(res.data.message);
-          getEvents();
+          setTimeout(() => {
+            navigate("/login");
+          }, 8000);
         }
+        changeSnackText(res.response.data.message);
+      } else {
+        console.log(res.data.message);
+        getEvents();
       }
-    );
+    });
     console.log("Delete Event", id);
   }
   async function downloadReport(id, eventName) {
     let filename = `${eventName}-report.xlsx`;
-    getEventReport(id, JSON.parse(sessionStorage.getItem("token"))).then(
-      (res) => {
-        console.log("Download response", res.data);
-        if (res.status !== 200) {
-          if (res.response.status === 401 || res.response.status === 403) {
-            changeSnackText(res.response.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 2000);
-          }
+    getEventReport(id).then((res) => {
+      console.log("Download response", res.data);
+      if (res.status !== 200) {
+        if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        }
+        changeSnackText(res.response.data.message);
+      } else {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        if (typeof window.navigator.msSaveBlob === "function") {
+          window.navigator.msSaveBlob(res.data, filename);
         } else {
-          const url = window.URL.createObjectURL(new Blob([res.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          if (typeof window.navigator.msSaveBlob === "function") {
-            window.navigator.msSaveBlob(res.data, filename);
-          } else {
-            link.setAttribute("download", filename);
-            document.body.appendChild(link);
-            link.click();
-          }
+          link.setAttribute("download", filename);
+          document.body.appendChild(link);
+          link.click();
         }
       }
-    );
+    });
     console.log("Download Report", id);
   }
 
