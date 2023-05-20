@@ -16,11 +16,7 @@ import {
 import CreateUsersForm from "./CreateUsersForm.jsx";
 import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
-import {
-  getAllMemberDetails,
-  deleteMember,
-  checkJwtTokenExpire,
-} from "../api.js";
+import { getAllMemberDetails, deleteMember } from "../api.js";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -37,7 +33,6 @@ function CreateUsers() {
     },
   ]);
   async function getMembers() {
-    await checkJwtTokenExpire();
     getAllMemberDetails(JSON.parse(sessionStorage.getItem("token"))).then(
       (res) => {
         if (res.status !== 200) {
@@ -65,7 +60,8 @@ function CreateUsers() {
   const [open, setOpen] = useState(false);
   const [snackText, setSnackText] = useState("hello");
   async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
+    const cookies = document.cookie;
+    const token = cookies.split(", ")[0].split("=")[1];
     const role = sessionStorage.getItem("role");
     if (token === null) {
       return navigate("/login");
@@ -74,7 +70,6 @@ function CreateUsers() {
     }
   }
   const deleteAccount = async (membershipId) => {
-    await checkJwtTokenExpire();
     deleteMember(
       membershipId,
       JSON.parse(sessionStorage.getItem("token"))

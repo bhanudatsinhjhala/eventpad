@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import VerifiedIcon from '@mui/icons-material/Verified';
+import VerifiedIcon from "@mui/icons-material/Verified";
 import { verifyAccount } from "../api.js";
 import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
@@ -23,8 +23,16 @@ export default function VerifyAccountForm(props) {
   } = useForm();
 
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
-  const form = useForm({ defaultValues: { membershipId: "", otpPassword: "", newPassword: "", confirmPassword: "",} });
+  const form = useForm({
+    defaultValues: {
+      membershipId: "",
+      otpPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -139,74 +147,74 @@ export default function VerifyAccountForm(props) {
               ),
             }}
           />
-           <TextField
-                autoComplete="off"
-                type={showPassword ? "text" : "password"}
-                label="New Password"
-                color="primary"
-                className="textInput"
-                placeholder="Enter your New Password"
-                size="small"
-                {...register("newPassword", {
-                  required: true,
-                })}
-                error={Boolean(errors.newPassword)}
-                helperText={
-                  errors.newPassword
-                    ? errors.newPassword.type === "required"
-                      ? "New Password is required"
-                      : null
-                    : null
-                }
-                InputProps={{
-                  // <-- This is where the toggle button is added.
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <TextField
-                autoComplete="off"
-                type={showPassword ? "text" : "password"}
-                label="Confirm Password"
-                color="primary"
-                className="textInput"
-                placeholder="Enter your Update Password again"
-                size="small"
-                {...register("confirmPassword", {
-                  required: true,
-                })}
-                error={Boolean(errors.confirmPassword)}
-                helperText={
-                  errors.confirmPassword
-                    ? errors.confirmPassword.type === "required"
-                      ? "Confirm Password is required"
-                      : null
-                    : null
-                }
-                InputProps={{
-                  // <-- This is where the toggle button is added.
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+          <TextField
+            autoComplete="off"
+            type={showPassword ? "text" : "password"}
+            label="New Password"
+            color="primary"
+            className="textInput"
+            placeholder="Enter your New Password"
+            size="small"
+            {...register("newPassword", {
+              required: true,
+            })}
+            error={Boolean(errors.newPassword)}
+            helperText={
+              errors.newPassword
+                ? errors.newPassword.type === "required"
+                  ? "New Password is required"
+                  : null
+                : null
+            }
+            InputProps={{
+              // <-- This is where the toggle button is added.
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            autoComplete="off"
+            type={showPassword ? "text" : "password"}
+            label="Confirm Password"
+            color="primary"
+            className="textInput"
+            placeholder="Enter your Update Password again"
+            size="small"
+            {...register("confirmPassword", {
+              required: true,
+            })}
+            error={Boolean(errors.confirmPassword)}
+            helperText={
+              errors.confirmPassword
+                ? errors.confirmPassword.type === "required"
+                  ? "Confirm Password is required"
+                  : null
+                : null
+            }
+            InputProps={{
+              // <-- This is where the toggle button is added.
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
           <LoadingButton
             type="submit"
             size="medium"

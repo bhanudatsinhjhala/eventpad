@@ -16,7 +16,7 @@ import {
 
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import { LoadingButton } from "@mui/lab";
-import { checkJwtTokenExpire, updateProfile, getProfile } from "../api";
+import { updateProfile, getProfile } from "../api";
 
 export default function UpdateProfile(props) {
   const {
@@ -35,7 +35,6 @@ export default function UpdateProfile(props) {
     setOpenDialog(false);
   };
   const getUserProfile = async () => {
-    await checkJwtTokenExpire();
     await getProfile().then((res, err) => {
       console.log("userProfile ----", res);
       if (res.status === 200) {
@@ -53,7 +52,6 @@ export default function UpdateProfile(props) {
   const onSubmit = async (data) => {
     setLoading(true);
     console.log("data", data);
-    await checkJwtTokenExpire();
     await updateProfile(data).then((res, err) => {
       console.log("updateProfile res -----", res);
       if (res.status === 200) {

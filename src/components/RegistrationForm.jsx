@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { getUserDetails, checkJwtTokenExpire } from "../api.js";
+import { getUserDetails } from "../api.js";
 import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
 
@@ -33,7 +33,6 @@ export default function RegistrationForm(props) {
   // });
   const onSubmit = async (data) => {
     // console.log(data);
-    await checkJwtTokenExpire();
     getUserDetails(
       data.regid,
       JSON.parse(sessionStorage.getItem("token"))

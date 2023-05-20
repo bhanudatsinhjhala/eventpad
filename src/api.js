@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const api_url = process.env.REACT_APP_API_URL;
 
+axios.defaults.withCredentials = true;
 const getJwtToken = async (membershipId) => {
   try {
     console.log("membershipId", membershipId);
@@ -22,16 +23,7 @@ const getJwtToken = async (membershipId) => {
       },
     });
     console.log("response.data", response.data);
-    if (response.status === 200) {
-      sessionStorage.setItem(
-        "token",
-        JSON.stringify(response.data.accessToken)
-      );
-      sessionStorage.setItem(
-        "refreshToken",
-        JSON.stringify(response.data.refreshToken)
-      );
-    }
+    if (response.status === 200) return;
   } catch (error) {
     console.error("catch getJwtToken error", error);
   }
@@ -63,6 +55,7 @@ export const getProfile = async () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     console.log("response.data", response.data);
     return response;
@@ -141,20 +134,20 @@ export const downloadAllParticipantsList = async () => {
     console.error("catch getAllparticipantsList error", error);
   }
 };
-export const checkJwtTokenExpire = async () => {
-  const token = JSON.parse(sessionStorage.getItem("token"));
-  const decodeToken = jwt.decode(token);
-  console.log("decodeToken", decodeToken);
-  const expTime = decodeToken.exp;
-  console.log("expTime", expTime);
-  console.log("current Time ", new Date().getTime() / 1000);
+// export const checkJwtTokenExpire = async () => {
+//   const token = JSON.parse(sessionStorage.getItem("token"));
+//   const decodeToken = jwt.decode(token);
+//   console.log("decodeToken", decodeToken);
+//   const expTime = decodeToken.exp;
+//   console.log("expTime", expTime);
+//   console.log("current Time ", new Date().getTime() / 1000);
 
-  if (expTime < parseInt(new Date().getTime() / 1000)) {
-    await getJwtToken(decodeToken.membershipId);
-    return true;
-  }
-  return false;
-};
+//   if (expTime < parseInt(new Date().getTime() / 1000)) {
+//     await getJwtToken(decodeToken.membershipId);
+//     return true;
+//   }
+//   return false;
+// };
 export async function uploadFile(file, token, eventId) {
   try {
     // console.log(file);
@@ -418,6 +411,7 @@ export async function getAllParticipantDetails(eventId, token) {
       url: `${api_url}/getalluserdetails`,
       headers: {
         Authorization: `Bearer ${token}`,
+        withCredentials: true,
       },
       params: bodyParameters,
     }).then((res, err) => {

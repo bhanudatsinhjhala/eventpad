@@ -19,7 +19,7 @@ import {
   DialogActions,
   Dialog,
 } from "@mui/material";
-import { createUsers, checkJwtTokenExpire } from "../api.js";
+import { createUsers } from "../api.js";
 import { yellowColorTheme } from "../colorTheme.js";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -60,12 +60,11 @@ function MyForm(props) {
     setOpenDialog(false);
   };
   const form = useForm({
-    defaultValues: { membershipId: "",  email: "", role: "" },
+    defaultValues: { membershipId: "", email: "", role: "" },
   });
   const onSubmit = async (data) => {
     console.log(data);
     setLoading(true);
-    await checkJwtTokenExpire();
     createUsers(data, JSON.parse(sessionStorage.getItem("token"))).then(
       (res, err) => {
         console.log(res);

@@ -8,7 +8,7 @@ import {
   Box,
   Snackbar,
   Grow,
-  CssBaseline
+  CssBaseline,
 } from "@mui/material";
 import { yellowColorTheme } from "../colorTheme.js";
 import { ThemeProvider } from "@mui/material/styles";
@@ -44,7 +44,7 @@ export default function VerifyAccount(props) {
     </React.Fragment>
   );
   return (
-    <ThemeProvider theme={yellowColorTheme} >
+    <ThemeProvider theme={yellowColorTheme}>
       <CssBaseline />
       <Container sx={{ height: "100vh", display: "flex" }}>
         <Grow in={true} {...(true ? { timeout: 1300 } : {})}>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import UserDetailsCard from "./userDetailsCard";
-import { getUserDetails, checkJwtTokenExpire } from "../api.js";
+import { getUserDetails } from "../api.js";
 import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
 import { QrReader } from "react-qr-reader";
@@ -52,7 +52,6 @@ function QrScanner() {
   async function qrData(data) {
     if (data !== null) {
       console.info("qr data====>", data);
-      await checkJwtTokenExpire();
       getUserDetails(data, JSON.parse(sessionStorage.getItem("token"))).then(
         (res) => {
           console.log(res);

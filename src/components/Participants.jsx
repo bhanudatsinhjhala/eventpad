@@ -15,11 +15,7 @@ import {
 import { yellowColorTheme } from "../colorTheme.js";
 import Header from "./Header.jsx";
 import { ThemeProvider } from "@mui/material/styles";
-import {
-  getAllParticipantsList,
-  checkJwtTokenExpire,
-  downloadAllParticipantsList,
-} from "../api.js";
+import { getAllParticipantsList, downloadAllParticipantsList } from "../api.js";
 import { useNavigate } from "react-router-dom";
 // import FileDownloadIcon from "@mui/icons-material/FileDownload";
 // import DeleteIcon from "@mui/icons-material/Delete";
@@ -36,7 +32,6 @@ export default function Event() {
   ]);
 
   async function getAllParticipants() {
-    await checkJwtTokenExpire();
     getAllParticipantsList(JSON.parse(sessionStorage.getItem("token"))).then(
       (res) => {
         console.log(res);
@@ -55,7 +50,6 @@ export default function Event() {
     );
   }
   async function downloadParticipantData() {
-    await checkJwtTokenExpire();
     let filename = "ieeeParticipantDB.xlsx";
     downloadAllParticipantsList().then((res) => {
       console.log(res);
@@ -83,7 +77,8 @@ export default function Event() {
   }
   const navigate = useNavigate();
   async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
+    const cookies = document.cookie;
+    const token = cookies.split(", ")[0].split("=")[1];
     const role = sessionStorage.getItem("role");
     if (token === null) {
       navigate("/login");

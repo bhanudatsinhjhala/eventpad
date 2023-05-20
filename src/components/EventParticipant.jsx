@@ -8,7 +8,7 @@ import {
   Typography,
   Container,
 } from "@mui/material";
-import { getAllParticipantDetails, checkJwtTokenExpire } from "../api.js";
+import { getAllParticipantDetails } from "../api.js";
 import EnhancedTable from "./ParticipantTable.jsx";
 import { useNavigate } from "react-router-dom";
 import { yellowColorTheme } from "../colorTheme.js";
@@ -26,7 +26,6 @@ export default function EventParticpant(props) {
     },
   ]);
   async function getAllParticipant() {
-    await checkJwtTokenExpire();
     getAllParticipantDetails(
       props.eventId,
       JSON.parse(sessionStorage.getItem("token"))
@@ -50,7 +49,8 @@ export default function EventParticpant(props) {
     });
   }
   async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
+    const cookies = document.cookie;
+    const token = cookies.split(", ")[0].split("=")[1];
     const role = sessionStorage.getItem("role");
     if (token === null) {
       navigate("/login");

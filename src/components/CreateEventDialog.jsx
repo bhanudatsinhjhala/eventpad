@@ -22,7 +22,7 @@ import "./App.css";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { createEvent, checkJwtTokenExpire } from "../api.js";
+import { createEvent } from "../api.js";
 import UploadFileDialog from "./UploadFileDialog.jsx";
 import EventIcon from "@mui/icons-material/Event";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,8 @@ import Container from "@mui/material/Container";
 function CreateEvent(props) {
   const navigate = useNavigate();
   async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
+    const cookies = document.cookie;
+    const token = cookies.split(", ")[0].split("=")[1];
     if (token === null) {
       navigate("/login");
     }
@@ -74,7 +75,6 @@ function CreateEvent(props) {
     console.info(data);
     console.log(new Date(eventDatePicker));
     data.eventDate = Math.round(new Date(eventDatePicker).getTime() / 1000);
-    await checkJwtTokenExpire();
     createEvent(data, JSON.parse(sessionStorage.getItem("token"))).then(
       (res, err) => {
         console.info(res);

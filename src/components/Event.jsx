@@ -19,12 +19,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CreateEventDialog from "./CreateEventDialog.jsx";
 import UploadFile from "./UploadFileDialog.jsx";
 import EventParticipant from "./EventParticipant.jsx";
-import {
-  getEventDetails,
-  getEventReport,
-  deleteEventDetails,
-  checkJwtTokenExpire,
-} from "../api.js";
+import { getEventDetails, getEventReport, deleteEventDetails } from "../api.js";
 import { useNavigate } from "react-router-dom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -42,7 +37,6 @@ export default function Event() {
     },
   ]);
   async function getEvents() {
-    await checkJwtTokenExpire();
     getEventDetails(JSON.parse(sessionStorage.getItem("token"))).then((res) => {
       console.log(res);
       if (res.status !== 200) {
@@ -67,7 +61,8 @@ export default function Event() {
   }
   const navigate = useNavigate();
   async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
+    const cookies = document.cookie;
+    const token = cookies.split(", ")[0].split("=")[1];
     const role = sessionStorage.getItem("role");
     if (token === null) {
       navigate("/login");
@@ -93,7 +88,6 @@ export default function Event() {
     setOpenDialog(false);
   };
   async function deleteEvent(id) {
-    await checkJwtTokenExpire();
     deleteEventDetails(id, JSON.parse(sessionStorage.getItem("token"))).then(
       (res) => {
         console.log(res);
@@ -114,7 +108,6 @@ export default function Event() {
     console.log("Delete Event", id);
   }
   async function downloadReport(id, eventName) {
-    await checkJwtTokenExpire();
     let filename = `${eventName}-report.xlsx`;
     getEventReport(id, JSON.parse(sessionStorage.getItem("token"))).then(
       (res) => {

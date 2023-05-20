@@ -20,21 +20,21 @@ import {
   Snackbar,
 } from "@mui/material";
 
-import { getProfile, checkJwtTokenExpire } from "../api.js";
+import { getProfile } from "../api.js";
 
 export default function Profile() {
   const [userProfile, setUserProfile] = useState({});
   const [open, setOpen] = useState(false);
   const [snackText, setSnackText] = useState("hello");
   async function isAuthenticated() {
-    const token = sessionStorage.getItem("token");
+    const cookies = document.cookie;
+    const token = cookies.split(", ")[0].split("=")[1];
     if (token === null) {
       navigate("/login");
     }
   }
 
   const getUserProfile = async () => {
-    await checkJwtTokenExpire();
     await getProfile().then((res, err) => {
       console.log("userProfile ----", res);
       if (res.status === 200) {

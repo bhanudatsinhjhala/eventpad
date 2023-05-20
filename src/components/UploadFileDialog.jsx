@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import { Input } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useNavigate } from "react-router-dom";
-import { uploadFile, checkJwtTokenExpire } from "../api.js";
+import { uploadFile } from "../api.js";
 import {
   Button,
   DialogTitle,
@@ -43,7 +43,6 @@ function UploadData(props) {
     if (user === null) {
       props.changeSnackText("Please Upload Excel or Spread Sheet.");
     } else {
-      await checkJwtTokenExpire();
       uploadFile(
         user,
         JSON.parse(sessionStorage.getItem("token")),

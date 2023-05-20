@@ -20,7 +20,7 @@ import IconButton from "@mui/material/IconButton";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import { LoadingButton } from "@mui/lab";
 
-import { checkJwtTokenExpire, resetPassword } from "../api";
+import { resetPassword } from "../api";
 
 export default function PasswordChangeDialog(props) {
   const {
@@ -62,7 +62,6 @@ export default function PasswordChangeDialog(props) {
       setLoading(false);
       return props.changeSnackText("Confirm Password does not match");
     }
-    await checkJwtTokenExpire();
     await resetPassword(data).then((res, err) => {
       console.log("resetpassword ----", res);
       setLoading(false);

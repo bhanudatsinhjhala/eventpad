@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
-import { markPresence, checkJwtTokenExpire } from "../api.js";
+import { markPresence } from "../api.js";
 
 function userDetailsCard(props) {
   const checked = true;
@@ -19,8 +19,6 @@ function userDetailsCard(props) {
     setOpen(true);
   };
   async function handlePresent() {
-    // console.log(props);
-    await checkJwtTokenExpire();
     markPresence(
       props.userDetails.regId,
       JSON.parse(sessionStorage.getItem("token"))

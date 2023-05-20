@@ -62,7 +62,9 @@ export default function PersistentDrawerLeft(props) {
   const navigate = useNavigate();
   async function isAuthenticated() {
     console.info("isAuthenticated is working");
-    const token = JSON.parse(sessionStorage.getItem("token"));
+    const cookies = document.cookie;
+    const token = cookies.split(", ")[0].split("=")[1];
+    console.log("cookies -------------------------", cookies);
     if (token === null || token === undefined) {
       navigate("/login");
     }
