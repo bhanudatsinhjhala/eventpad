@@ -54,11 +54,19 @@ export default function UpdateProfile(props) {
     console.log("data", data);
     await updateProfile(data).then((res, err) => {
       console.log("updateProfile res -----", res);
-      if (res.status === 200) {
-        setLoading(false);
-        handleCloseDialog();
-        getUserProfile();
+      if (res.status !== 200) {
+        if (res.response.status === 401 || res.response.status === 403) {
+          props.changeSnackText(res.response.data.message);
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+        } else {
+          props.changeSnackText(res.response.data.message);
+        }
       }
+      setLoading(false);
+      handleCloseDialog();
+      getUserProfile();
     });
   };
   const onError = (error) => {

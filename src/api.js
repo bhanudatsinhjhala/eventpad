@@ -1,6 +1,6 @@
 import axios from "axios";
 import qs from "qs";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 // import reportWebVitals from "./reportWebVitals";
 require("dotenv").config();
 
@@ -33,6 +33,7 @@ export const getAllParticipantsList = async () => {
     return response;
   } catch (error) {
     console.error("catch getAllparticipantsList error", error);
+    return error;
   }
 };
 export const getProfile = async () => {
@@ -46,6 +47,7 @@ export const getProfile = async () => {
     return response;
   } catch (error) {
     console.error("catch getProfile error", error);
+    return error;
   }
 };
 export const updateProfile = async (data) => {
@@ -59,6 +61,7 @@ export const updateProfile = async (data) => {
     return response;
   } catch (error) {
     console.error("catch getProfile error", error);
+    return error;
   }
 };
 export const resetPassword = async (data) => {
@@ -71,7 +74,8 @@ export const resetPassword = async (data) => {
     console.log("response.data", response.data);
     return response;
   } catch (error) {
-    console.error("catch resetpassword error", error);
+    console.log("catch resetpassword error", error);
+    return error;
   }
 };
 export const verifyAccount = async (data) => {
@@ -81,10 +85,11 @@ export const verifyAccount = async (data) => {
       url: `${api_url}/verify`,
       data: qs.stringify(data),
     });
-    console.log("response.data", response.data);
+    console.log("response.data", response);
     return response;
   } catch (error) {
-    console.error("catch resetpassword error", error);
+    console.error("catch verify email error", error);
+    return error;
   }
 };
 export const downloadAllParticipantsList = async () => {
@@ -127,7 +132,6 @@ export async function uploadFile(file, eventId) {
       data: formData,
     }).then((res, err) => {
       if (res) {
-        // console.log(file);
         console.log(res);
         return res;
       } else {
