@@ -38,21 +38,18 @@ export default function VerifyAccountForm(props) {
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   const onSubmit = async (data) => {
-    console.log(data);
     setLoading(true);
     if (data.newPassword !== data.confirmPassword) {
       setLoading(false);
       return props.changeSnackText("Confirm Password does not match");
     }
     verifyAccount(data).then((res, err) => {
-      console.log(res);
       if (err) {
         console.log("error in api", err);
       }
       if (res.status !== 200) {
         let errorRes = res.response;
         if (errorRes.data.message) {
-          // console.log(res.data);
           props.changeSnackText(errorRes.data.message);
           setLoading(false);
         } else {
@@ -68,11 +65,14 @@ export default function VerifyAccountForm(props) {
           JSON.stringify(res.data.refreshToken)
         );
         sessionStorage.setItem("role", JSON.stringify(res.data.role));
+        sessionStorage.setItem(
+          "membershipId",
+          JSON.stringify(res.data.membershipId)
+        );
         navigate("/");
       }
     });
   };
-  // console.log(onSubmit);
   const onError = (error) => {
     console.log(error);
   };

@@ -37,7 +37,6 @@ export default function Profile() {
   const getUserProfile = async () => {
     await getProfile().then((res, err) => {
       if (err) navigate("/login");
-      console.log("userProfile ----", res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);

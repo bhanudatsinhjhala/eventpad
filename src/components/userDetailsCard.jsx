@@ -20,10 +20,8 @@ function userDetailsCard(props) {
   };
   async function handlePresent() {
     markPresence(props.userDetails.regId).then(async (res) => {
-      // console.log(res);
       if (res.request.status === 200) {
         changeSnackText(res.data.message);
-        // console.log(res.data.acknowledged);
         props.changeUserDetails({
           name: "",
           email: "",

@@ -24,7 +24,6 @@ export default function RegistrationForm(props) {
 
   // function checkAbsentCount() {
   //   totalAbsent().then((res) => {
-  //     console.log(res);
   //     setAbsentCount(res.data.count);
   //   });
   // }
@@ -32,9 +31,7 @@ export default function RegistrationForm(props) {
   //   checkAbsentCount();
   // });
   const onSubmit = async (data) => {
-    // console.log(data);
     getUserDetails(data.regid).then((res) => {
-      console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401) {
           props.changeSnackText(res.response.data.message);

@@ -27,7 +27,6 @@ export default function EventParticpant(props) {
   ]);
   async function getAllParticipant() {
     getAllParticipantDetails(props.eventId).then((res) => {
-      console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           props.changeSnackText(res.response.data.message);
@@ -40,7 +39,6 @@ export default function EventParticpant(props) {
         res.data.forEach((element) => {
           element.present = JSON.stringify(element.present);
         });
-        console.log("data", res.data[0]);
         setParticipantDetails(res.data);
       }
     });

@@ -58,22 +58,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
-  var [role, setRole] = React.useState();
+  const role = JSON.parse(sessionStorage.getItem("role"));
   const navigate = useNavigate();
-  async function isAuthenticated() {
-    console.info("isAuthenticated is working");
-    const cookies = document.cookie;
-    const token = cookies.split(", ")[0].split("=")[1];
-    console.log("cookies -------------------------", cookies);
-    if (token === null || token === undefined) {
-      navigate("/login");
-    }
-    setRole(JSON.parse(sessionStorage.getItem("role")));
-  }
-  React.useEffect(() => {
-    isAuthenticated();
-  }, []);
-  // console.log(props.tokenValue, "tokenValue");
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 

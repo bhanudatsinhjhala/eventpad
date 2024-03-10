@@ -30,35 +30,29 @@ function MyForm(props) {
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   const onSubmit = async (data) => {
-    // console.log(data);
     setLoading(true);
     loginUser(data).then((res, err) => {
-      console.log(res);
       if (err) {
         navigate("/login");
       }
       if (res.status !== 200) {
         let errorRes = res.response;
         if (errorRes.data.message) {
-          // console.log(res.data);
           props.changeSnackText(errorRes.data.message);
-          setLoading(false);
+          return setLoading(false);
         } else {
           props.changeSnackText(res.data);
-          setLoading(false);
+          return setLoading(false);
         }
-      } else {
-        sessionStorage.setItem("token", JSON.stringify(res.data.accessToken));
-        sessionStorage.setItem(
-          "refreshToken",
-          JSON.stringify(res.data.refreshToken)
-        );
-        sessionStorage.setItem("role", JSON.stringify(res.data.role));
-        navigate("/");
       }
+      sessionStorage.setItem("role", JSON.stringify(res.data.role));
+      sessionStorage.setItem(
+        "membershipId",
+        JSON.stringify(res.data.membershipId)
+      );
+      return navigate("/");
     });
   };
-  // console.log(onSubmit);
   const onError = (error) => {
     console.log(error);
   };

@@ -4,32 +4,29 @@ import qs from "qs";
 // import reportWebVitals from "./reportWebVitals";
 require("dotenv").config();
 
-const api_url = process.env.REACT_APP_API_URL;
-
+const API_URL = process.env.REACT_APP_API_URL;
+const ADMIN_API_URL = `${API_URL}/admin`;
 axios.defaults.withCredentials = true;
-// const getJwtToken = async (membershipId) => {
-//   try {
-//     console.log("membershipId", membershipId);
-//     const response = await axios({
-//       method: "GET",
-//       url: `${api_url}/getjwttoken`,
-//       params: {
-//         membershipId,
-//       },
-//     });
-//     console.log("response.data", response.data);
-//     if (response.status === 200) return;
-//   } catch (error) {
-//     console.error("catch getJwtToken error", error);
-//   }
-// };
+
 export const getAllParticipantsList = async () => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${api_url}/getallparticipantslist`,
+      url: `${ADMIN_API_URL}/getallparticipantslist`,
     });
-    console.log("response.data", response.data);
+    return response;
+  } catch (error) {
+    console.error("catch getAllparticipantsList error", error);
+    return error;
+  }
+};
+
+export const checkAuth = async () => {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `${ADMIN_API_URL}/check-auth`,
+    });
     return response;
   } catch (error) {
     console.error("catch getAllparticipantsList error", error);
@@ -40,10 +37,9 @@ export const getProfile = async () => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${api_url}/getprofile`,
+      url: `${ADMIN_API_URL}/getprofile`,
       withCredentials: true,
     });
-    console.log("response.data", response.data);
     return response;
   } catch (error) {
     console.error("catch getProfile error", error);
@@ -54,7 +50,7 @@ export const updateProfile = async (data) => {
   try {
     const response = await axios({
       method: "PATCH",
-      url: `${api_url}/memberdetails`,
+      url: `${ADMIN_API_URL}/memberdetails`,
       data: qs.stringify(data),
     });
     console.log("response.data", response.data);
@@ -68,13 +64,11 @@ export const resetPassword = async (data) => {
   try {
     const response = await axios({
       method: "PATCH",
-      url: `${api_url}/resetpassword`,
+      url: `${ADMIN_API_URL}/resetpassword`,
       data: qs.stringify(data),
     });
-    console.log("response.data", response.data);
     return response;
   } catch (error) {
-    console.log("catch resetpassword error", error);
     return error;
   }
 };
@@ -82,10 +76,9 @@ export const verifyAccount = async (data) => {
   try {
     const response = await axios({
       method: "POST",
-      url: `${api_url}/verify`,
+      url: `${ADMIN_API_URL}/verify`,
       data: qs.stringify(data),
     });
-    console.log("response.data", response);
     return response;
   } catch (error) {
     console.error("catch verify email error", error);
@@ -96,7 +89,7 @@ export const downloadAllParticipantsList = async () => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${api_url}/downloadallparticipantslist`,
+      url: `${ADMIN_API_URL}/downloadallparticipantslist`,
       responseType: "blob",
     });
     return response;
@@ -104,28 +97,13 @@ export const downloadAllParticipantsList = async () => {
     console.error("catch getAllparticipantsList error", error);
   }
 };
-// export const checkJwtTokenExpire = async () => {
-//   console.log("decodeToken", decodeToken);
-//   const expTime = decodeToken.exp;
-//   console.log("expTime", expTime);
-//   console.log("current Time ", new Date().getTime() / 1000);
-
-//   if (expTime < parseInt(new Date().getTime() / 1000)) {
-//     await getJwtToken(decodeToken.membershipId);
-//     return true;
-//   }
-//   return false;
-// };
 export async function uploadFile(file, eventId) {
   try {
-    // console.log(file);
     const formData = new FormData();
-    // formData.append("hl", "file");
     formData.append("sheet", file);
-    console.log("eventId ====>", eventId);
     const response = await axios({
       method: "POST",
-      url: `${api_url}/uploadsheet`,
+      url: `${ADMIN_API_URL}/uploadsheet`,
       params: {
         eventId: eventId,
       },
@@ -150,7 +128,7 @@ export async function deleteMember(membershipId) {
   try {
     const response = await axios({
       method: "DELETE",
-      url: `${api_url}/deletemember`,
+      url: `${ADMIN_API_URL}/deletemember`,
       data: {
         membershipId: membershipId,
       },
@@ -162,17 +140,14 @@ export async function deleteMember(membershipId) {
 }
 export async function getEventReport(eventId) {
   try {
-    console.log("eventId in index.js", eventId);
-    // console.log("eventId in index.js", typeOf eventId);
     const response = await axios({
       method: "GET",
-      url: `${api_url}/geteventreport`,
+      url: `${ADMIN_API_URL}/geteventreport`,
       params: {
         eventId: eventId,
       },
       responseType: "blob",
     });
-    console.info("get event report ==>", response);
     return response;
   } catch (error) {
     console.log("event report==>", error);
@@ -183,13 +158,11 @@ export async function deleteEventDetails(eventId) {
   try {
     const response = await axios({
       method: "DELETE",
-      url: `${api_url}/deleteevent`,
+      url: `${ADMIN_API_URL}/deleteevent`,
       data: {
         eventId: eventId,
       },
     });
-
-    console.log("Api resp==>", response);
     return response;
   } catch (error) {
     console.log(error);
@@ -199,9 +172,8 @@ export async function getEventDetails() {
   try {
     const response = await axios({
       method: "GET",
-      url: `${api_url}/getevent`,
+      url: `${ADMIN_API_URL}/getevent`,
     });
-    console.info("get event ===>", response);
     return response;
   } catch (error) {
     console.info(error);
@@ -211,40 +183,18 @@ export async function getAllMemberDetails() {
   try {
     const response = await axios({
       method: "GET",
-      url: `${api_url}/getallmemberdetails`,
+      url: `${ADMIN_API_URL}/getallmemberdetails`,
     });
-    console.info("get member ===>", response);
     return response;
   } catch (error) {
     console.info(error);
   }
 }
-// export async function verifyjwt() {
-//   try {
-//     const response = await axios
-//       .get(`${api_url}/verifyjwt`, {
-//       })
-//       .then((res, err) => {
-//         if (res) {
-//           // console.log(res);
-//           return res;
-//         } else {
-//           // console.log(err, "25");
-//           return err;
-//         }
-//       });
-//     return response;
-//   } catch (err) {
-//     console.log(err);
-//     return err;
-//   }
-// }
 export async function loginUser(user) {
   try {
     const membershipId = parseInt(user.membershipId);
-    // console.log(user);
     const response = await axios
-      .post(`${api_url}/login`, {
+      .post(`${ADMIN_API_URL}/login`, {
         membershipId: membershipId,
         password: user.password,
       })
@@ -258,46 +208,10 @@ export async function loginUser(user) {
     return err;
   }
 }
-// export async function totalAbsent() {
-//   try {
-//     if (verifyres.status === 200) {
-//       const response = await axios
-//         .get(`${api_url}/totalAbsent`)
-//         .then((res, err) => {
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             console.log(res);
-//             return res;
-//           }
-//           return response;
-//         });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-// export async function qrGenerate(membershipId) {
-
-//   try {
-//     const response = await axios(`${api_url}/qrgenerate/${membershipId}`)
-//       .then((res, err) => {
-//         if (res) {
-//           return res;
-//         } else {
-//           console.log(err);
-//         }
-//       })
-//     return response;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
 export async function totalAbsent() {
   try {
     const response = await axios
-      .get(`${api_url}/totalabsent`)
+      .get(`${ADMIN_API_URL}/totalabsent`)
       .then((res, err) => {
         if (res) {
           return res;
@@ -318,7 +232,7 @@ export async function getUserDetails(id) {
     };
     const response = await axios({
       method: "GET",
-      url: `${api_url}/getuserdetails`,
+      url: `${ADMIN_API_URL}/getuserdetails`,
       params: bodyParameters,
     }).then((res, err) => {
       if (res) {
@@ -342,12 +256,11 @@ export async function getAllParticipantDetails(eventId) {
     };
     const response = await axios({
       method: "GET",
-      url: `${api_url}/getalluserdetails`,
+      url: `${ADMIN_API_URL}/getalluserdetails`,
       withCredentials: true,
       params: bodyParameters,
     }).then((res, err) => {
       if (res) {
-        // console.log(res.data);
         return res;
       } else {
         console.log(err);
@@ -364,7 +277,7 @@ export async function markPresence(id) {
   try {
     const response = await axios({
       method: "PUT",
-      url: `${api_url}/markpresence`,
+      url: `${ADMIN_API_URL}/markpresence`,
       data: {
         present: true,
         regId: id,
@@ -387,7 +300,7 @@ export async function createUsers(user) {
   try {
     const response = await axios({
       method: "POST",
-      url: `${api_url}/signup`,
+      url: `${ADMIN_API_URL}/signup`,
       data: qs.stringify({
         membershipId: parseInt(user.membershipId),
         role: user.role,
@@ -415,7 +328,7 @@ export async function createEvent(event) {
   try {
     const response = await axios({
       method: "POST",
-      url: `${api_url}/createevent`,
+      url: `${ADMIN_API_URL}/createevent`,
       data: event,
     }).then((res, err) => {
       if (res) {

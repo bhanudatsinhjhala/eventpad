@@ -36,7 +36,6 @@ export default function UpdateProfile(props) {
   };
   const getUserProfile = async () => {
     await getProfile().then((res, err) => {
-      console.log("userProfile ----", res);
       if (res.status === 200) {
         props.changeUserProfile(res.data.data);
       } else if (res.response.status === 401 || res.response.status === 403) {
@@ -51,9 +50,7 @@ export default function UpdateProfile(props) {
   };
   const onSubmit = async (data) => {
     setLoading(true);
-    console.log("data", data);
     await updateProfile(data).then((res, err) => {
-      console.log("updateProfile res -----", res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           props.changeSnackText(res.response.data.message);
