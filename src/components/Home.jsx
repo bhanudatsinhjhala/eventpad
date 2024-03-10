@@ -1,25 +1,44 @@
-import React from "react";
+import * as React from "react";
 import Header from "./Header";
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/material/styles";
 import { yellowColorTheme } from "../colorTheme.js";
-import { CardContent, CssBaseline, Typography, Stack, Grow, Container, Card, IconButton } from "@mui/material";
+import {
+  CardContent,
+  CssBaseline,
+  Typography,
+  Stack,
+  Grow,
+  Container,
+  Card,
+  IconButton,
+} from "@mui/material";
 import FullScreen from "@mui/icons-material/Fullscreen";
 import Edit from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
+import { checkAuth } from "../api.js";
+
 function Home(props) {
   const navigate = useNavigate();
+  async function isAuthenticated() {
+    console.info("isAuthenticated is working");
+    await checkAuth().then((res, err) => {
+      if (err || res.status !== 200) return navigate("/login");
+    });
+  }
+  React.useEffect(() => {
+    isAuthenticated();
+  }, []);
   function handleClick(value) {
     if (value === "reg") {
       navigate("/registrationid");
     } else {
       navigate("/qrscan");
     }
-    // console.log("clicked", value);
   }
   return (
     <div>
       <Header />
-      <ThemeProvider theme={yellowColorTheme} >
+      <ThemeProvider theme={yellowColorTheme}>
         <CssBaseline />
         <Container sx={{ margin: "auto", marginTop: "100px" }}>
           <Grow in="true" {...(true ? { timeout: 1300 } : {})}>

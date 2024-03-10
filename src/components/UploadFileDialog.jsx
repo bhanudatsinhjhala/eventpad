@@ -34,17 +34,14 @@ function UploadData(props) {
     console.log(e.target.files[0].name);
     const file = e.target.files[0];
     setUser(file);
-    // console.log(user);
   }
   async function formSubmit(e) {
     setLoading(true);
     e.preventDefault();
-    // console.log(user, "user");
     if (user === null) {
       props.changeSnackText("Please Upload Excel or Spread Sheet.");
     } else {
       uploadFile(user, props.eventId).then((res, err) => {
-        // console.log(res);
         if (res.request.status !== 200) {
           if (res.response.status === 401 || res.response.status === 403) {
             props.changeSnackText(res.response.data.message);
@@ -52,7 +49,6 @@ function UploadData(props) {
               navigate("/login");
             }, 3000);
           } else {
-            console.log("409 error working");
             props.changeSnackText(res.response.data.message);
           }
         } else {

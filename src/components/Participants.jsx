@@ -33,7 +33,6 @@ export default function Event() {
 
   async function getAllParticipants() {
     getAllParticipantsList().then((res) => {
-      console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
@@ -50,7 +49,6 @@ export default function Event() {
   async function downloadParticipantData() {
     let filename = "ieeeParticipantDB.xlsx";
     downloadAllParticipantsList().then((res) => {
-      console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);

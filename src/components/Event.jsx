@@ -38,7 +38,6 @@ export default function Event() {
   ]);
   async function getEvents() {
     getEventDetails().then((res) => {
-      console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
@@ -52,7 +51,6 @@ export default function Event() {
           let date = new Date(event.eventDate * 1000);
           let dateString = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}/${date.getMonth() +
             1}/${date.getFullYear()}`;
-          console.log(dateString);
           event.dateString = dateString;
         });
         setRows(res.data);
@@ -89,7 +87,6 @@ export default function Event() {
   };
   async function deleteEvent(id) {
     deleteEventDetails(id).then((res) => {
-      console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
@@ -99,16 +96,13 @@ export default function Event() {
         }
         changeSnackText(res.response.data.message);
       } else {
-        console.log(res.data.message);
         getEvents();
       }
     });
-    console.log("Delete Event", id);
   }
   async function downloadReport(id, eventName) {
     let filename = `${eventName}-report.xlsx`;
     getEventReport(id).then((res) => {
-      console.log("Download response", res.data);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
@@ -130,7 +124,6 @@ export default function Event() {
         }
       }
     });
-    console.log("Download Report", id);
   }
 
   function handleClose() {

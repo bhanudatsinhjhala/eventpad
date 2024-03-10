@@ -63,11 +63,8 @@ function MyForm(props) {
     defaultValues: { membershipId: "", email: "", role: "" },
   });
   const onSubmit = async (data) => {
-    console.log(data);
     setLoading(true);
     createUsers(data).then((res, err) => {
-      console.log(res);
-      // console.log(err.response);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           props.changeSnackText(res.response.data.message);
@@ -86,7 +83,6 @@ function MyForm(props) {
           props.changeSnackText(res.response.data.message);
         }
       } else if (res.data.message) {
-        // console.log(res.data);
         setBtnColor("success");
         props.getMembers();
         props.changeSnackText(res.data.message);

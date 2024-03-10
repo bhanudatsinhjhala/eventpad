@@ -33,7 +33,6 @@ function QrScanner() {
   };
   const changeSnackText = (value) => {
     setSnackText(value);
-    console.log("snack text changed");
     setOpen(true);
     setTimeout(() => {
       setOpen(false);
@@ -53,7 +52,6 @@ function QrScanner() {
     if (data !== null) {
       console.info("qr data====>", data);
       getUserDetails(data).then((res) => {
-        console.log(res);
         if (res.status !== 200) {
           if (res.response.status === 401) {
             changeSnackText(res.response.data.message);
@@ -111,11 +109,9 @@ function QrScanner() {
               scanDelay={500}
               onResult={(result, error) => {
                 if (result) {
-                  // console.log(result.text);
                   qrData(parseInt(result.text));
                 } else if (error) {
-                  // console.info(error);
-                  // qrData("");
+                  console.info(error);
                 }
               }}
               videoStyle={{

@@ -56,14 +56,12 @@ export default function PasswordChangeDialog(props) {
     setOpenDialog(false);
   };
   const onSubmit = async (data) => {
-    console.log("data", data);
     setLoading(true);
     if (data.updatePassword !== data.confirmPassword) {
       setLoading(false);
       return props.changeSnackText("Confirm Password does not match");
     }
     await resetPassword(data).then((res, err) => {
-      console.log("resetpassword ----", res);
       setLoading(false);
       if (res.status === 201) {
         props.changeSnackText("Password Changed Successfully");

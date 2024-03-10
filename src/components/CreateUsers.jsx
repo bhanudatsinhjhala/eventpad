@@ -43,7 +43,6 @@ function CreateUsers() {
         }
         changeSnackText(res.response.data.message);
       } else {
-        console.log(res);
         setRows(res.data.data);
       }
     });
@@ -69,7 +68,6 @@ function CreateUsers() {
   }
   const deleteAccount = async (membershipId) => {
     deleteMember(membershipId).then((res) => {
-      console.log(res);
       if (res.status !== 200) {
         if (res.response.status === 401 || res.response.status === 403) {
           changeSnackText(res.response.data.message);
@@ -81,7 +79,6 @@ function CreateUsers() {
       }
       getMembers();
     });
-    console.log("membership id", membershipId);
   };
   function handleClose() {
     if (open === true) {

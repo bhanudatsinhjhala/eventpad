@@ -70,10 +70,8 @@ function CreateEvent(props) {
   // const navigate = useNavigate();
   const form = useForm({ defaultValues: { eventName: "", eventDate: "" } });
   const onSubmit = async (data) => {
-    // console.log(data);
     setLoading(true);
     console.info(data);
-    console.log(new Date(eventDatePicker));
     data.eventDate = Math.round(new Date(eventDatePicker).getTime() / 1000);
     createEvent(data).then((res, err) => {
       console.info(res);
